@@ -1,0 +1,1385 @@
+import { LanguageCode, LanguageOption } from '../types/cognitive';
+
+export const SUPPORTED_LANGUAGES: LanguageOption[] = [
+  { code: 'en', label: 'English', nativeLabel: 'English', flag: '🇬🇧', direction: 'ltr' },
+  { code: 'cs', label: 'Czech', nativeLabel: 'Čeština', flag: '🇨🇿', direction: 'ltr' },
+  { code: 'es', label: 'Spanish', nativeLabel: 'Español', flag: '🇪🇸', direction: 'ltr' },
+  { code: 'de', label: 'German', nativeLabel: 'Deutsch', flag: '🇩🇪', direction: 'ltr' },
+  { code: 'fr', label: 'French', nativeLabel: 'Français', flag: '🇫🇷', direction: 'ltr' },
+  { code: 'ja', label: 'Japanese', nativeLabel: '日本語', flag: '🇯🇵', direction: 'ltr' },
+  { code: 'zh', label: 'Chinese', nativeLabel: '简体中文', flag: '🇨🇳', direction: 'ltr' },
+  { code: 'ar', label: 'Arabic', nativeLabel: 'العربية', flag: '🇸🇦', direction: 'rtl' },
+  { code: 'pt', label: 'Portuguese', nativeLabel: 'Português', flag: '🇧🇷', direction: 'ltr' },
+];
+
+export interface TranslationDictionary {
+  appName: string;
+  appSubtitle: string;
+  entryHub: string;
+  topicsMenu: string;
+  topicsProcessed: string;
+  newTopic: string;
+  activeTopic: string;
+  searchTopics: string;
+  noTopicsFound: string;
+  pinTopic: string;
+  unpinTopic: string;
+  exportTopic: string;
+  deleteTopic: string;
+  renameTopic: string;
+  topicCasesHeading: string;
+  topicsProcessedBadge: string;
+  
+  // Navigation
+  navArena: string;
+  navPhysics: string;
+  navColorimetry: string;
+  navMemory: string;
+  navMethodology: string;
+  navCloud: string;
+  navPlans: string;
+  navDocs: string;
+  
+  // Quick Actions & Live
+  startLive: string;
+  endLive: string;
+  handshakeLive: string;
+  testAcoustic: string;
+  stopAcoustic: string;
+  stopAllAudio: string;
+  activeStream: string;
+  readyStream: string;
+
+  // Left Sidebar Controls
+  secAudioConfig: string;
+  modelArch: string;
+  voiceSynth: string;
+  gpuParticles: string;
+  particlesUnit: string;
+  vadThreshold: string;
+  secModelResilience: string;
+  textModel: string;
+  highDemandFailover: string;
+  highDemandFailoverDesc: string;
+  patientMode: string;
+  patientModeDesc: string;
+  secDomains: string;
+
+  // Arena & Inquiry
+  disputationHeading: string;
+  disputationDesc: string;
+  hypothesisLabel: string;
+  hypothesisPlaceholder: string;
+  contextDirectiveLabel: string;
+  contextDirectivePlaceholder: string;
+  submitInquiry: string;
+  submitting: string;
+  autoTts: string;
+  autoTtsDesc: string;
+  branchingHeading: string;
+  verticalInquiry: string;
+  lateralInquiry: string;
+  antithesisInquiry: string;
+  deepAnalysisHeading: string;
+  hiddenAxioms: string;
+  isomorphisms: string;
+  counterTheses: string;
+  keyQuestionsHeading: string;
+  answerQuestion: string;
+  sendClarification: string;
+  skipQuestion: string;
+
+  // Entry Hub
+  welcomeTitle: string;
+  welcomeSubtitle: string;
+  entryActionNew: string;
+  entryActionNewDesc: string;
+  entryActionResume: string;
+  entryActionResumeDesc: string;
+  entryActionTour: string;
+  entryActionTourDesc: string;
+  entryActionDocs: string;
+  entryActionDocsDesc: string;
+  quickDomains: string;
+  enterArena: string;
+  dontShowAgain: string;
+
+  // Tour
+  tourTitle: string;
+  tourStep: string;
+  tourNext: string;
+  tourBack: string;
+  tourFinish: string;
+  tourSkip: string;
+  tourCustomizeTitle: string;
+  themeAccent: string;
+  dialecticRigour: string;
+  ambientHum: string;
+  ambientHumDesc: string;
+
+  // Plans & Balance
+  plansTitle: string;
+  plansSubtitle: string;
+  planFree: string;
+  planPro: string;
+  planUnlimited: string;
+  planAdmin: string;
+  currentPlan: string;
+  selectPlan: string;
+  adminControls: string;
+  adminTokenInspector: string;
+  adminBypassQuota: string;
+  adminVectorFlush: string;
+  quotaUsed: string;
+  
+  // Docs & PDF
+  docsTitle: string;
+  docsSubtitle: string;
+  downloadPdf: string;
+  generatingPdf: string;
+  simpleGuide: string;
+
+  // Ergonomic Workspace Layout & UI Labels
+  workspaceDeconstruct: string;
+  workspaceBalanced: string;
+  workspaceSphere: string;
+  collapseSidebar: string;
+  expandSidebar: string;
+  parametersCalibration: string;
+  pttLabel: string;
+  pttMutedNotice: string;
+  pttOpenMicNotice: string;
+  dspActiveLabel: string;
+  dspBypassLabel: string;
+  secShaderCalibration: string;
+  lightnessLabel: string;
+  axisGreenRedLabel: string;
+  axisBlueYellowLabel: string;
+  turbulenceParam: string;
+  densityParam: string;
+  secContextProgramming: string;
+  contextDesc: string;
+  injectContextBtn: string;
+  spectralTrayHeading: string;
+  rmsInputTray: string;
+  bargeInTray: string;
+  duplexNominalTray: string;
+  flushQueueBtn: string;
+  compactTelemetryBtn: string;
+  expandFftBtn: string;
+  playReplyBtn: string;
+  stopAudioBtn: string;
+  domainAxiomLabel: string;
+  insertSampleTopicBtn: string;
+  copyAnalysisBtn: string;
+  analysisCopiedBtn: string;
+  filterDialogueBtn: string;
+  filterAllBtn: string;
+  deepThinkingBannerTitle: string;
+  cancelQueryBtn: string;
+  roleUserLabel: string;
+  roleModelLabel: string;
+  roleGpuLabel: string;
+  roleSystemLabel: string;
+  listenAudioBtn: string;
+  stopAudioBtnLabel: string;
+  synthesizingAudioBtn: string;
+  inputModeStructuredLabel: string;
+  inputModeFreeLabel: string;
+  keyboardAnalysisSubtext: string;
+  topicTitleInputPlaceholder: string;
+  topicHypothesisInputPlaceholder: string;
+  topicFreeInputPlaceholder: string;
+  executeDisputationBtnLabel: string;
+}
+
+const baseExtraEn = {
+  workspaceDeconstruct: 'Deconstruction',
+  workspaceBalanced: 'Balanced',
+  workspaceSphere: 'Sphere',
+  collapseSidebar: 'Collapse',
+  expandSidebar: 'Parameters',
+  parametersCalibration: 'PARAMETERS & CALIBRATION',
+  pttLabel: 'Push-to-Talk (Default)',
+  pttMutedNotice: 'Microphone is muted by default. Audio streams only while holding Space or mic button.',
+  pttOpenMicNotice: 'Open Mic: Audio streams continuously from input without pressing.',
+  dspActiveLabel: 'ACTIVE',
+  dspBypassLabel: 'BYPASS',
+  secShaderCalibration: '03. Shader Calibration & OKLab Space',
+  lightnessLabel: 'Perceptual Lightness (L)',
+  axisGreenRedLabel: 'Axis a (Green–Red)',
+  axisBlueYellowLabel: 'Axis b (Blue–Yellow)',
+  turbulenceParam: 'Turbulence (μ₀)',
+  densityParam: 'Density (σ / k)',
+  secContextProgramming: '04. Dynamic Context Programming',
+  contextDesc: 'Injects an [EXTEND_CONTEXT] directive into the model context window with turn_complete: false.',
+  injectContextBtn: 'Inject Context at Runtime',
+  spectralTrayHeading: 'Spectral Analysis (FFT = 1024) & Asymmetric Envelope Follower',
+  rmsInputTray: 'Input RMS',
+  bargeInTray: '▲ BARGE-IN INTERRUPTION',
+  duplexNominalTray: '● DUPLEX NOMINAL',
+  flushQueueBtn: 'Flush Audio Queue',
+  compactTelemetryBtn: 'Compact Telemetry',
+  expandFftBtn: 'Expand FFT (1024)',
+  playReplyBtn: 'Play Reply',
+  stopAudioBtn: 'Stop All Audio',
+  domainAxiomLabel: 'Domain Axiom',
+  insertSampleTopicBtn: 'Insert Sample Thesis →',
+  copyAnalysisBtn: 'Copy Analysis',
+  analysisCopiedBtn: 'Copied!',
+  filterDialogueBtn: 'Dialogue Only',
+  filterAllBtn: 'All Logs',
+  deepThinkingBannerTitle: 'Deep Socratic Deconstruction & Inquiry',
+  cancelQueryBtn: 'Cancel Query',
+  roleUserLabel: 'User (Thesis)',
+  roleModelLabel: 'Dialectical Partner',
+  roleGpuLabel: 'GPU Telemetry',
+  roleSystemLabel: 'System Orchestrator',
+  listenAudioBtn: 'Listen Voice',
+  stopAudioBtnLabel: 'Stop',
+  synthesizingAudioBtn: 'Synthesizing...',
+  inputModeStructuredLabel: 'Topic Name + Premise',
+  inputModeFreeLabel: 'Complex Free Text',
+  keyboardAnalysisSubtext: 'Keyboard Dialectic Input',
+  topicTitleInputPlaceholder: 'Topic Name (e.g. Consciousness as Quantum Collapse, Non-Equilibrium Sociology...)',
+  topicHypothesisInputPlaceholder: 'Premise, hypothesis, or text to deconstruct...',
+  topicFreeInputPlaceholder: 'Paste any complex excerpt, scientific thesis, or argument to deconstruct...',
+  executeDisputationBtnLabel: 'Deconstruct Thesis',
+};
+
+const baseExtraCs = {
+  workspaceDeconstruct: 'Dekonstrukce',
+  workspaceBalanced: 'Vyvážený',
+  workspaceSphere: 'Sféra',
+  collapseSidebar: 'Sbalit',
+  expandSidebar: 'Parametry',
+  parametersCalibration: 'PARAMETRY & KALIBRACE',
+  pttLabel: 'Push-to-Talk (Výchozí)',
+  pttMutedNotice: 'Mikrofon je ve výchozím stavu ztlumen. Zvuk se přenáší pouze při stisku mezerníku nebo tlačítka mikrofónu.',
+  pttOpenMicNotice: 'Open Mic: Zvuk ze vstupu je nepřetržitě streamován bez nutnosti stisku.',
+  dspActiveLabel: 'AKTIVNÍ',
+  dspBypassLabel: 'BYPASS',
+  secShaderCalibration: '03. Kalibrace shaderu a prostoru OKLab',
+  lightnessLabel: 'Percepční světlost (L)',
+  axisGreenRedLabel: 'Osa a (Z–Č)',
+  axisBlueYellowLabel: 'Osa b (M–Ž)',
+  turbulenceParam: 'Turbulence (μ₀)',
+  densityParam: 'Hustota (σ / k)',
+  secContextProgramming: '04. Dynamické programování kontextu',
+  contextDesc: 'Vloží direktivu [EXTEND_CONTEXT] do paměťového okna modelu s příznakem turn_complete: false.',
+  injectContextBtn: 'Injektovat kontext za běhu relace',
+  spectralTrayHeading: 'Spektrální analýza (FFT = 1024) & Asymetrický obálkový sledovač',
+  rmsInputTray: 'Vstup RMS',
+  bargeInTray: '▲ BARGE-IN PŘERUŠENÍ',
+  duplexNominalTray: '● DUPLEX NOMINÁLNÍ',
+  flushQueueBtn: 'Vyprázdnit audio frontu',
+  compactTelemetryBtn: 'Kompaktní telemetrie',
+  expandFftBtn: 'Rozbalit FFT (1024)',
+  playReplyBtn: 'Přehrát repliku',
+  stopAudioBtn: 'Zastavit veškerý zvuk',
+  domainAxiomLabel: 'Axióm domény',
+  insertSampleTopicBtn: 'Vložit vzorové téma k rozboru →',
+  copyAnalysisBtn: 'Kopírovat rozbor',
+  analysisCopiedBtn: 'Zkopírováno!',
+  filterDialogueBtn: 'Pouze dialog',
+  filterAllBtn: 'Všechna data',
+  deepThinkingBannerTitle: 'Hloubková dekonstrukce & sokratovská disputace',
+  cancelQueryBtn: 'Zrušit dotaz',
+  roleUserLabel: 'Uživatel (Teze)',
+  roleModelLabel: 'Dialektický partner',
+  roleGpuLabel: 'Telemetrie GPU',
+  roleSystemLabel: 'Systémový orchestrátor',
+  listenAudioBtn: 'Přehrát hlasem',
+  stopAudioBtnLabel: 'Zastavit',
+  synthesizingAudioBtn: 'Syntéza...',
+  inputModeStructuredLabel: 'Jméno tématu + Popis',
+  inputModeFreeLabel: 'Komplexní volný text',
+  keyboardAnalysisSubtext: 'Textová analýza klávesnicí',
+  topicTitleInputPlaceholder: 'Jméno tématu (např. Vědomí jako kvantový kolaps, Termodynamická sociologie...)',
+  topicHypothesisInputPlaceholder: 'Popis, hypotéza nebo rozvedení tématu k hlubokému rozebrání...',
+  topicFreeInputPlaceholder: 'Vložte jakkoliv složitý text, úryvek vědecké práce, argumentaci nebo tezi k dekonstrukci...',
+  executeDisputationBtnLabel: 'Rozebrat téma',
+};
+
+export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
+  en: {
+    ...baseExtraEn,
+    appName: 'Semantic Research Lab',
+    appSubtitle: 'OKLab VaporSphere & Gemini Live Duplex Cognitive Interface',
+    entryHub: 'Entry Hub',
+    topicsMenu: 'Research Cases & Topics',
+    topicsProcessed: 'Topics Processed',
+    newTopic: 'New Case (+)',
+    activeTopic: 'Active Case',
+    searchTopics: 'Filter research topics...',
+    noTopicsFound: 'No research topics found.',
+    pinTopic: 'Pin Case',
+    unpinTopic: 'Unpin Case',
+    exportTopic: 'Export Case (JSON)',
+    deleteTopic: 'Delete Case',
+    renameTopic: 'Rename Case',
+    topicCasesHeading: 'Investigation Cases History',
+    topicsProcessedBadge: 'Cases Processed',
+
+    navArena: 'Dialectical Arena',
+    navPhysics: 'Physics & Frustum',
+    navColorimetry: 'OKLab Colorimetry',
+    navMemory: 'Vector Memory',
+    navMethodology: 'Socratic Protocol',
+    navCloud: 'Google Cloud Mesh',
+    navPlans: 'Subscriptions & Tiers',
+    navDocs: 'Guide & PDF Docs',
+
+    startLive: 'Start Gemini Live API',
+    endLive: 'End Gemini Live Stream',
+    handshakeLive: 'WebSocket Handshake...',
+    testAcoustic: 'Spectral Response Test',
+    stopAcoustic: 'Stop Acoustic Exciter',
+    stopAllAudio: 'Silence Kill-Switch',
+    activeStream: '● ACTIVE STREAM',
+    readyStream: '○ READY',
+
+    secAudioConfig: '01. Gemini Live API Engine',
+    modelArch: 'Model Architecture',
+    voiceSynth: 'Voice Synthesizer',
+    gpuParticles: 'GPU Particle Density',
+    particlesUnit: 'particles',
+    vadThreshold: 'Local VAD Barge-in (RMS)',
+    secModelResilience: '02. AI Model Selection & Resilience',
+    textModel: 'Text Disputation Model',
+    highDemandFailover: 'High Demand Resilience (Auto Failover)',
+    highDemandFailoverDesc: 'On 429/503 quota exhaustion, dynamically fails over to available models with exponential jitter.',
+    patientMode: 'Patient Thinking Mode',
+    patientModeDesc: 'Allows extended reasoning budgets and multiple attempts for deep dialectic synthesis.',
+    secDomains: '03. Thematic & Affective OKLab Domains',
+
+    disputationHeading: 'Socratic Inquiry & Disputation',
+    disputationDesc: 'Submit an axiomatic thesis or hypothesis for elenctic deconstruction and GPU sphere modulation.',
+    hypothesisLabel: 'Axiomatic Hypothesis / Research Premise',
+    hypothesisPlaceholder: 'e.g. Consciousness is not an emergent computation, but a fundamental ontological primitive...',
+    contextDirectiveLabel: 'Epistemic Role / Context Injection',
+    contextDirectivePlaceholder: 'e.g. Strict Peer Reviewer in Non-Equilibrium Complex Systems',
+    submitInquiry: 'Execute Socratic Analysis',
+    submitting: 'Synthesizing Elenctics...',
+    autoTts: 'Auto-synthesize 24kHz HD Voice on Reply',
+    autoTtsDesc: 'Automatically triggers Gemini TTS or local speech upon response generation.',
+    branchingHeading: 'Proactive Branching Pathways',
+    verticalInquiry: 'Vertical Deepening',
+    lateralInquiry: 'Lateral Extrapolation',
+    antithesisInquiry: 'Opponent Antithesis',
+    deepAnalysisHeading: 'Epistemic Deconstruction',
+    hiddenAxioms: 'Hidden Axioms & Boundary Conditions',
+    isomorphisms: 'Structural Isomorphisms',
+    counterTheses: 'Dialectical Counter-Theses',
+    keyQuestionsHeading: 'Clarification & Extension Requests',
+    answerQuestion: 'Address Question',
+    sendClarification: 'Inject Clarification',
+    skipQuestion: 'Dismiss',
+
+    welcomeTitle: 'Multimodal Cognitive Research Lab',
+    welcomeSubtitle: 'High-performance duplex voice interface and real-time OKLab GPU fluid simulator for interdisciplinary Socratic debate.',
+    entryActionNew: 'Start New Dialectic Case',
+    entryActionNewDesc: 'Open a blank research case or choose from curated epistemological challenges.',
+    entryActionResume: 'Resume Previous Cases',
+    entryActionResumeDesc: 'Switch to previously evaluated research topics and preserve your full dialectic history.',
+    entryActionTour: 'Personalisation & Guided Tour',
+    entryActionTourDesc: 'Interactive walkthrough highlighting cases, OKLab physics, Live audio, and custom themes.',
+    entryActionDocs: 'Documentation & PDF Guide',
+    entryActionDocsDesc: 'Download or view the simple-minded operational manual and architecture changelog.',
+    quickDomains: 'Quick Curated Domains',
+    enterArena: 'Enter Cognitive Interface',
+    dontShowAgain: 'Do not show entry dialog automatically on startup',
+
+    tourTitle: 'Cognitive Lab Personalisation Tour',
+    tourStep: 'Step',
+    tourNext: 'Next Step',
+    tourBack: 'Back',
+    tourFinish: 'Complete Tour & Start',
+    tourSkip: 'Skip Tour',
+    tourCustomizeTitle: 'Lab Customisation & Aesthetic Calibration',
+    themeAccent: 'Accent Glow & UI Tint',
+    dialecticRigour: 'Dialectical Rigour & Style',
+    ambientHum: 'Binaural Focus Frequency (432Hz)',
+    ambientHumDesc: 'Synthesizes a subtle, grounding carrier frequency for enhanced cognitive immersion.',
+
+    plansTitle: 'Subscription Balancing & Cloud Coordination',
+    plansSubtitle: 'Equitable allocation of Google Gemini tokens, Live audio streams, GPU particles, and cloud services.',
+    planFree: 'Free Explorer',
+    planPro: 'Pro Researcher',
+    planUnlimited: 'Unlimited Scholar',
+    planAdmin: 'ADMIN & Root Mesh',
+    currentPlan: 'Current Active Tier',
+    selectPlan: 'Activate Plan',
+    adminControls: 'Root Admin Console & Debugging Hooks',
+    adminTokenInspector: 'Live Token & Latency Telemetry',
+    adminBypassQuota: 'Bypass Rate Limiting & Quotas',
+    adminVectorFlush: 'Purge / Reseed Semantic Memory Store',
+    quotaUsed: 'Daily Session Quota Used',
+
+    docsTitle: 'Simple-Minded Operational Guide & Architecture',
+    docsSubtitle: 'Everything you need to understand, navigate, and leverage this cognitive interface in plain terms.',
+    downloadPdf: 'Download Complete Guide (.PDF)',
+    generatingPdf: 'Compiling PDF Document...',
+    simpleGuide: 'Operational Handbook',
+  },
+  cs: {
+    ...baseExtraCs,
+    appName: 'Sémantická výzkumná laboratoř',
+    appSubtitle: 'OKLab VaporSphere & Obousměrné kognitivní rozhraní Gemini Live',
+    entryHub: 'Vstupní rozcestník',
+    topicsMenu: 'Výzkumné případy & Témata',
+    topicsProcessed: 'Zpracovaná témata',
+    newTopic: 'Nový případ (+)',
+    activeTopic: 'Aktivní případ',
+    searchTopics: 'Filtrovat výzkumná témata...',
+    noTopicsFound: 'Nenalezena žádná témata.',
+    pinTopic: 'Připnout případ',
+    unpinTopic: 'Odepnout případ',
+    exportTopic: 'Exportovat případ (JSON)',
+    deleteTopic: 'Smazat případ',
+    renameTopic: 'Přejmenovat případ',
+    topicCasesHeading: 'Historie vyšetřovaných případů',
+    topicsProcessedBadge: 'Zpracovaných případů',
+
+    navArena: 'Dialektická aréna',
+    navPhysics: 'Fyzika částic & Frustum',
+    navColorimetry: 'Kolorimetrie OKLab',
+    navMemory: 'Vektorová paměť',
+    navMethodology: 'Sokratovský protokol',
+    navCloud: 'Google Cloud Mesh',
+    navPlans: 'Předplatné & Tarify',
+    navDocs: 'Příručka & PDF Dokumentace',
+
+    startLive: 'Spustit Gemini Live API',
+    endLive: 'Ukončit Gemini Live',
+    handshakeLive: 'Handshake WebSocket...',
+    testAcoustic: 'Test spektrální odezvy',
+    stopAcoustic: 'Zastavit akustický budič',
+    stopAllAudio: 'Okamžité ticho (Kill-Switch)',
+    activeStream: '● AKTIVNÍ TOK',
+    readyStream: '○ PŘIPRAVENO',
+
+    secAudioConfig: '01. Konfigurace Gemini Live API',
+    modelArch: 'Architektura modelu',
+    voiceSynth: 'Hlasový syntetizér',
+    gpuParticles: 'Počet částic GPU',
+    particlesUnit: 'částic',
+    vadThreshold: 'Lokální práh VAD (Barge-in RMS)',
+    secModelResilience: '02. Volba AI modelu & Odolnost',
+    textModel: 'Model textové disputace',
+    highDemandFailover: 'Ochrana proti přetížení (High Demand Failover)',
+    highDemandFailoverDesc: 'Při chybách 429/503 automaticky přepíná na záložní modely s exponenciálním odkladem.',
+    patientMode: 'Trpělivý režim (Vyšší limit na uvažování)',
+    patientModeDesc: 'Povoluje delší časový limit a více pokusů pro komplexní uvažování bez přerušení.',
+    secDomains: '03. Tematické a afektivní domény (OKLab)',
+
+    disputationHeading: 'Sokratovská disputace & Axiomatika',
+    disputationDesc: 'Zadejte axiomatickou tezi nebo hypotézu pro elenktickou dekonstrukci a GPU modulaci sféry.',
+    hypothesisLabel: 'Axiomatická hypotéza / Výzkumná premisa',
+    hypothesisPlaceholder: 'např. Vědomí není emergentní vlastností komputace, nýbrž fundamentální ontologickou kategorií...',
+    contextDirectiveLabel: 'Epistemická role / Rozšíření kontextu',
+    contextDirectivePlaceholder: 'např. Oponent vědecké práce v teorii komplexních nerovnovážných systémů',
+    submitInquiry: 'Provést sokratovskou analýzu',
+    submitting: 'Syntéza elenktiky...',
+    autoTts: 'Automaticky syntetizovat HD hlas (TTS) při odpovědi',
+    autoTtsDesc: 'Okamžitě po vygenerování odpovědi spustí přehrávání 24kHz hlasu nebo syntézu v prohlížeči.',
+    branchingHeading: 'Proaktivní rozcestník tázání',
+    verticalInquiry: 'Vertikální prohloubení',
+    lateralInquiry: 'Laterální extrapolace',
+    antithesisInquiry: 'Oponentská antiteze',
+    deepAnalysisHeading: 'Epistemická dekonstrukce',
+    hiddenAxioms: 'Skryté axiomy & Hraniční podmínky',
+    isomorphisms: 'Strukturální izomorfismy',
+    counterTheses: 'Oponentské antiteze',
+    keyQuestionsHeading: 'Klíčové otázky pro uživatele (Clarification)',
+    answerQuestion: 'Odpovědět na otázku',
+    sendClarification: 'Odeslat upřesnění',
+    skipQuestion: 'Přeskočit',
+
+    welcomeTitle: 'Multimodální kognitivní laboratoř',
+    welcomeSubtitle: 'Špičkové obousměrné hlasové rozhraní a reaktivní fluidní GPU simulátor v prostoru OKLab pro mezioborovou disputaci.',
+    entryActionNew: 'Zahájit nový případ',
+    entryActionNewDesc: 'Otevřete čistý výzkumný případ nebo vyberte z připravených epistemologických výzev.',
+    entryActionResume: 'Pokračovat v předchozích případech',
+    entryActionResumeDesc: 'Přepněte se do rozpracovaných témat s uchováním celého transkriptu i stavu sféry.',
+    entryActionTour: 'Prohlídka & Přizpůsobení rozhraní',
+    entryActionTourDesc: 'Interaktivní průvodce tématy, fyzikou OKLab, hlasovým tokem a vizuálními motivy.',
+    entryActionDocs: 'Příručka & PDF Dokumentace',
+    entryActionDocsDesc: 'Stáhněte si přehledný manuál pro obsluhu a kompletní changelog architektury.',
+    quickDomains: 'Předpřipravené vědní domény',
+    enterArena: 'Vstoupit do kognitivní arény',
+    dontShowAgain: 'Při příštím spuštění nezobrazovat automaticky',
+
+    tourTitle: 'Průvodce kognitivní laboratoří & Personalizace',
+    tourStep: 'Krok',
+    tourNext: 'Další krok',
+    tourBack: 'Zpět',
+    tourFinish: 'Dokončit a spustit',
+    tourSkip: 'Přeskočit prohlídku',
+    tourCustomizeTitle: 'Personalizace a estetická kalibrace',
+    themeAccent: 'Barevný akcent rozhraní',
+    dialecticRigour: 'Rigoróznost a tón dialogu',
+    ambientHum: 'Binaurální frekvence soustředění (432Hz)',
+    ambientHumDesc: 'Generuje jemný harmonický šum na pozadí pro hlubokou mentální koncentraci.',
+
+    plansTitle: 'Vyvážení tarifů & Koordinace cloudových služeb',
+    plansSubtitle: 'Spravedlivé vyvážení kvót pro Gemini API, Live hlasové streamy, GPU částice a návazné služby.',
+    planFree: 'Free Explorer',
+    planPro: 'Pro Researcher',
+    planUnlimited: 'Unlimited Scholar',
+    planAdmin: 'ADMIN & Koordinační síť',
+    currentPlan: 'Aktuální aktivní tarif',
+    selectPlan: 'Aktivovat tarif',
+    adminControls: 'Koordinační konzole správce & Debugging',
+    adminTokenInspector: 'Živá telemetrie tokenů a latence',
+    adminBypassQuota: 'Obejít denní limity a omezení',
+    adminVectorFlush: 'Vyčistit / Znovu naplnit sémantickou paměť',
+    quotaUsed: 'Využitá denní kvóta dotazů',
+
+    docsTitle: 'Srozumitelný návod k obsluze & Architektura',
+    docsSubtitle: 'Vše, co potřebujete vědět k ovládání a plnému využití tohoto rozhraní lidskou řečí.',
+    downloadPdf: 'Stáhnout kompletní příručku (.PDF)',
+    generatingPdf: 'Sestavuji PDF dokument...',
+    simpleGuide: 'Uživatelská příručka',
+  },
+  es: {
+    ...baseExtraEn,
+    appName: 'Laboratorio de Investigación Semántica',
+    appSubtitle: 'OKLab VaporSphere & Interfaz Cognitiva Dúplex Gemini Live',
+    entryHub: 'Centro de Entrada',
+    topicsMenu: 'Casos y Temas de Investigación',
+    topicsProcessed: 'Temas Procesados',
+    newTopic: 'Nuevo Caso (+)',
+    activeTopic: 'Caso Activo',
+    searchTopics: 'Filtrar temas de investigación...',
+    noTopicsFound: 'No se encontraron temas.',
+    pinTopic: 'Fijar Caso',
+    unpinTopic: 'Desfijar Caso',
+    exportTopic: 'Exportar Caso (JSON)',
+    deleteTopic: 'Eliminar Caso',
+    renameTopic: 'Renombrar Caso',
+    topicCasesHeading: 'Historial de Casos Evaluados',
+    topicsProcessedBadge: 'Casos Procesados',
+
+    navArena: 'Arena Dialéctica',
+    navPhysics: 'Física y Frustum',
+    navColorimetry: 'Colorimetría OKLab',
+    navMemory: 'Memoria Vectorial',
+    navMethodology: 'Protocolo Socrático',
+    navCloud: 'Google Cloud Mesh',
+    navPlans: 'Planes y Suscripción',
+    navDocs: 'Guía y Docs PDF',
+
+    startLive: 'Iniciar Gemini Live API',
+    endLive: 'Finalizar Gemini Live',
+    handshakeLive: 'Handshake WebSocket...',
+    testAcoustic: 'Test de Respuesta Espectral',
+    stopAcoustic: 'Detener Excitador Acústico',
+    stopAllAudio: 'Silencio Inmediato (Kill-Switch)',
+    activeStream: '● FLUJO ACTIVO',
+    readyStream: '○ LISTO',
+
+    secAudioConfig: '01. Motor Gemini Live API',
+    modelArch: 'Arquitectura del Modelo',
+    voiceSynth: 'Sintetizador de Voz',
+    gpuParticles: 'Partículas GPU',
+    particlesUnit: 'partículas',
+    vadThreshold: 'Umbral VAD Local (Barge-in RMS)',
+    secModelResilience: '02. Selección de Modelo e Inteligencia',
+    textModel: 'Modelo de Disputa Textual',
+    highDemandFailover: 'Resiliencia ante Alta Demanda (Failover)',
+    highDemandFailoverDesc: 'En errores 429/503 cambia automáticamente a modelos de respaldo con backoff exponencial.',
+    patientMode: 'Modo de Pensamiento Paciente',
+    patientModeDesc: 'Permite un límite de tiempo mayor para un razonamiento profundo y riguroso.',
+    secDomains: '03. Dominios Temáticos y Afectivos OKLab',
+
+    disputationHeading: 'Disputa Socrática y Axiomática',
+    disputationDesc: 'Presente una tesis o hipótesis para deconstrucción elenctica y modulación de la esfera GPU.',
+    hypothesisLabel: 'Hipótesis Axiomática / Premisa',
+    hypothesisPlaceholder: 'ej. La conciencia no es un cómputo emergente, sino una categoría ontológica fundamental...',
+    contextDirectiveLabel: 'Rol Epistémico / Inyección de Contexto',
+    contextDirectivePlaceholder: 'ej. Evaluador Paritario en Sistemas Complejos No Lineales',
+    submitInquiry: 'Ejecutar Análisis Socrático',
+    submitting: 'Sintetizando Elenctica...',
+    autoTts: 'Sintetizar Voz HD 24kHz automáticamente',
+    autoTtsDesc: 'Reproduce audio nativo Gemini o voz local al generar respuestas.',
+    branchingHeading: 'Rutas de Indagación Ramificada',
+    verticalInquiry: 'Profundización Vertical',
+    lateralInquiry: 'Extrapolación Lateral',
+    antithesisInquiry: 'Antítesis Opositora',
+    deepAnalysisHeading: 'Deconstrucción Epistémica',
+    hiddenAxioms: 'Axiomas Ocultos y Condiciones Límite',
+    isomorphisms: 'Isomorfismos Estructurales',
+    counterTheses: 'Contratesis Dialécticas',
+    keyQuestionsHeading: 'Preguntas Clave de Clarificación',
+    answerQuestion: 'Responder Pregunta',
+    sendClarification: 'Enviar Aclaración',
+    skipQuestion: 'Descartar',
+
+    welcomeTitle: 'Laboratorio de Investigación Cognitiva',
+    welcomeSubtitle: 'Interfaz dúplex de voz y visualizador de fluidos GPU OKLab para debate socrático interdisciplinario.',
+    entryActionNew: 'Iniciar Nuevo Caso',
+    entryActionNewDesc: 'Abra un nuevo caso de investigación o elija entre desafíos epistemológicos preparados.',
+    entryActionResume: 'Reanudar Casos Previos',
+    entryActionResumeDesc: 'Cambie entre casos investigados conservando su historial completo y estado visual.',
+    entryActionTour: 'Tour y Personalización',
+    entryActionTourDesc: 'Recorrido interactivo por casos, física OKLab, audio en vivo y temas visuales.',
+    entryActionDocs: 'Guía y Documentación PDF',
+    entryActionDocsDesc: 'Descargue o consulte el manual operativo sencillo y el registro de cambios.',
+    quickDomains: 'Dominios Rápidos',
+    enterArena: 'Entrar a la Arena Cognitiva',
+    dontShowAgain: 'No mostrar automáticamente al inicio',
+
+    tourTitle: 'Tour de Personalización del Laboratorio',
+    tourStep: 'Paso',
+    tourNext: 'Siguiente',
+    tourBack: 'Atrás',
+    tourFinish: 'Finalizar y Comenzar',
+    tourSkip: 'Omitir Tour',
+    tourCustomizeTitle: 'Personalización y Calibración Estética',
+    themeAccent: 'Tinte de Acento Visual',
+    dialecticRigour: 'Rigor y Tono Dialéctico',
+    ambientHum: 'Frecuencia Binaural (432Hz)',
+    ambientHumDesc: 'Genera un sutil tono armónico para una concentración profunda.',
+
+    plansTitle: 'Planes Equilibrados y Coordinación Cloud',
+    plansSubtitle: 'Distribución equilibrada de tokens Gemini, flujos Live, partículas y servicios en la nube.',
+    planFree: 'Free Explorer',
+    planPro: 'Pro Researcher',
+    planUnlimited: 'Unlimited Scholar',
+    planAdmin: 'ADMIN y Red Raíz',
+    currentPlan: 'Plan Activo',
+    selectPlan: 'Activar Plan',
+    adminControls: 'Consola de Control de Administrador',
+    adminTokenInspector: 'Telemetría de Tokens y Latencia',
+    adminBypassQuota: 'Omitir Límites y Cuotas',
+    adminVectorFlush: 'Limpiar / Sembrar Memoria Vectorial',
+    quotaUsed: 'Cuota Diaria Utilizada',
+
+    docsTitle: 'Manual Operativo Sencillo y Arquitectura',
+    docsSubtitle: 'Todo lo que necesita saber para interactuar con este sistema en lenguaje claro.',
+    downloadPdf: 'Descargar Guía Completa (.PDF)',
+    generatingPdf: 'Generando archivo PDF...',
+    simpleGuide: 'Manual del Usuario',
+  },
+  de: {
+    ...baseExtraEn,
+    appName: 'Semantisches Forschungslabor',
+    appSubtitle: 'OKLab VaporSphere & Gemini Live Duplex Kognitive Schnittstelle',
+    entryHub: 'Einstiegsmenü',
+    topicsMenu: 'Forschungsfälle & Themen',
+    topicsProcessed: 'Bearbeitete Themen',
+    newTopic: 'Neuer Fall (+)',
+    activeTopic: 'Aktiver Fall',
+    searchTopics: 'Forschungsfälle filtern...',
+    noTopicsFound: 'Keine Themen gefunden.',
+    pinTopic: 'Fall anheften',
+    unpinTopic: 'Fall lösen',
+    exportTopic: 'Fall exportieren (JSON)',
+    deleteTopic: 'Fall löschen',
+    renameTopic: 'Fall umbenennen',
+    topicCasesHeading: 'Verlauf der untersuchten Fälle',
+    topicsProcessedBadge: 'Bearbeitete Fälle',
+
+    navArena: 'Dialektische Arena',
+    navPhysics: 'Partikelphysik & Frustum',
+    navColorimetry: 'OKLab Kolorimetrie',
+    navMemory: 'Vektorgedächtnis',
+    navMethodology: 'Sokratisches Protokoll',
+    navCloud: 'Google Cloud Mesh',
+    navPlans: 'Abonnements & Pläne',
+    navDocs: 'Handbuch & PDF Docs',
+
+    startLive: 'Gemini Live API starten',
+    endLive: 'Gemini Live beenden',
+    handshakeLive: 'WebSocket Handshake...',
+    testAcoustic: 'Spektralantwort-Test',
+    stopAcoustic: 'Akustischen Erreger stoppen',
+    stopAllAudio: 'Sofortige Stille (Kill-Switch)',
+    activeStream: '● AKTIVER STREAM',
+    readyStream: '○ BEREIT',
+
+    secAudioConfig: '01. Gemini Live API Konfiguration',
+    modelArch: 'Modellarchitektur',
+    voiceSynth: 'Sprachsynthesizer',
+    gpuParticles: 'GPU Partikeldichte',
+    particlesUnit: 'Partikel',
+    vadThreshold: 'Lokale VAD-Schwelle (Barge-in RMS)',
+    secModelResilience: '02. KI-Modellauswahl & Resilienz',
+    textModel: 'Text-Disputationsmodell',
+    highDemandFailover: 'Hohe Auslastungs-Resilienz (Auto Failover)',
+    highDemandFailoverDesc: 'Wechselt bei 429/503 Fehlern automatisch mit exponentiellem Backoff zu Ausweichmodellen.',
+    patientMode: 'Geduldiger Denkmodus',
+    patientModeDesc: 'Ermöglicht längere Denkzeiten für tiefgehende sokratische Synthese.',
+    secDomains: '03. Thematische & Affektive OKLab Domänen',
+
+    disputationHeading: 'Sokratische Disputation & Axiomatik',
+    disputationDesc: 'Reichen Sie eine These für die elenktische Dekonstruktion und Sphärenmodulation ein.',
+    hypothesisLabel: 'Axiomatische Hypothese / Forschungshypothese',
+    hypothesisPlaceholder: 'z.B. Das Bewusstsein ist keine emergente Berechnung, sondern eine fundamentale Kategorie...',
+    contextDirectiveLabel: 'Epistemische Rolle / Kontextinjektion',
+    contextDirectivePlaceholder: 'z.B. Strenger Gutachter für komplexe dissipative Systeme',
+    submitInquiry: 'Sokratische Analyse ausführen',
+    submitting: 'Elenktische Synthese läuft...',
+    autoTts: 'Automatisch 24kHz HD-Stimme bei Antwort',
+    autoTtsDesc: 'Spielt native Gemini-Sprache oder Browsersynthese sofort ab.',
+    branchingHeading: 'Proaktive Verzweigungspfade',
+    verticalInquiry: 'Vertikale Vertiefung',
+    lateralInquiry: 'Laterale Extrapolation',
+    antithesisInquiry: 'Gegnerische Antithese',
+    deepAnalysisHeading: 'Epistemische Dekonstruktion',
+    hiddenAxioms: 'Versteckte Axiome & Randbedingungen',
+    isomorphisms: 'Strukturelle Isomorphismen',
+    counterTheses: 'Dialektische Gegenthesen',
+    keyQuestionsHeading: 'Klärungs- & Erweiterungsfragen',
+    answerQuestion: 'Frage beantworten',
+    sendClarification: 'Präzisierung senden',
+    skipQuestion: 'Überspringen',
+
+    welcomeTitle: 'Multimodales Kognitives Labor',
+    welcomeSubtitle: 'Echtzeit Duplex-Sprachschnittstelle und reaktiver OKLab Fluid-Visualisierer für interdisziplinäre Debatten.',
+    entryActionNew: 'Neuen Fall beginnen',
+    entryActionNewDesc: 'Starten Sie eine neue Forschungsuntersuchung oder wählen Sie ein vorgefertigtes Thema.',
+    entryActionResume: 'Bestehende Fälle fortsetzen',
+    entryActionResumeDesc: 'Wechseln Sie zwischen bearbeiteten Themen mit vollständiger Historie und Sphärenzustand.',
+    entryActionTour: 'Tour & Personalisierung',
+    entryActionTourDesc: 'Interaktive Führung durch Fälle, OKLab Physik, Audio und visuelle Themes.',
+    entryActionDocs: 'Handbuch & PDF Dokumentation',
+    entryActionDocsDesc: 'Laden Sie das leicht verständliche Handbuch und Changelog herunter.',
+    quickDomains: 'Schnellauswahl Domänen',
+    enterArena: 'Kognitive Arena betreten',
+    dontShowAgain: 'Beim Start nicht mehr automatisch anzeigen',
+
+    tourTitle: 'Labor Personalisierungstour',
+    tourStep: 'Schritt',
+    tourNext: 'Weiter',
+    tourBack: 'Zurück',
+    tourFinish: 'Tour abschließen',
+    tourSkip: 'Tour überspringen',
+    tourCustomizeTitle: 'Anpassung & Ästhetische Kalibrierung',
+    themeAccent: 'Farbton & Leuchten',
+    dialecticRigour: 'Dialektische Strenge',
+    ambientHum: 'Binaurale Konzentrationsfrequenz (432Hz)',
+    ambientHumDesc: 'Erzeugt ein dezentes Hintergrundrauschen für maximale Konzentration.',
+
+    plansTitle: 'Abonnements & Service-Koordination',
+    plansSubtitle: 'Ausgewogene Verteilung von Gemini Token, Live Audio, Partikeln und Cloud-Diensten.',
+    planFree: 'Free Explorer',
+    planPro: 'Pro Researcher',
+    planUnlimited: 'Unlimited Scholar',
+    planAdmin: 'ADMIN & Root Mesh',
+    currentPlan: 'Aktueller Plan',
+    selectPlan: 'Plan aktivieren',
+    adminControls: 'Admin-Steuerung & Diagnose',
+    adminTokenInspector: 'Live-Token & Latenz-Telemetrie',
+    adminBypassQuota: 'Quoten & Limits umgehen',
+    adminVectorFlush: 'Vektorspeicher bereinigen / neu befüllen',
+    quotaUsed: 'Heutige Abfragen genutzt',
+
+    docsTitle: 'Verständliches Handbuch & Architektur',
+    docsSubtitle: 'Klar verständliche Erläuterungen zur Bedienung und den Funktionen dieses Systems.',
+    downloadPdf: 'Vollständiges Handbuch (.PDF) herunterladen',
+    generatingPdf: 'PDF wird erstellt...',
+    simpleGuide: 'Benutzerhandbuch',
+  },
+  fr: {
+    ...baseExtraEn,
+    appName: 'Laboratoire de Recherche Sémantique',
+    appSubtitle: 'OKLab VaporSphere & Interface Cognitive Duplex Gemini Live',
+    entryHub: "Point d'Entrée",
+    topicsMenu: 'Cas & Sujets de Recherche',
+    topicsProcessed: 'Sujets Traités',
+    newTopic: 'Nouveau Cas (+)',
+    activeTopic: 'Cas Actif',
+    searchTopics: 'Filtrer les sujets...',
+    noTopicsFound: 'Aucun sujet trouvé.',
+    pinTopic: 'Épingler le cas',
+    unpinTopic: 'Désépingler',
+    exportTopic: 'Exporter le cas (JSON)',
+    deleteTopic: 'Supprimer le cas',
+    renameTopic: 'Renommer le cas',
+    topicCasesHeading: 'Historique des Cas Étudiés',
+    topicsProcessedBadge: 'Cas Traités',
+
+    navArena: 'Arène Dialectique',
+    navPhysics: 'Physique & Frustum',
+    navColorimetry: 'Colorimétrie OKLab',
+    navMemory: 'Mémoire Vectorielle',
+    navMethodology: 'Protocole Socratique',
+    navCloud: 'Google Cloud Mesh',
+    navPlans: 'Abonnements & Tarifs',
+    navDocs: 'Guide & Docs PDF',
+
+    startLive: 'Démarrer Gemini Live API',
+    endLive: 'Arrêter Gemini Live',
+    handshakeLive: 'Connexion WebSocket...',
+    testAcoustic: 'Test de Réponse Spectrale',
+    stopAcoustic: 'Arrêter Excitateur Acoustique',
+    stopAllAudio: 'Silence Immédiat (Kill-Switch)',
+    activeStream: '● FLUX ACTIF',
+    readyStream: '○ PRÊT',
+
+    secAudioConfig: '01. Moteur Gemini Live API',
+    modelArch: 'Architecture du Modèle',
+    voiceSynth: 'Synthétiseur Vocal',
+    gpuParticles: 'Particules GPU',
+    particlesUnit: 'particules',
+    vadThreshold: 'Seuil VAD Local (Barge-in RMS)',
+    secModelResilience: '02. Sélection du Modèle & Résilience',
+    textModel: 'Modèle de Débat Textuel',
+    highDemandFailover: 'Résilience Forte Demande (Failover)',
+    highDemandFailoverDesc: 'Bascule automatiquement vers des modèles de secours en cas d’erreurs 429/503.',
+    patientMode: 'Mode de Pensée Patiente',
+    patientModeDesc: 'Permet des temps de réflexion allongés pour un raisonnement rigoureux.',
+    secDomains: '03. Domaines Thématiques et Affectifs OKLab',
+
+    disputationHeading: 'Disputation Socratique & Axiomatique',
+    disputationDesc: 'Soumettez une thèse pour déconstruction élenctique et modulation de la sphère GPU.',
+    hypothesisLabel: 'Hypothèse Axiomatique / Prémisse',
+    hypothesisPlaceholder: 'ex: La conscience n’est pas un calcul émergent mais une catégorie ontologique première...',
+    contextDirectiveLabel: 'Rôle Épistémique / Injection de Contexte',
+    contextDirectivePlaceholder: 'ex: Réviseur Strict en Théorie des Systèmes Complexes',
+    submitInquiry: 'Exécuter l’Analyse Socratique',
+    submitting: 'Synthèse Élenctique en cours...',
+    autoTts: 'Synthétiser la voix HD 24kHz sur réponse',
+    autoTtsDesc: 'Déclenche la lecture vocale native Gemini ou synthèse locale.',
+    branchingHeading: 'Voies de Questionnement Ramifiées',
+    verticalInquiry: 'Approfondissement Vertical',
+    lateralInquiry: 'Extrapolation Latérale',
+    antithesisInquiry: 'Antithèse Adverse',
+    deepAnalysisHeading: 'Déconstruction Épistémique',
+    hiddenAxioms: 'Axiomes Cachés & Conditions Limites',
+    isomorphisms: 'Isomorphismes Structurels',
+    counterTheses: 'Contre-thèses Dialectiques',
+    keyQuestionsHeading: 'Questions Clés d’Élucidation',
+    answerQuestion: 'Répondre à la question',
+    sendClarification: 'Injecter une clarification',
+    skipQuestion: 'Ignorer',
+
+    welcomeTitle: 'Laboratoire Cognitif Multimodal',
+    welcomeSubtitle: 'Interface vocale bidirectionnelle et simulateur de fluide GPU OKLab pour débats interdisciplinaires.',
+    entryActionNew: 'Démarrer un Nouveau Cas',
+    entryActionNewDesc: 'Lancez un cas de recherche vierge ou choisissez une énigme philosophique préparée.',
+    entryActionResume: 'Reprendre les Cas Précédents',
+    entryActionResumeDesc: 'Basculez entre vos sujets de recherche tout en conservant l’historique et la sphère.',
+    entryActionTour: 'Visite & Personnalisation',
+    entryActionTourDesc: 'Visite guidée interactive des cas, de la physique OKLab et de la voix Live.',
+    entryActionDocs: 'Guide & Documentation PDF',
+    entryActionDocsDesc: 'Téléchargez le manuel d’utilisation simple et le journal des modifications.',
+    quickDomains: 'Domaines Préconfigurés',
+    enterArena: 'Entrer dans l’Arène',
+    dontShowAgain: 'Ne plus afficher au démarrage',
+
+    tourTitle: 'Visite & Personnalisation du Laboratoire',
+    tourStep: 'Étape',
+    tourNext: 'Suivant',
+    tourBack: 'Précédent',
+    tourFinish: 'Terminer & Commencer',
+    tourSkip: 'Passer la visite',
+    tourCustomizeTitle: 'Personnalisation & Calibration',
+    themeAccent: 'Teinte et Éclat Visuel',
+    dialecticRigour: 'Rigueur Dialectique',
+    ambientHum: 'Fréquence Binaurale de Focus (432Hz)',
+    ambientHumDesc: 'Émet une fréquence harmonique subtile pour favoriser l’immersion cognitive.',
+
+    plansTitle: 'Abonnements & Coordination Cloud',
+    plansSubtitle: 'Gestion équilibrée des jetons Gemini, flux Live, particules GPU et services cloud.',
+    planFree: 'Free Explorer',
+    planPro: 'Pro Researcher',
+    planUnlimited: 'Unlimited Scholar',
+    planAdmin: 'ADMIN & Contrôle Racine',
+    currentPlan: 'Plan Actuel',
+    selectPlan: 'Activer ce Plan',
+    adminControls: 'Console Administrateur & Diagnostic',
+    adminTokenInspector: 'Télémétrie des Jetons & Latence',
+    adminBypassQuota: 'Outrepasser Quotas & Limites',
+    adminVectorFlush: 'Purger / Réensemencer la Mémoire',
+    quotaUsed: 'Requêtes Journalières Utilisées',
+
+    docsTitle: 'Manuel d’Utilisation Accessible & Architecture',
+    docsSubtitle: 'Toutes les clés pour comprendre et exploiter ce système en langage simple.',
+    downloadPdf: 'Télécharger le Guide Complet (.PDF)',
+    generatingPdf: 'Génération du PDF...',
+    simpleGuide: 'Manuel Utilisateur',
+  },
+  ja: {
+    ...baseExtraEn,
+    appName: '意味論的認知研究ラボ',
+    appSubtitle: 'OKLab VaporSphere & Gemini Live デュプレックス音声対話インターフェース',
+    entryHub: 'エントリーハブ',
+    topicsMenu: '研究ケース・トピック履歴',
+    topicsProcessed: '処理済みトピック',
+    newTopic: '新規ケース (+)',
+    activeTopic: '現在のケース',
+    searchTopics: 'トピックを検索...',
+    noTopicsFound: '該当するトピックがありません。',
+    pinTopic: 'ピン留め',
+    unpinTopic: 'ピン解除',
+    exportTopic: 'ケース出力 (JSON)',
+    deleteTopic: 'ケース削除',
+    renameTopic: 'ケース名変更',
+    topicCasesHeading: '調査ケース履歴',
+    topicsProcessedBadge: '件のケース完了',
+
+    navArena: '弁証法アリーナ',
+    navPhysics: '粒子物理 & 視錐台',
+    navColorimetry: 'OKLab 比色分析',
+    navMemory: 'ベクトル記憶',
+    navMethodology: 'ソクラテス式対話',
+    navCloud: 'Google Cloud Mesh',
+    navPlans: 'プラン & サブスクリプション',
+    navDocs: 'PDFガイド & 資料',
+
+    startLive: 'Gemini Live API 開始',
+    endLive: 'Gemini Live 終了',
+    handshakeLive: 'WebSocket 接続中...',
+    testAcoustic: '音響応答テスト',
+    stopAcoustic: '音響加振停止',
+    stopAllAudio: '即座に消音 (Kill-Switch)',
+    activeStream: '● 音声ストリーム中',
+    readyStream: '○ 待機中',
+
+    secAudioConfig: '01. Gemini Live API 音声設定',
+    modelArch: 'モデル構造',
+    voiceSynth: '音声ペルソナ',
+    gpuParticles: 'GPU 粒子数',
+    particlesUnit: '個',
+    vadThreshold: 'ローカル VAD 閾値 (RMS)',
+    secModelResilience: '02. AI モデル選択 & 高耐久性',
+    textModel: '論述モデル',
+    highDemandFailover: '高負荷耐性フェイルオーバー',
+    highDemandFailoverDesc: 'クォータ超過時に待機モデルへ自動切り替えを行います。',
+    patientMode: '深層思考モード',
+    patientModeDesc: 'より高度な論理検証のため、思考時間を拡張します。',
+    secDomains: '03. OKLab 感情・主題ドメイン',
+
+    disputationHeading: 'ソクラテス的問答 & 公理的検証',
+    disputationDesc: '命題を入力し、論理的矛盾の摘出と GPU 蒸気球体のリアルタイム変化を体験します。',
+    hypothesisLabel: '公理的命題 / 研究仮説',
+    hypothesisPlaceholder: '例: 意識は創発的な計算結果ではなく、物理主義に還元できない根本的存在論的カテゴリーである...',
+    contextDirectiveLabel: '専門役割 / コンテキスト指示',
+    contextDirectivePlaceholder: '例: 複雑系非平衡熱力学の厳格な論文査読者',
+    submitInquiry: 'ソクラテス的検証を実行',
+    submitting: '論理検証中...',
+    autoTts: '応答時に 24kHz HD 音声を自動再生',
+    autoTtsDesc: '回答生成と同時に Gemini 音声またはブラウザ音声を再生します。',
+    branchingHeading: '能動的論理展開パス',
+    verticalInquiry: '垂直的深化',
+    lateralInquiry: '横断的拡張',
+    antithesisInquiry: '批判的対立命題',
+    deepAnalysisHeading: '認識論的脱構築',
+    hiddenAxioms: '隠れた公理と境界条件',
+    isomorphisms: '構造的同型性',
+    counterTheses: '対立仮説',
+    keyQuestionsHeading: 'ユーザーへの主要な問いかけ',
+    answerQuestion: '問いに答える',
+    sendClarification: '追加情報を送信',
+    skipQuestion: 'スキップ',
+
+    welcomeTitle: 'マルチモーダル認知研究ラボへようこそ',
+    welcomeSubtitle: '超低遅延双方向音声と OKLab 色空間 GPU 流体球体による、学際的思考探求システム。',
+    entryActionNew: '新しい研究ケースを開始',
+    entryActionNewDesc: '新しい命題を入力するか、用意された難解な認識論的課題を選択します。',
+    entryActionResume: '前回のケースを再開',
+    entryActionResumeDesc: '過去の議論履歴や球体の視覚状態を即座に復元します。',
+    entryActionTour: '機能紹介ツアー & カスタマイズ',
+    entryActionTourDesc: '操作方法、球体物理、音声対話、カラーテーマの解説ツアー。',
+    entryActionDocs: 'PDF ガイド & ドキュメント',
+    entryActionDocsDesc: '初心者にもわかりやすい解説書と更新履歴をダウンロード。',
+    quickDomains: '推奨ドメイン',
+    enterArena: 'アリーナに入る',
+    dontShowAgain: '次回以降、起動時に自動表示しない',
+
+    tourTitle: '認知ラボ ツアー & 個人設定',
+    tourStep: 'ステップ',
+    tourNext: '次へ',
+    tourBack: '戻る',
+    tourFinish: '完了して開始',
+    tourSkip: 'ツアーをスキップ',
+    tourCustomizeTitle: '環境カスタマイズ & 視覚設定',
+    themeAccent: 'UI アクセントカラー',
+    dialecticRigour: '論理の厳格性レベル',
+    ambientHum: 'バイノーラル集中周波数 (432Hz)',
+    ambientHumDesc: '深い思考を促す微小な背景周波数を再生します。',
+
+    plansTitle: '利用プラン & クラウド連携設計',
+    plansSubtitle: 'Gemini トークン、音声ストリーム、GPU 負荷の最適なバランス設計。',
+    planFree: 'Free Explorer',
+    planPro: 'Pro Researcher',
+    planUnlimited: 'Unlimited Scholar',
+    planAdmin: 'ADMIN & Root Mesh',
+    currentPlan: '現在のプラン',
+    selectPlan: 'プランを選択',
+    adminControls: '管理者コンソール & デバッグ',
+    adminTokenInspector: 'リアルタイム トークン・遅延監視',
+    adminBypassQuota: '利用制限のバイパス',
+    adminVectorFlush: 'ベクトル記憶の再初期化',
+    quotaUsed: '本日の使用枠',
+
+    docsTitle: 'わかりやすい操作ガイド & アーキテクチャ',
+    docsSubtitle: 'このインターフェースを直感的に活用するための平易な解説書。',
+    downloadPdf: '完全版ガイド (.PDF) をダウンロード',
+    generatingPdf: 'PDF を作成中...',
+    simpleGuide: 'ユーザーガイド',
+  },
+  zh: {
+    ...baseExtraEn,
+    appName: '语义认知研究实验室',
+    appSubtitle: 'OKLab 蒸气粒子球 & Gemini Live 双工全语音认知界面',
+    entryHub: '入口中心',
+    topicsMenu: '研究案例与主题',
+    topicsProcessed: '已处理主题',
+    newTopic: '新案例 (+)',
+    activeTopic: '当前案例',
+    searchTopics: '筛选研究主题...',
+    noTopicsFound: '未找到相关主题。',
+    pinTopic: '置顶案例',
+    unpinTopic: '取消置顶',
+    exportTopic: '导出案例 (JSON)',
+    deleteTopic: '删除案例',
+    renameTopic: '重命名案例',
+    topicCasesHeading: '课题研究案例历史',
+    topicsProcessedBadge: '个已研究案例',
+
+    navArena: '辨证竞技场',
+    navPhysics: '粒子物理与视锥体',
+    navColorimetry: 'OKLab 色度学',
+    navMemory: '向量记忆库',
+    navMethodology: '苏格拉底方法论',
+    navCloud: 'Google Cloud Mesh',
+    navPlans: '订阅与层级',
+    navDocs: '指南与 PDF 文档',
+
+    startLive: '启动 Gemini Live API',
+    endLive: '停止 Gemini Live',
+    handshakeLive: 'WebSocket 握手中...',
+    testAcoustic: '声谱响应测试',
+    stopAcoustic: '停止声学激励',
+    stopAllAudio: '立即静音 (Kill-Switch)',
+    activeStream: '● 语音流活跃',
+    readyStream: '○ 就绪',
+
+    secAudioConfig: '01. Gemini Live API 引擎配置',
+    modelArch: '模型架构',
+    voiceSynth: '语音合成人设',
+    gpuParticles: 'GPU 粒子数量',
+    particlesUnit: '个粒子',
+    vadThreshold: '本地 VAD 阈值 (RMS)',
+    secModelResilience: '02. AI 模型选择与容灾机制',
+    textModel: '文本辨证模型',
+    highDemandFailover: '高并发容灾自动切换 (Failover)',
+    highDemandFailoverDesc: '遇 429/503 限流时，自动指数退避并无缝切换至备用模型。',
+    patientMode: '耐心深度思考模式',
+    patientModeDesc: '允许更充裕的思考配额，展开深层认识论推导。',
+    secDomains: '03. OKLab 主题与情感域',
+
+    disputationHeading: '苏格拉底式辨证与公理检验',
+    disputationDesc: '输入公理化命题，实时体验逻辑反诘与 GPU 蒸气球体的动态演变。',
+    hypothesisLabel: '公理化假设 / 核心命题',
+    hypothesisPlaceholder: '例如：意识并非复杂计算的涌现属性，而是无法还原为物理主义的原初本体范畴...',
+    contextDirectiveLabel: '认识论角色 / 上下文注入',
+    contextDirectivePlaceholder: '例如：非平衡复杂系统理论的严格同行评议专家',
+    submitInquiry: '执行苏格拉底式解构',
+    submitting: '逻辑反诘推导中...',
+    autoTts: '生成回复时自动播放 24kHz HD 语音',
+    autoTtsDesc: '模型回答完毕后立即触发 Gemini 原生音频或本地朗读。',
+    branchingHeading: '前瞻性延伸思考路径',
+    verticalInquiry: '纵向深化',
+    lateralInquiry: '横向外推',
+    antithesisInquiry: '批判性对立命题',
+    deepAnalysisHeading: '认识论解构分析',
+    hiddenAxioms: '隐蔽公理与边界前提',
+    isomorphisms: '结构性同构联想',
+    counterTheses: '辨证对立论点',
+    keyQuestionsHeading: '向用户提出的关键澄清问题',
+    answerQuestion: '回答问题',
+    sendClarification: '注入澄清说明',
+    skipQuestion: '跳过',
+
+    welcomeTitle: '多模态认知研究实验室',
+    welcomeSubtitle: '融合低延迟双工语音交互与 OKLab 色彩空间 GPU 流体模拟的跨学科思想探究系统。',
+    entryActionNew: '开启全新研究案例',
+    entryActionNewDesc: '创建全新课题或探索预置的经典哲学与科学命题。',
+    entryActionResume: '恢复已有案例',
+    entryActionResumeDesc: '快速切换此前探讨的研究案例，完整保留对话及视觉粒子状态。',
+    entryActionTour: '功能漫游与个性化',
+    entryActionTourDesc: '互动式导览：案例管理、OKLab 物理球体、实时语音与视觉主题。',
+    entryActionDocs: '操作手册与 PDF 文档',
+    entryActionDocsDesc: '下载通俗易懂的使用指南及系统架构更新日志。',
+    quickDomains: '精选前沿领域',
+    enterArena: '进入认知竞技场',
+    dontShowAgain: '启动时不再自动弹出欢迎窗口',
+
+    tourTitle: '认知实验室漫游与个性化设置',
+    tourStep: '步骤',
+    tourNext: '下一步',
+    tourBack: '上一步',
+    tourFinish: '完成导览并开始',
+    tourSkip: '跳过导览',
+    tourCustomizeTitle: '环境个性化与审美微调',
+    themeAccent: 'UI 发光主色调',
+    dialecticRigour: '辨证严谨度级别',
+    ambientHum: '双耳专注背景频率 (432Hz)',
+    ambientHumDesc: '生成柔和的双耳微谐波，增强深度沉浸与专注力。',
+
+    plansTitle: '方案配额与云服务协同',
+    plansSubtitle: '平衡调度 Gemini 令牌、实时语音流、GPU 粒子及多云协调。',
+    planFree: 'Free Explorer (免费探索者)',
+    planPro: 'Pro Researcher (专业学者)',
+    planUnlimited: 'Unlimited Scholar (无限学术)',
+    planAdmin: 'ADMIN & 根级节点',
+    currentPlan: '当前生效方案',
+    selectPlan: '激活方案',
+    adminControls: '管理员控制台与底层调试',
+    adminTokenInspector: '实时 Token 与延迟监控',
+    adminBypassQuota: '绕过限流与每日额度',
+    adminVectorFlush: '清理 / 重新灌入向量记忆库',
+    quotaUsed: '今日已用提问额度',
+
+    docsTitle: '通俗易懂的操作手册与架构说明',
+    docsSubtitle: '以平实生动的语言，帮助您快速掌握本系统的全部潜能。',
+    downloadPdf: '下载完整操作手册 (.PDF)',
+    generatingPdf: '正在生成 PDF 文档...',
+    simpleGuide: '操作指南',
+  },
+  ar: {
+    ...baseExtraEn,
+    appName: 'مختبر الأبحاث الدلالية والمعرفية',
+    appSubtitle: 'واجهة OKLab ومحرك Gemini Live ثنائي الاتجاه للمناظرة السقراطية',
+    entryHub: 'مركز الدخول',
+    topicsMenu: 'قضايا وموضوعات البحث',
+    topicsProcessed: 'موضوعات مكتملة',
+    newTopic: 'قضية جديدة (+)',
+    activeTopic: 'القضية النشطة',
+    searchTopics: 'تصفية الموضوعات...',
+    noTopicsFound: 'لم يتم العثور على موضوعات.',
+    pinTopic: 'تثبيت القضية',
+    unpinTopic: 'إلغاء التثبيت',
+    exportTopic: 'تصدير القضية (JSON)',
+    deleteTopic: 'حذف القضية',
+    renameTopic: 'إعادة تسمية',
+    topicCasesHeading: 'سجل القضايا البحثية',
+    topicsProcessedBadge: 'قضايا مكتملة',
+
+    navArena: 'الميدان الجدلي',
+    navPhysics: 'فيزياء الجسيمات',
+    navColorimetry: 'فضاء OKLab اللوني',
+    navMemory: 'الذاكرة الشعاعية',
+    navMethodology: 'المنهج السقراطي',
+    navCloud: 'Google Cloud Mesh',
+    navPlans: 'الخطط والاشتراكات',
+    navDocs: 'الدليل ووثائق PDF',
+
+    startLive: 'بدء Gemini Live API',
+    endLive: 'إنهاء البث المباشر',
+    handshakeLive: 'اتصال WebSocket...',
+    testAcoustic: 'اختبار الاستجابة الصوتية',
+    stopAcoustic: 'إيقاف المثير الصوتي',
+    stopAllAudio: 'صمت فوري (Kill-Switch)',
+    activeStream: '● بث صوتي نشط',
+    readyStream: '○ جاهز',
+
+    secAudioConfig: '01. تكوين Gemini Live API',
+    modelArch: 'بنية النموذج',
+    voiceSynth: 'المولد الصوتي',
+    gpuParticles: 'عدد جسيمات GPU',
+    particlesUnit: 'جسيم',
+    vadThreshold: 'عتبة المقاطعة VAD (RMS)',
+    secModelResilience: '02. اختيار النموذج والمتانة',
+    textModel: 'نموذج المناظرة النصية',
+    highDemandFailover: 'الحماية من الضغط والتحويل التلقائي',
+    highDemandFailoverDesc: 'عند تجاوز الحصص يتم التحويل السلس للنماذج البديلة دون توقف.',
+    patientMode: 'وضع التفكير المتأني',
+    patientModeDesc: 'يمنح النموذج وقتاً أطول للتفكير العميق والتفكيك المنطقي.',
+    secDomains: '03. مجالات OKLab الدلالية والوجدانية',
+
+    disputationHeading: 'المناظرة السقراطية والمسلمات الأولية',
+    disputationDesc: 'قدم فرضية أو أطروحة ليتم تفكيكها جدلياً وتجسيدها في الكرة الغازية التفاعلية.',
+    hypothesisLabel: 'الفرضية الأولية / الأساس المعرفي',
+    hypothesisPlaceholder: 'مثال: الوعي ليس مجرد حوسبة ناشئة بل فئة أنطولوجية جوهرية لا تختزل...',
+    contextDirectiveLabel: 'الدور المعرفي / توجيه السياق',
+    contextDirectivePlaceholder: 'مثال: محكم أكاديمي صارم في نظرية الأنظمة المعقدة',
+    submitInquiry: 'تنفيذ التحليل السقراطي',
+    submitting: 'جارٍ التفكيك والتحليل...',
+    autoTts: 'توليد صوت عالي الدقة 24kHz تلقائياً',
+    autoTtsDesc: 'تشغيل الصوت فور اكتمال صياغة الجواب.',
+    branchingHeading: 'مسارات الاستقصاء المتفرعة',
+    verticalInquiry: 'تعميق رأسي',
+    lateralInquiry: 'استقراء جانبي',
+    antithesisInquiry: 'الأطروحة النقيضة',
+    deepAnalysisHeading: 'التفكيك الإبستمولوجي',
+    hiddenAxioms: 'المسلمات الخفية والشروط الحدية',
+    isomorphisms: 'التناظرات الهيكلية',
+    counterTheses: 'الأطروحات المضادة',
+    keyQuestionsHeading: 'أسئلة توضيحية موجهة للمستخدم',
+    answerQuestion: 'الإجابة عن السؤال',
+    sendClarification: 'إرسال التوضيح',
+    skipQuestion: 'تخطي',
+
+    welcomeTitle: 'مختبر المعرفة متعدد الأنماط',
+    welcomeSubtitle: 'واجهة صوتية متطورة ومحاكي سوائل ثلاثي الأبعاد في فضاء OKLab للحوار السقراطي المعمق.',
+    entryActionNew: 'بدء قضية بحثية جديدة',
+    entryActionNewDesc: 'ابدأ فرضية جديدة أو اختر من بين التحديات الفلسفية المعدة مسبقاً.',
+    entryActionResume: 'متابعة القضايا السابقة',
+    entryActionResumeDesc: 'التنقل الفوري بين القضايا السابقة مع حفظ التاريخ وحالة الكرة البصرية.',
+    entryActionTour: 'جولة التخصيص والاستكشاف',
+    entryActionTourDesc: 'دليل تفاعلي للتعرف على القضايا، وفيزياء OKLab، والتفاعل الصوتي الحي.',
+    entryActionDocs: 'الدليل ودليل PDF التوضيحي',
+    entryActionDocsDesc: 'تحميل الدليل المبسط وسجل التحديثات الشامل.',
+    quickDomains: 'مجالات سريعة مختارة',
+    enterArena: 'الدخول إلى الميدان المعرفي',
+    dontShowAgain: 'عدم الإظهار تلقائياً عند بدء التشغيل',
+
+    tourTitle: 'جولة الاستكشاف والتخصيص',
+    tourStep: 'خطوة',
+    tourNext: 'التالي',
+    tourBack: 'السابق',
+    tourFinish: 'إنهاء والبدء',
+    tourSkip: 'تخطي الجولة',
+    tourCustomizeTitle: 'تخصيص البيئة والمعايرة البصرية',
+    themeAccent: 'لون الإضاءة الرئيسي',
+    dialecticRigour: 'مستوى الصرامة الجدلية',
+    ambientHum: 'تردد التركيز الثنائي (432Hz)',
+    ambientHumDesc: 'توليد نغمة خلفية متناغمة لتعزيز الاستغراق الذهني العميق.',
+
+    plansTitle: 'توازن الخطط وتنسيق السحابة',
+    plansSubtitle: 'توزيع متوازن لحصص Gemini، والبث الصوتي الحي، وجسيمات المحاكي.',
+    planFree: 'مستكشف مجاني (Free)',
+    planPro: 'باحث محترف (Pro)',
+    planUnlimited: 'أكاديمي بلا حدود (Unlimited)',
+    planAdmin: 'مدير النظام (ADMIN)',
+    currentPlan: 'الخطة الحالية',
+    selectPlan: 'تفعيل الخطة',
+    adminControls: 'لوحة تحكم المسؤول وأدوات التشخيص',
+    adminTokenInspector: 'مراقبة الرموز والتأخير الزمني',
+    adminBypassQuota: 'تجاوز حدود الحصص اليومية',
+    adminVectorFlush: 'تفريغ / إعادة تهيئة الذاكرة الشعاعية',
+    quotaUsed: 'الحصة اليومية المستهلكة',
+
+    docsTitle: 'دليل التشغيل المبسط والبنية المعمارية',
+    docsSubtitle: 'كل ما تحتاج لمعرفته للاستفادة الكاملة من هذا النظام بأسلوب واضح وميسر.',
+    downloadPdf: 'تحميل الدليل الكامل بصيغة (.PDF)',
+    generatingPdf: 'جارٍ إنشاء ملف PDF...',
+    simpleGuide: 'دليل المستخدم المبسط',
+  },
+  pt: {
+    ...baseExtraEn,
+    appName: 'Laboratório de Pesquisa Semântica',
+    appSubtitle: 'OKLab VaporSphere & Interface Cognitiva Duplex Gemini Live',
+    entryHub: 'Hub de Entrada',
+    topicsMenu: 'Casos e Tópicos de Pesquisa',
+    topicsProcessed: 'Tópicos Processados',
+    newTopic: 'Novo Caso (+)',
+    activeTopic: 'Caso Ativo',
+    searchTopics: 'Filtrar tópicos de pesquisa...',
+    noTopicsFound: 'Nenhum tópico encontrado.',
+    pinTopic: 'Fixar Caso',
+    unpinTopic: 'Desafixar Caso',
+    exportTopic: 'Exportar Caso (JSON)',
+    deleteTopic: 'Excluir Caso',
+    renameTopic: 'Renomear Caso',
+    topicCasesHeading: 'Histórico de Casos Analisados',
+    topicsProcessedBadge: 'Casos Concluídos',
+
+    navArena: 'Arena Dialética',
+    navPhysics: 'Física & Frustum',
+    navColorimetry: 'Colorimetria OKLab',
+    navMemory: 'Memória Vetorial',
+    navMethodology: 'Protocolo Socrático',
+    navCloud: 'Google Cloud Mesh',
+    navPlans: 'Planos & Níveis',
+    navDocs: 'Guia & Documentos PDF',
+
+    startLive: 'Iniciar Gemini Live API',
+    endLive: 'Encerrar Gemini Live',
+    handshakeLive: 'Conexão WebSocket...',
+    testAcoustic: 'Teste de Resposta Espectral',
+    stopAcoustic: 'Parar Estimulador Acústico',
+    stopAllAudio: 'Silêncio Imediato (Kill-Switch)',
+    activeStream: '● FLUXO ATIVO',
+    readyStream: '○ PRONTO',
+
+    secAudioConfig: '01. Configuração Gemini Live API',
+    modelArch: 'Arquitetura do Modelo',
+    voiceSynth: 'Sintetizador de Voz',
+    gpuParticles: 'Partículas GPU',
+    particlesUnit: 'partículas',
+    vadThreshold: 'Limiar VAD Local (Barge-in RMS)',
+    secModelResilience: '02. Seleção de Modelos & Resiliência',
+    textModel: 'Modelo de Disputa Textual',
+    highDemandFailover: 'Resiliência a Alta Demanda (Failover)',
+    highDemandFailoverDesc: 'Troca automaticamente para modelos de reserva em caso de cotas esgotadas.',
+    patientMode: 'Modo de Pensamento Paciente',
+    patientModeDesc: 'Permite tempo extra para raciocínio analítico profundo sem cortes.',
+    secDomains: '03. Domínios Temáticos & Afetivos OKLab',
+
+    disputationHeading: 'Disputa Socrática & Axiomática',
+    disputationDesc: 'Submeta uma tese axiomática para desconstrução elênctica e modulação da esfera GPU.',
+    hypothesisLabel: 'Hipótese Axiomática / Premissa',
+    hypothesisPlaceholder: 'ex: A consciência não é um mero cálculo emergente, mas uma categoria ontológica fundamental...',
+    contextDirectiveLabel: 'Papel Epistêmico / Injeção de Contexto',
+    contextDirectivePlaceholder: 'ex: Revisor Rigoroso em Sistemas Complexos Não-Equilibrados',
+    submitInquiry: 'Executar Análise Socrática',
+    submitting: 'Sintetizando Elênctica...',
+    autoTts: 'Sintetizar Voz HD 24kHz automaticamente',
+    autoTtsDesc: 'Reproduz a voz nativa do Gemini ou navegador ao concluir resposta.',
+    branchingHeading: 'Caminhos de Investigação Ramificada',
+    verticalInquiry: 'Aprofundamento Vertical',
+    lateralInquiry: 'Extrapolação Lateral',
+    antithesisInquiry: 'Antítese do Oponente',
+    deepAnalysisHeading: 'Desconstrução Epistêmica',
+    hiddenAxioms: 'Axiomas Ocultos & Condições de Limite',
+    isomorphisms: 'Isomorfismos Estruturais',
+    counterTheses: 'Contrateses Dialéticas',
+    keyQuestionsHeading: 'Perguntas-Chave de Esclarecimento',
+    answerQuestion: 'Responder Pergunta',
+    sendClarification: 'Enviar Esclarecimento',
+    skipQuestion: 'Ignorar',
+
+    welcomeTitle: 'Laboratório de Pesquisa Cognitiva',
+    welcomeSubtitle: 'Interface de voz bidirecional de baixa latência e simulador de fluidos GPU OKLab para debate interdisciplinar.',
+    entryActionNew: 'Iniciar Novo Caso',
+    entryActionNewDesc: 'Abra um caso em branco ou explore desafios epistemológicos prontos.',
+    entryActionResume: 'Continuar Casos Anteriores',
+    entryActionResumeDesc: 'Alterne entre tópicos de pesquisa preservando histórico e esfera visual.',
+    entryActionTour: 'Tour & Personalização',
+    entryActionTourDesc: 'Tour interativo sobre casos, física OKLab, áudio Live e temas visuais.',
+    entryActionDocs: 'Guia & Documentação PDF',
+    entryActionDocsDesc: 'Baixe o manual prático e o registro de atualizações do sistema.',
+    quickDomains: 'Domínios Sugeridos',
+    enterArena: 'Entrar na Arena Cognitiva',
+    dontShowAgain: 'Não exibir automaticamente na inicialização',
+
+    tourTitle: 'Tour de Personalização do Laboratório',
+    tourStep: 'Passo',
+    tourNext: 'Avançar',
+    tourBack: 'Voltar',
+    tourFinish: 'Concluir & Iniciar',
+    tourSkip: 'Pular Tour',
+    tourCustomizeTitle: 'Personalização & Calibração Estética',
+    themeAccent: 'Tom de Acento e Brilho',
+    dialecticRigour: 'Rigor Dialético',
+    ambientHum: 'Frequência Binaural de Foco (432Hz)',
+    ambientHumDesc: 'Gera um som harmônico sutil para concentração profunda.',
+
+    plansTitle: 'Equilíbrio de Planos & Coordenação Cloud',
+    plansSubtitle: 'Distribuição justa de tokens Gemini, fluxos Live, partículas GPU e serviços em nuvem.',
+    planFree: 'Free Explorer',
+    planPro: 'Pro Researcher',
+    planUnlimited: 'Unlimited Scholar',
+    planAdmin: 'ADMIN & Malha Raiz',
+    currentPlan: 'Plano Ativo',
+    selectPlan: 'Ativar Plano',
+    adminControls: 'Console de Administração & Diagnóstico',
+    adminTokenInspector: 'Telemetria em Tempo Real de Tokens e Latência',
+    adminBypassQuota: 'Ignorar Limites de Cota',
+    adminVectorFlush: 'Limpar / Recarregar Memória Vetorial',
+    quotaUsed: 'Consultas Utilizadas Hoje',
+
+    docsTitle: 'Manual Operacional Acessível & Arquitetura',
+    docsSubtitle: 'Tudo o que você precisa para dominar e aproveitar esta interface em linguagem simples.',
+    downloadPdf: 'Baixar Guia Completo (.PDF)',
+    generatingPdf: 'Compilando arquivo PDF...',
+    simpleGuide: 'Manual do Usuário',
+  }
+};

@@ -1,0 +1,593 @@
+%PDF-1.3
+%ºß¬à
+3 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 4 0 R
+>>
+endobj
+4 0 obj
+<<
+/Length 6961
+>>
+stream
+0.5670000000000001 w
+0 G
+0.03 0.04 0.05 rg
+0. 841.8899999999999864 595.2799999999999727 -841.8899999999999864 re
+f
+0.02 0.71 0.83 rg
+45.354330708661422 807.8742519685039269 11.3385826771653555 -51.0236220472441033 re
+f
+BT
+/F2 18 Tf
+20.6999999999999993 TL
+0.973 0.98 0.988 rg
+68.031496062992133 785.1970866141732586 Td
+(Semantic Research Lab — Operational User Guide) Tj
+ET
+BT
+/F1 9 Tf
+10.3499999999999996 TL
+0.58 0.639 0.722 rg
+68.031496062992133 768.1892125984252289 Td
+(Simple-Minded Architecture & Feature Walkthrough | Version 2.0 \(Multilingual Edition\)) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.22 0.741 0.973 rg
+45.354330708661422 734.1734645669291695 Td
+(1. What Is This Cognitive Interface? \(In Plain Terms\)) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 717.1655905511811397 Td
+(• Think of this application as a high-level scientific debate partner and thinking lab.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 698.7403937007873083 Td
+(• Unlike simple chatbots that give shallow conversational summaries, this interface is built on Socratic Elenctics: it looks for hidden) Tj
+T* (assumptions in what you say, stress-tests your hypotheses, and connects ideas across theoretical physics, biology, and philosophy.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 667.559291338582625 Td
+(• Everything you discuss is physically mirrored in real-time by a glowing 3D particle sphere \(the OKLab VaporSphere\) that changes) Tj
+T* (color, turbulence, and density on your GPU depending on the intellectual tension and emotional tone of the inquiry.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.22 0.741 0.973 rg
+45.354330708661422 625.0396062992125508 Td
+(2. The Entry Hub & Managing Research Cases \(Chats\)) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 608.0317322834645211 Td
+(• Top Cases / Topics Bar: Located at the very top of your screen. Every distinct line of inquiry is treated as a dedicated "Case" \(like an) Tj
+T* (investigation file in a scientific lab\).) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 576.8506299212597241 Td
+(• The badge shows the total number of topics/cases you have processed \(e.g., [ 4 Cases Processed ]\).) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 558.42543307086612 Td
+(• You can switch between previous cases with zero data loss—your full conversation history, key clarifying questions, and 3D visual) Tj
+T* (particle states are preserved in your local browser.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 527.2443307086614368 Td
+(• Click "New Case \(+\)" to open a fresh slate, or click "Entry Hub" to choose pre-configured philosophical paradoxes.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.22 0.741 0.973 rg
+45.354330708661422 497.480551181102328 Td
+(3. Talking with Your Voice: Gemini Live API & Barge-In) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 480.4726771653542983 Td
+(• Real-Time Duplex Voice: Click the cyan "Start Gemini Live API" button in the top right to start a live audio stream.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 462.0474803149605805 Td
+(• Instant Interruption \(Barge-In\): You do not need to wait for the model to finish speaking. If you speak into your microphone, the local) Tj
+T* (voice activity detector \(VAD\) immediately cuts the model speech and lets you take the floor.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 430.8663779527558404 Td
+(• Voice Personas: Choose between Zephyr \(Analytical\), Fenrir \(Deep Baritone\), Kore \(Precise\), Charon \(Grave\), or Puck \(Dynamic\).) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 412.4411811023621226 Td
+(• Spectral Telemetry: Notice how your voice frequencies directly perturb the 3D vapor sphere in real time.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.22 0.741 0.973 rg
+45.354330708661422 382.6774015748030706 Td
+(4. Understanding the 3D VaporSphere & OKLab Colorimetry) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 365.6695275590550409 Td
+(• Perceptual Color Space \(OKLab\): Colors are calculated using true human vision LMS cone responses. This prevents ugly muddy) Tj
+T* (transitions and creates radiant, luminous glows.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 334.4884251968503008 Td
+(• Color Meanings:) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 316.0632283464566399 Td
+(•   - Deep Indigo \(285 deg\): Metaphysics & Ontology of Consciousness.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 297.6380314960629221 Td
+(•   - Crystalline Azure \(190 deg\): Exact Sciences & Theoretical Physics.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 279.2128346456692043 Td
+(•   - Emerald / Warm Amber \(145 to 35 deg\): Medicine & Bioethical Dilemmas.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 260.7876377952754865 Td
+(•   - Terracotta / Cobalt \(15 to 240 deg\): Socioeconomic Bifurcation & Friction.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 242.3624409448817687 Td
+(•   - Pale Platinum \(85 deg\): Critical Epistemology & Deconstruction.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 223.9372440944881646 Td
+(• Turbulence: Low turbulence = calm, orderly logic. High turbulence = fierce controversy or structural paradox.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.22 0.741 0.973 rg
+45.354330708661422 194.1734645669290558 Td
+(5. Socratic Disputation & Key Clarification Questions) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 177.1655905511810261 Td
+(• Submitting a Premise: In the Dialectical Arena, write your hypothesis or research question.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 158.7403937007873083 Td
+(• Elenctic Deconstruction: The model immediately identifies: 1\) Hidden Axioms, 2\) Structural Isomorphisms, and 3\) Dialectical) Tj
+T* (Counter-Theses.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 127.559291338582625 Td
+(• Key Clarification Questions: The model will pose 2-3 specific questions asking you to clarify missing boundaries. You can click) Tj
+T* ("Address Question" to instantly inject your answer into the debate.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 96.3781889763778281 Td
+(• Branching Inquiries: Three quick-launch buttons allow you to dive deeper vertically, extrapolate laterally, or adopt the opponent) Tj
+T* (antithesis.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<</Type /Page
+/Parent 1 0 R
+/Resources 2 0 R
+/MediaBox [0 0 595.2799999999999727 841.8899999999999864]
+/Contents 6 0 R
+>>
+endobj
+6 0 obj
+<<
+/Length 4000
+>>
+stream
+0.5670000000000001 w
+0 G
+0.03 0.04 0.05 rg
+0. 841.8899999999999864 595.2799999999999727 -841.8899999999999864 re
+f
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.22 0.741 0.973 rg
+45.354330708661422 785.1970866141732586 Td
+(6. Subscription Plans, Quotas & Coordination with Cloud Services) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 768.1892125984252289 Td
+(• Free Explorer: 20 turns/day, uses Gemini 3.1 Flash-Lite, standard 100k GPU particles, browser voice synthesis.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 749.7640157480315111 Td
+(• Pro Researcher: 250 turns/day, Gemini 3.8 Flash, Pro reasoning, full 24kHz Live audio streaming, unlimited research cases.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 731.3388188976377933 Td
+(• Unlimited Scholar: Unlimited inquiries, 250k particle simulation, extended thinking mode, automated PDF report generation.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 712.9136220472440755 Td
+(• ADMIN & Root Mesh: Complete administrative bypass, live WebSocket latency inspectors, raw prompt debugger, vector store) Tj
+T* (management, and direct integration hooks with Google Cloud Run, Cloud SQL, Firebase, and Google Workspace.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.22 0.741 0.973 rg
+45.354330708661422 670.3939370078740012 Td
+(7. Multi-Language Support & Personalisation) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 653.3860629921259715 Td
+(• Language Selection: Toggle between English \(default\), Czech, Spanish, German, French, Japanese, Chinese, Arabic, and) Tj
+T* (Portuguese with 1 click.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 622.2049606299212883 Td
+(• Personalisation: Customize your UI accent glow \(Cyan, Emerald, Amber, Violet, Rose\) and dialectical tone \(Post-graduate, Socratic) Tj
+T* (Challenger, Peer Reviewer\).) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 591.0238582677164914 Td
+(• Ambient Focus Hum: Activate a 432Hz binaural background frequency to enhance mental immersion during research.) Tj
+ET
+BT
+/F2 11 Tf
+12.6499999999999986 TL
+0.22 0.741 0.973 rg
+45.354330708661422 561.2600787401574962 Td
+(8. Push-to-Talk \(Default\) & Studio Sound Engineer DSP Chain) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 544.2522047244094665 Td
+(• Hard Default Push-to-Talk: To protect dialogue sanctity and eliminate accidental background interruptions, the microphone is muted) Tj
+T* (by default until you hold the Spacebar or the central Microphone button.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 513.0711023622046696 Td
+(• Universal Microphone Button: Features a universal mic icon that changes dynamically from cool standby slate into glowing emerald) Tj
+T* (while transmitting.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 481.8899999999999295 Td
+(• Ability to Disable PTT: If you prefer continuous hands-free dialogue, toggle the switch from "PTT" to "Open Mic" at any time.) Tj
+ET
+BT
+/F1 8.5 Tf
+9.7749999999999986 TL
+0.886 0.91 0.941 rg
+45.354330708661422 463.4648031496062686 Td
+(• Studio DSP Noise Reduction Strip: The audio chain processes your input before sending to Gemini: 1\) 85Hz High-Pass Filter cuts) Tj
+T* (desk bumps and HVAC rumble; 2\) 2.8kHz Clarity Peaking EQ lifts consonant intelligibility; 3\) Downward Expander silences background) Tj
+T* (room tone; 4\) 3.5:1 Vocal Compressor levels quiet vs loud words; 5\) -1.5dB Brickwall Peak Limiter eliminates digital distortion; 6\) 12ms) Tj
+T* (Anti-Click soft ramp eliminates mechanical mouse switch clicks.) Tj
+ET
+BT
+/F3 7.5 Tf
+8.625 TL
+0.392 0.455 0.545 rg
+45.354330708661422 22.6771653543306684 Td
+(Generated by Semantic Research Lab Engine · Gemini Live API & OKLab VaporSphere · 10/4/2026) Tj
+ET
+endstream
+endobj
+1 0 obj
+<</Type /Pages
+/Kids [3 0 R 5 0 R ]
+/Count 2
+>>
+endobj
+7 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+8 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+9 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+10 0 obj
+<<
+/Type /Font
+/BaseFont /Helvetica-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+11 0 obj
+<<
+/Type /Font
+/BaseFont /Courier
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+12 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+13 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-Oblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+14 0 obj
+<<
+/Type /Font
+/BaseFont /Courier-BoldOblique
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+15 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Roman
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+16 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Bold
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+17 0 obj
+<<
+/Type /Font
+/BaseFont /Times-Italic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+18 0 obj
+<<
+/Type /Font
+/BaseFont /Times-BoldItalic
+/Subtype /Type1
+/Encoding /WinAnsiEncoding
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+19 0 obj
+<<
+/Type /Font
+/BaseFont /ZapfDingbats
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+20 0 obj
+<<
+/Type /Font
+/BaseFont /Symbol
+/Subtype /Type1
+/FirstChar 32
+/LastChar 255
+>>
+endobj
+2 0 obj
+<<
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+/Font <<
+/F1 7 0 R
+/F2 8 0 R
+/F3 9 0 R
+/F4 10 0 R
+/F5 11 0 R
+/F6 12 0 R
+/F7 13 0 R
+/F8 14 0 R
+/F9 15 0 R
+/F10 16 0 R
+/F11 17 0 R
+/F12 18 0 R
+/F13 19 0 R
+/F14 20 0 R
+>>
+/XObject <<
+>>
+>>
+endobj
+21 0 obj
+<<
+/Producer (jsPDF 4.2.1)
+/CreationDate (D:20261004094842-00'00')
+>>
+endobj
+22 0 obj
+<<
+/Type /Catalog
+/Pages 1 0 R
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+>>
+endobj
+xref
+0 23
+0000000000 65535 f 
+0000011354 00000 n 
+0000013179 00000 n 
+0000000015 00000 n 
+0000000152 00000 n 
+0000007165 00000 n 
+0000007302 00000 n 
+0000011417 00000 n 
+0000011542 00000 n 
+0000011672 00000 n 
+0000011805 00000 n 
+0000011943 00000 n 
+0000012067 00000 n 
+0000012196 00000 n 
+0000012328 00000 n 
+0000012464 00000 n 
+0000012592 00000 n 
+0000012719 00000 n 
+0000012848 00000 n 
+0000012981 00000 n 
+0000013083 00000 n 
+0000013429 00000 n 
+0000013515 00000 n 
+trailer
+<<
+/Size 23
+/Root 22 0 R
+/Info 21 0 R
+/ID [ <8DCC4127119912A74E6911950404DD29> <8DCC4127119912A74E6911950404DD29> ]
+>>
+startxref
+13619
+%%EOF
