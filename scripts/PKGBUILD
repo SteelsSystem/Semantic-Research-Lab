@@ -1,0 +1,62 @@
+# Maintainer: VaporSphere Authors <team@vaporsphere.local>
+# Contributor: CachyOS Community
+pkgname=vaporsphere-bin
+pkgver=0.2.0
+pkgrel=1
+pkgdesc="Personal Dialectical Research Lab & OKLab Acoustic Engine (Tauri v2 Desktop Host)"
+arch=('x86_64' 'aarch64')
+url="https://github.com/vaporsphere/vaporsphere"
+license=('MIT')
+depends=(
+    'webkit2gtk-4.1'
+    'libayatana-appindicator'
+    'openssl'
+    'hicolor-icon-theme'
+)
+optdepends=(
+    'llama-cpp: for high-performance offline local LLM inference'
+    'ollama: for running local background inference servers'
+)
+provides=('vaporsphere')
+conflicts=('vaporsphere')
+source_x86_64=("https://github.com/vaporsphere/vaporsphere/releases/download/v${pkgver}/VaporSphere_${pkgver}_amd64.AppImage")
+sha256sums_x86_64=('SKIP')
+
+prepare() {
+    cd "${srcdir}"
+    chmod +x "VaporSphere_${pkgver}_amd64.AppImage"
+    ./"VaporSphere_${pkgver}_amd64.AppImage" --appimage-extract >/dev/null 2>&1 || true
+}
+
+package() {
+    cd "${srcdir}"
+
+    install -dm755 "${pkgdir}/usr/bin"
+    install -dm755 "${pkgdir}/usr/share/applications"
+    install -dm755 "${pkgdir}/usr/share/icons/hicolor/256x256/apps"
+
+    if [ -d "squashfs-root" ]; then
+        install -Dm755 "squashfs-root/usr/bin/vaporsphere" "${pkgdir}/usr/bin/vaporsphere" 2>/dev/null || \
+        install -Dm755 "VaporSphere_${pkgver}_amd64.AppImage" "${pkgdir}/usr/bin/vaporsphere"
+    else
+        install -Dm755 "VaporSphere_${pkgver}_amd64.AppImage" "${pkgdir}/usr/bin/vaporsphere"
+    fi
+
+    # Desktop entry
+    cat << EOF > "${pkgdir}/usr/share/applications/vaporsphere.desktop"
+[Desktop Entry]
+Name=VaporSphere Dialectical Lab
+Comment=Personal Dialectical Research & OKLab Acoustic Engine
+Exec=/usr/bin/vaporsphere %U
+Icon=vaporsphere
+Terminal=false
+Type=Application
+Categories=Science;AudioVideo;Development;Education;
+StartupWMClass=vaporsphere-desktop
+EOF
+
+    # Icon
+    if [ -f "squashfs-root/usr/share/icons/hicolor/256x256/apps/vaporsphere.png" ]; then
+        install -Dm644 "squashfs-root/usr/share/icons/hicolor/256x256/apps/vaporsphere.png" "${pkgdir}/usr/share/icons/hicolor/256x256/apps/vaporsphere.png"
+    fi
+}

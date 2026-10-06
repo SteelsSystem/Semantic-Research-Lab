@@ -67,6 +67,7 @@ import { ProviderSettingsModal } from './components/ProviderSettingsModal';
 import { ProviderRegistry } from './utils/providerRegistry';
 import { DocumentationView } from './components/DocumentationView';
 import { VoicePttController } from './components/VoicePttController';
+import { InstallHubView } from './components/InstallHubView';
 
 const INITIAL_TRANSCRIPTS: TranscriptEntry[] = [
   {
@@ -2817,6 +2818,9 @@ export default function App() {
                   <span>Otevřít konfiguraci</span>
                 </button>
               </div>
+
+              {/* 1-Click Multi-Platform Installation Hub (CachyOS/Linux, macOS, Windows) */}
+              <InstallHubView lang={lang} />
 
               {/* Vitest Audio DSP Math Protection Showcase */}
               <div className="space-y-2.5">

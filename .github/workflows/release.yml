@@ -1,0 +1,111 @@
+name: Multi-Platform Release (macOS, Linux, Windows)
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag (e.g. v0.2.0)'
+        required: true
+        default: 'v0.2.0'
+
+jobs:
+  build-tauri:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'macos-latest'
+            args: '--target universal-apple-darwin'
+            os_name: 'macOS'
+          - platform: 'ubuntu-22.04'
+            args: ''
+            os_name: 'Linux (CachyOS/Arch/Ubuntu/Debian AppImage & deb)'
+          - platform: 'windows-latest'
+            args: ''
+            os_name: 'Windows'
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Set up Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
+      - name: Install Linux build dependencies (CachyOS / Ubuntu / WebKitGTK)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libssl-dev
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Run Vitest DSP math unit tests
+        run: npm test
+
+      - name: Build frontend assets
+        run: npm run build
+
+      - name: Build Tauri desktop bundle
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name || inputs.release_tag }}
+          releaseName: 'VaporSphere ${{ github.ref_name || inputs.release_tag }}'
+          releaseBody: |
+            ### VaporSphere Dialectical Research Lab - Multi-Platform Release
+            Autonomous Socratic Elenctics, OKLab Acoustic Particle Engine & Local Offline Intelligence.
+
+            #### 🚀 Quick 1-Line Installation Commands
+
+            **🐧 Linux (CachyOS / Arch / Ubuntu / Debian / Fedora / AppImage):**
+            ```bash
+            curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/install.sh | bash
+            ```
+            *CachyOS / Arch Linux Native Package:*
+            ```bash
+            git clone https://github.com/${{ github.repository }}.git && cd vaporsphere/scripts && makepkg -si
+            ```
+
+            **🍎 macOS (Apple Silicon & Intel Universal DMG):**
+            ```bash
+            curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/install-macos.sh | bash
+            ```
+
+            **🪟 Windows (.EXE Setup Installer & PowerShell):**
+            ```powershell
+            irm https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/install-windows.ps1 | iex
+            ```
+            *Command Prompt (CMD) direct run:*
+            ```cmd
+            curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/install-windows.cmd -o install.cmd && install.cmd
+            ```
+
+            #### 📦 Release Assets
+            - **Windows**: `VaporSphere_*_x64-setup.exe` (Standard NSIS Setup Wizard), `.msi`, `.zip`
+            - **Linux**: `.AppImage`, `.deb`, `tar.gz` (Compatible with CachyOS x86-64-v3/v4 & Wayland/X11)
+            - **macOS**: `.dmg`, `.app.tar.gz` (Universal binary for M1/M2/M3/M4 & Intel)
+          releaseDraft: false
+          prerelease: false
+          args: ${{ matrix.args }}

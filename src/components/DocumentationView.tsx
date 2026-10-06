@@ -17,6 +17,7 @@ import {
 import { LanguageCode } from '../types/cognitive';
 import { TRANSLATIONS } from '../utils/i18n';
 import { generateSimpleGuidePdf, GUIDE_SECTIONS } from '../utils/pdfGenerator';
+import { InstallHubView } from './InstallHubView';
 
 interface DocumentationViewProps {
   lang: LanguageCode;
@@ -77,6 +78,9 @@ export function DocumentationView({ lang }: DocumentationViewProps) {
           )}
         </button>
       </div>
+
+      {/* 1-Click Multi-Platform Installation Hub (CachyOS/Linux, macOS, Windows) */}
+      <InstallHubView lang={lang} />
 
       {/* Guide Chapters in Clear, Plain English/Czech */}
       <div className="space-y-4">
