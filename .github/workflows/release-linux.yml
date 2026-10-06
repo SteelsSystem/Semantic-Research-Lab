@@ -1,0 +1,111 @@
+name: Linux Release (CachyOS, Arch, Ubuntu, Debian, AppImage)
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release Tag (e.g. v0.2.0)'
+        required: false
+        default: 'v0.2.0'
+
+permissions:
+  contents: write
+
+jobs:
+  release-linux:
+    name: Build & Publish Linux Release (AppImage, deb, CachyOS)
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Set up Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Linux build dependencies (CachyOS/Ubuntu/WebKitGTK)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libssl-dev
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Generate multi-platform icons
+        run: python3 scripts/generate-icons.py
+
+      - name: Run DSP unit test suite
+        run: npm test
+
+      - name: Build frontend bundle
+        run: npm run build
+
+      - name: Build Tauri Linux packages (AppImage & deb)
+        run: npx tauri build
+        continue-on-error: true
+
+      - name: Package portable Linux tarball and CachyOS bundle
+        run: |
+          node scripts/package-portable.js
+          mkdir -p releases
+          tar -czf releases/vaporsphere-cachyos-arch-package.tar.gz scripts/PKGBUILD scripts/install-linux.sh
+
+      - name: Determine release tag
+        id: vars
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          elif [ -n "${{ inputs.release_tag }}" ]; then
+            echo "tag=${{ inputs.release_tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=v0.2.0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Publish Linux Release on GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.vars.outputs.tag }}
+          name: VaporSphere Linux Release (${{ steps.vars.outputs.tag }})
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            src-tauri/target/release/bundle/appimage/*.AppImage
+            src-tauri/target/release/bundle/deb/*.deb
+            releases/*linux*.tar.gz
+            releases/vaporsphere-cachyos-arch-package.tar.gz
+          body: |
+            ### VaporSphere Dialectical Lab - Linux Release
+            High-performance Socratic Elenctics & OKLab Acoustic Particle Synthesis.
+            Optimized for CachyOS (x86-64-v3/v4), Arch Linux, Ubuntu, Debian, and Fedora.
+
+            #### 🐧 Quick Installation on Linux
+            **Universal 1-Line Installer (Recommended):**
+            ```bash
+            curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/install.sh | bash
+            ```
+
+            **Native CachyOS / Arch Linux PKGBUILD:**
+            ```bash
+            curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/PKGBUILD -o PKGBUILD && makepkg -si
+            ```
+
+            **Direct AppImage Execution:**
+            ```bash
+            chmod +x VaporSphere_*_amd64.AppImage
+            ./VaporSphere_*_amd64.AppImage
+            ```
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

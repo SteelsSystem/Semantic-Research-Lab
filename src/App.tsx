@@ -34,7 +34,8 @@ import {
   PanelLeftOpen,
   Columns,
   Cpu,
-  Terminal
+  Terminal,
+  Activity
 } from 'lucide-react';
 import {
   AudioSpectrumMetrics,
@@ -68,6 +69,8 @@ import { ProviderRegistry } from './utils/providerRegistry';
 import { DocumentationView } from './components/DocumentationView';
 import { VoicePttController } from './components/VoicePttController';
 import { InstallHubView } from './components/InstallHubView';
+import { ReferenceAuditHub } from './components/ReferenceAuditHub';
+import { AdvancedSettingsDrawer } from './components/AdvancedSettingsDrawer';
 
 const INITIAL_TRANSCRIPTS: TranscriptEntry[] = [
   {
@@ -125,10 +128,11 @@ const INITIAL_TRANSCRIPTS: TranscriptEntry[] = [
 ];
 
 export default function App() {
-  // Active Top Navigation Tab
+  // Active Top Navigation Tab (Two-Tier Model: Action Dashboard 'arena' vs Reference Hub 'reference')
   const [activeNav, setActiveNav] = useState<
-    'arena' | 'physics' | 'colorimetry' | 'memory' | 'methodology' | 'cloud' | 'desktop' | 'plans' | 'docs'
+    'arena' | 'reference' | 'physics' | 'colorimetry' | 'memory' | 'methodology' | 'cloud' | 'desktop' | 'plans' | 'docs'
   >('arena');
+  const [isAdvancedSettingsOpen, setIsAdvancedSettingsOpen] = useState(false);
 
   // Multi-Language Support (English default, Czech, Spanish, German, French, Japanese, Chinese, Arabic, Portuguese)
   const [lang, setLang] = useState<LanguageCode>(() => {
@@ -1150,87 +1154,48 @@ export default function App() {
           <span>{t.appName}</span>
         </a>
 
-        {/* Zone 2: Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-5 text-xs font-medium text-slate-400">
+        {/* Zone 2: Two-Tier Consolidated Navigation */}
+        <nav className="hidden lg:flex items-center gap-4 text-xs font-medium text-slate-400">
           <button
             onClick={() => setActiveNav('arena')}
-            className={`py-1 transition-colors whitespace-nowrap ${
+            className={`py-1 transition-colors whitespace-nowrap flex items-center gap-1.5 ${
               activeNav === 'arena'
                 ? 'text-cyan-400 underline underline-offset-4 font-semibold'
                 : 'hover:text-slate-100'
             }`}
           >
-            {t.navArena}
+            <Activity className="w-3.5 h-3.5 text-cyan-400" />
+            <span>{lang === 'cs' ? 'Akční Konzole' : 'Action Dashboard'}</span>
           </button>
+
           <button
-            onClick={() => setActiveNav('physics')}
-            className={`py-1 transition-colors whitespace-nowrap ${
-              activeNav === 'physics'
-                ? 'text-cyan-400 underline underline-offset-4 font-semibold'
-                : 'hover:text-slate-100'
-            }`}
-          >
-            {t.navPhysics}
-          </button>
-          <button
-            onClick={() => setActiveNav('colorimetry')}
-            className={`py-1 transition-colors whitespace-nowrap ${
-              activeNav === 'colorimetry'
-                ? 'text-cyan-400 underline underline-offset-4 font-semibold'
-                : 'hover:text-slate-100'
-            }`}
-          >
-            {t.navColorimetry}
-          </button>
-          <button
-            onClick={() => setActiveNav('memory')}
-            className={`py-1 transition-colors whitespace-nowrap ${
-              activeNav === 'memory'
-                ? 'text-cyan-400 underline underline-offset-4 font-semibold'
-                : 'hover:text-slate-100'
-            }`}
-          >
-            {t.navMemory}
-          </button>
-          <button
-            onClick={() => setActiveNav('methodology')}
-            className={`py-1 transition-colors whitespace-nowrap ${
-              activeNav === 'methodology'
-                ? 'text-cyan-400 underline underline-offset-4 font-semibold'
-                : 'hover:text-slate-100'
-            }`}
-          >
-            {t.navMethodology}
-          </button>
-          <button
-            onClick={() => setActiveNav('desktop')}
+            onClick={() => setActiveNav('reference')}
             className={`py-1 transition-colors whitespace-nowrap flex items-center gap-1.5 ${
-              activeNav === 'desktop'
+              activeNav !== 'arena'
                 ? 'text-cyan-400 underline underline-offset-4 font-semibold'
-                : 'hover:text-slate-100 text-slate-300'
-            }`}
-          >
-            <Cpu className="w-3.5 h-3.5 text-cyan-400" />
-            <span>{t.navDesktop}</span>
-          </button>
-          <button
-            onClick={() => setProviderSettingsOpen(true)}
-            title="Nastavení lokálního běhu, llama.cpp modelů, vektorové paměti a DSP workletu"
-            className="py-1 px-2 rounded bg-cyan-950/40 border border-cyan-500/30 transition-colors whitespace-nowrap flex items-center gap-1.5 text-cyan-300 hover:bg-cyan-900/50 text-xs font-medium"
-          >
-            <Sliders className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Providery & Modely</span>
-          </button>
-          <button
-            onClick={() => setActiveNav('docs')}
-            className={`py-1 transition-colors whitespace-nowrap flex items-center gap-1.5 ${
-              activeNav === 'docs'
-                ? 'text-cyan-400 underline underline-offset-4 font-semibold'
-                : 'hover:text-slate-100 text-slate-300'
+                : 'hover:text-slate-100'
             }`}
           >
             <BookOpen className="w-3.5 h-3.5 text-cyan-400" />
-            <span>{t.navDocs}</span>
+            <span>{lang === 'cs' ? 'Referenční & Audit Hub' : 'Reference & Audit Hub'}</span>
+          </button>
+
+          <button
+            onClick={() => setIsAdvancedSettingsOpen(true)}
+            title={lang === 'cs' ? 'Rozšířená nastavení VAD, GPU částic, OKLab shaderu a modelů' : 'Advanced settings drawer: VAD, GPU particles, OKLab, models'}
+            className="py-1 px-2.5 rounded bg-slate-900 border border-slate-800 transition-colors whitespace-nowrap flex items-center gap-1.5 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/50 text-xs font-medium"
+          >
+            <Sliders className="w-3.5 h-3.5 text-cyan-400" />
+            <span>{lang === 'cs' ? 'Rozšířená Nastavení' : 'Advanced Settings'}</span>
+          </button>
+
+          <button
+            onClick={() => setProviderSettingsOpen(true)}
+            title={lang === 'cs' ? 'Nastavení lokálního běhu, llama.cpp modelů a API klíčů' : 'Local models, Ollama, llama.cpp and API keys'}
+            className="py-1 px-2 rounded bg-cyan-950/40 border border-cyan-500/30 transition-colors whitespace-nowrap flex items-center gap-1.5 text-cyan-300 hover:bg-cyan-900/50 text-xs font-medium"
+          >
+            <Cpu className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Providery</span>
           </button>
         </nav>
 
@@ -1364,7 +1329,8 @@ export default function App() {
       </header>
 
       {/* Main Asymmetric Split Console Workspace with Dynamic Column Math */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-0 overflow-hidden relative">
+      {activeNav === 'arena' ? (
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-0 overflow-hidden relative">
             {/* Quick Uncollapse Button when sidebar is hidden */}
             {sidebarCollapsed && (
               <button
@@ -1385,16 +1351,39 @@ export default function App() {
                 <span className="text-[11px] font-mono font-semibold text-slate-300">
                   PARAMETRY & KALIBRACE
                 </span>
-                <button
-                  type="button"
-                  onClick={() => setSidebarCollapsed(true)}
-                  title="Sbalit panel pro zvětšení šířky dekonstrukce"
-                  className="px-1.5 py-0.5 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-1 text-[11px] font-mono"
-                >
-                  <PanelLeftClose className="w-3.5 h-3.5" />
-                  <span>Sbalit</span>
-                </button>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setIsAdvancedSettingsOpen(true)}
+                    title={lang === 'cs' ? 'Otevřít podrobné nastavení a ladění' : 'Open advanced settings drawer'}
+                    className="p-1 rounded text-cyan-400 hover:text-cyan-300 hover:bg-slate-800 transition-colors"
+                  >
+                    <Sliders className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSidebarCollapsed(true)}
+                    title="Sbalit panel pro zvětšení šířky dekonstrukce"
+                    className="px-1.5 py-0.5 rounded text-slate-400 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-1 text-[11px] font-mono"
+                  >
+                    <PanelLeftClose className="w-3.5 h-3.5" />
+                    <span>Sbalit</span>
+                  </button>
+                </div>
               </div>
+
+              {/* Primary High-Visibility Drawer Opener Banner */}
+              <button
+                type="button"
+                onClick={() => setIsAdvancedSettingsOpen(true)}
+                className="w-full py-2 px-3 rounded-lg bg-cyan-950/40 border border-cyan-500/40 hover:bg-cyan-900/50 text-cyan-300 font-semibold text-xs transition-all flex items-center justify-between shadow-sm group"
+              >
+                <div className="flex items-center gap-2">
+                  <Sliders className="w-3.5 h-3.5 text-cyan-400 group-hover:rotate-45 transition-transform" />
+                  <span>{lang === 'cs' ? 'Rozšířená Nastavení' : 'Advanced Settings'}</span>
+                </div>
+                <span className="text-[10px] text-cyan-400/80 font-mono">→</span>
+              </button>
           {/* Section 1: Duplex Audio & Live API Configuration */}
           <section className="space-y-3">
             <div className="flex items-center justify-between">
@@ -1479,9 +1468,12 @@ export default function App() {
               {/* Push-to-Talk (Default) & Sound Engineer DSP Status */}
               <div className="p-2.5 rounded bg-[#07090E] border border-slate-800 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300 font-medium text-[11px] flex items-center gap-1.5">
+                  <span
+                    className="text-slate-300 font-medium text-[11px] flex items-center gap-1.5 cursor-help"
+                    title={isPttMode ? 'Mikrofon je ztlumen. Zvuk se přenáší pouze při stisku mezerníku nebo tlačítka mikrofónu.' : 'Open Mic: Zvuk ze vstupu je nepřetržitě streamován.'}
+                  >
                     <Mic className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>Push-to-Talk (Výchozí)</span>
+                    <span>Push-to-Talk ⓘ</span>
                   </span>
                   <label className="relative inline-flex items-center cursor-pointer">
                     <input
@@ -1493,16 +1485,14 @@ export default function App() {
                     <div className="w-7 h-4 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-cyan-500"></div>
                   </label>
                 </div>
-                <p className="text-slate-400 text-[10px] leading-tight">
-                  {isPttMode
-                    ? 'Mikrofon je ve výchozím stavu ztlumen. Zvuk se přenáší pouze při stisku mezerníku nebo tlačítka mikrofónu.'
-                    : 'Open Mic: Zvuk ze vstupu je nepřetržitě streamován bez nutnosti stisku.'}
-                </p>
+                <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
+                  <span>{isPttMode ? 'Stav: Ztlumeno (stiskem mluvíte)' : 'Stav: Open Mic (živý stream)'}</span>
+                </div>
 
                 <div className="pt-1.5 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono text-cyan-400">
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-1 cursor-help" title="Hardware dynamický expander a limiter eliminující šum místnosti">
                     <Sliders className="w-3 h-3 text-cyan-400" />
-                    <span>DSP Expander & Limiter</span>
+                    <span>DSP Expander & Limiter ⓘ</span>
                   </div>
                   <span className={dspEnabled ? 'text-emerald-400 font-bold' : 'text-slate-500'}>
                     {dspEnabled ? 'AKTIVNÍ' : 'BYPASS'}
@@ -1547,40 +1537,36 @@ export default function App() {
 
               {/* High Demand Resilience Options */}
               <div className="p-2.5 rounded bg-[#07090E] border border-slate-800 space-y-2">
-                <label className="flex items-start gap-2 cursor-pointer">
+                <label
+                  className="flex items-center gap-2 cursor-pointer"
+                  title="Při 429/503 nebo přetížení serverů automaticky aplikuje exponenciální odklad a přepne na záložní model v řetězci."
+                >
                   <input
                     type="checkbox"
                     checked={highDemandResilient}
                     onChange={(e) => setHighDemandResilient(e.target.checked)}
-                    className="accent-cyan-400 rounded mt-0.5"
+                    className="accent-cyan-400 rounded"
                   />
-                  <div className="text-[11px] leading-tight">
-                    <span className="font-medium text-slate-200 flex items-center gap-1">
-                      <Zap className="w-3 h-3 text-amber-400 shrink-0" />
-                      <span>Ochrana proti přetížení (High Demand Failover)</span>
-                    </span>
-                    <p className="text-slate-400 text-[10px] mt-0.5">
-                      Při 429/503 nebo přetížení serverů automaticky aplikuje exponenciální odklad a přepne na záložní model v řetězci.
-                    </p>
-                  </div>
+                  <span className="font-medium text-slate-200 flex items-center gap-1 text-[11px]">
+                    <Zap className="w-3 h-3 text-amber-400 shrink-0" />
+                    <span>Failover ochrana při přetížení ⓘ</span>
+                  </span>
                 </label>
 
-                <label className="flex items-start gap-2 cursor-pointer pt-1.5 border-t border-slate-800/80">
+                <label
+                  className="flex items-center gap-2 cursor-pointer pt-1.5 border-t border-slate-800/80"
+                  title="Povoluje delší časový limit a více pokusů pro komplexní uvažování u pomalejších modelů bez přerušení."
+                >
                   <input
                     type="checkbox"
                     checked={patientMode}
                     onChange={(e) => setPatientMode(e.target.checked)}
-                    className="accent-cyan-400 rounded mt-0.5"
+                    className="accent-cyan-400 rounded"
                   />
-                  <div className="text-[11px] leading-tight">
-                    <span className="font-medium text-slate-200 flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-cyan-400 shrink-0" />
-                      <span>Trpělivý režim (Vyšší limit na uvažování)</span>
-                    </span>
-                    <p className="text-slate-400 text-[10px] mt-0.5">
-                      Povoluje delší časový limit a více pokusů pro komplexní uvažování u pomalejších modelů bez přerušení.
-                    </p>
-                  </div>
+                  <span className="font-medium text-slate-200 flex items-center gap-1 text-[11px]">
+                    <Clock className="w-3 h-3 text-cyan-400 shrink-0" />
+                    <span>Trpělivý režim uvažování ⓘ</span>
+                  </span>
                 </label>
               </div>
             </div>
@@ -1924,10 +1910,9 @@ export default function App() {
           </div>
         </main>
 
-        {/* Right Column: Socratic Disputation Arena / Tab Inspector (4 cols on 12-col grid) */}
+        {/* Right Column: Socratic Disputation Arena / Console */}
         <section className="lg:col-span-4 flex flex-col min-h-0 bg-[#0B0E17]">
-          {activeNav === 'arena' && (
-            <div className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 flex flex-col min-h-0">
               {/* Arena Header */}
               <div className="px-4 py-3 border-b border-slate-800/90 flex flex-wrap items-center justify-between gap-2">
                 <div>
@@ -2395,10 +2380,6 @@ export default function App() {
                       Komplexní volný text
                     </button>
                   </div>
-
-                  <span className="text-[11px] text-slate-400 font-mono">
-                    Textová analýza klávesnicí
-                  </span>
                 </div>
 
                 {inputMode === 'structured' ? (
@@ -2407,23 +2388,23 @@ export default function App() {
                       type="text"
                       value={inputTopicName}
                       onChange={(e) => setInputTopicName(e.target.value)}
-                      placeholder="Jméno tématu (např. Vědomí jako kvantový kolaps, Termodynamická sociologie...)"
+                      placeholder="Téma k dekonstrukci..."
                       className="w-full bg-[#0B0E17] border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-cyan-500"
                     />
                     <textarea
                       rows={3}
                       value={inputHypothesis}
                       onChange={(e) => setInputHypothesis(e.target.value)}
-                      placeholder="Popis, hypotéza nebo rozvedení tématu k hlubokému rozebrání..."
+                      placeholder="Výchozí teze, premisa nebo hypotéza..."
                       className="w-full bg-[#0B0E17] border border-slate-800 rounded p-2.5 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-cyan-500 resize-none"
                     />
                   </div>
                 ) : (
                   <textarea
-                    rows={4}
+                    rows={3}
                     value={inputHypothesis}
                     onChange={(e) => setInputHypothesis(e.target.value)}
-                    placeholder="Vložte jakkoliv složitý text, úryvek vědecké práce, argumentaci nebo tezi k dekonstrukci..."
+                    placeholder="Zadejte tezi, argument nebo výrok k sokratovské dekonstrukci..."
                     className="w-full bg-[#0B0E17] border border-slate-800 rounded p-2.5 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-cyan-500 resize-none"
                   />
                 )}
@@ -2464,412 +2445,16 @@ export default function App() {
                 </div>
               </form>
             </div>
-          )}
-
-          {activeNav === 'physics' && (
-            <div className="flex-1 overflow-y-auto p-5 space-y-5 text-xs leading-relaxed">
-              <div>
-                <h2 className="text-base font-display font-bold text-slate-100">
-                  Fyzika částicového pole a kamerový komolý jehlan
-                </h2>
-                <p className="text-slate-400 mt-1">
-                  Matematické ukotvení solidifikované parní sféry, tangenciální projekce Curl Noise a
-                  nelineární radiální stabilizace.
-                </p>
-              </div>
-
-              <div className="p-3.5 bg-[#07090E] border border-slate-800 rounded space-y-2">
-                <h3 className="font-semibold text-slate-200">
-                  1. Ortogonální tangenciální projekce rychlostního pole Curl Noise
-                </h3>
-                <p className="text-slate-400">
-                  Aby nedocházelo k odstředivému úniku mikročástic do prostoru, je bezdivergenční
-                  pole <code className="text-cyan-400 font-mono">∇ · v_curl = 0</code> ortogonálně
-                  promítnuto do tečné roviny lokálního sférického povrchu s jednotkovou normálou{' '}
-                  <code className="font-mono text-slate-200">n = x / ∥x∥</code>:
-                </p>
-                <div className="p-2.5 bg-[#0B0E17] border border-slate-800/80 rounded font-mono text-cyan-300 text-center">
-                  v_tangent = v_curl − (v_curl · n) n
-                </div>
-              </div>
-
-              <div className="p-3.5 bg-[#07090E] border border-slate-800 rounded space-y-2">
-                <h3 className="font-semibold text-slate-200">
-                  2. Elastická sférická vazba s nelineárním tlumením (tanh)
-                </h3>
-                <p className="text-slate-400">
-                  Radiální vzdálenost částice je omezena na dynamicky modulovanou skořepinu{' '}
-                  <code className="font-mono text-slate-200">R(t) = R₀ + ΔR_audio</code> pomocí
-                  hyperbolického tangens s maximální tloušťkou korony{' '}
-                  <code className="font-mono text-slate-200">δ_max = 0.65</code>:
-                </p>
-                <div className="p-2.5 bg-[#0B0E17] border border-slate-800/80 rounded font-mono text-emerald-300 text-center">
-                  r_bound = R(t) + δ_max · tanh((r_raw − R(t)) / δ_max)
-                </div>
-                <div className="p-2.5 bg-[#0B0E17] border border-slate-800/80 rounded font-mono text-slate-200 text-center">
-                  x_final = n · r_bound + v_tangent · (μ₀ + Δμ_audio)
-                </div>
-              </div>
-
-              <div className="p-3.5 bg-[#07090E] border border-slate-800 rounded space-y-2">
-                <h3 className="font-semibold text-slate-200">
-                  3. Analytické zarámování kamery (Frustum Fitting)
-                </h3>
-                <p className="text-slate-400">
-                  Pro maximální poloměr <code className="font-mono">R_max = 3.6</code>, bezpečnostní
-                  okraj <code className="font-mono">p = 0.15</code> a vertikální úhel{' '}
-                  <code className="font-mono">θ_v = 45°</code> je vzdálenost kamery{' '}
-                  <code className="font-mono">d = max(d_v, d_h)</code> počítána v reálném čase přes{' '}
-                  <code className="font-mono">ResizeObserver</code>:
-                </p>
-                <table className="w-full text-left border-collapse font-mono text-[11px] mt-2">
-                  <thead>
-                    <tr className="border-b border-slate-800 text-slate-400">
-                      <th className="py-1.5">Profil</th>
-                      <th className="py-1.5">Poměr α</th>
-                      <th className="py-1.5">Odstup d</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800/60 text-slate-300">
-                    <tr>
-                      <td className="py-1.5">Širokoúhlý (16:9)</td>
-                      <td className="py-1.5">1.78</td>
-                      <td className="py-1.5 text-cyan-400">11.07 (Vertikální limit)</td>
-                    </tr>
-                    <tr>
-                      <td className="py-1.5">Čtvercový (1:1)</td>
-                      <td className="py-1.5">1.00</td>
-                      <td className="py-1.5 text-cyan-400">11.07 (Izotropní limit)</td>
-                    </tr>
-                    <tr>
-                      <td className="py-1.5">Mobilní (9:16)</td>
-                      <td className="py-1.5">0.56</td>
-                      <td className="py-1.5 text-amber-400">18.66 (Horizontální limit)</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {activeNav === 'colorimetry' && (
-            <div className="flex-1 overflow-y-auto p-5 space-y-5 text-xs leading-relaxed">
-              <div>
-                <h2 className="text-base font-display font-bold text-slate-100">
-                  Percepční kolorimetrie v prostoru OKLab a OKLCh
-                </h2>
-                <p className="text-slate-400 mt-1">
-                  Transformace přes kubickou nelinearitu čípků LMS eliminuje šedé desaturované zóny
-                  při míchání barev ve fragmentovém shaderu.
-                </p>
-              </div>
-
-              <div className="p-3.5 bg-[#07090E] border border-slate-800 rounded space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-slate-200">Aktuální chromatický vektor</span>
-                  <span className="font-mono text-cyan-400">{currentHex}</span>
-                </div>
-                <div
-                  className="h-10 w-full rounded border border-white/10"
-                  style={{ backgroundColor: currentHex }}
-                />
-                <div className="grid grid-cols-3 gap-2 font-mono text-[11px] text-slate-300 pt-1">
-                  <div>L (Světlost): {visualState.L.toFixed(3)}</div>
-                  <div>C (Chroma): {lch.C.toFixed(3)}</div>
-                  <div>h (Odstín): {lch.h.toFixed(1)}°</div>
-                </div>
-              </div>
-
-              <div className="space-y-2.5">
-                <h3 className="font-semibold text-slate-200">
-                  Přehled afektivně-tematických profilů
-                </h3>
-                {DOMAIN_PROFILES.map((p) => (
-                  <div
-                    key={p.id}
-                    onClick={() => handleSelectDomainProfile(p)}
-                    className="p-3 bg-[#07090E] border border-slate-800 hover:border-slate-700 rounded cursor-pointer space-y-1"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-slate-200">{p.name}</span>
-                      <span className="font-mono text-[11px] text-cyan-400">{p.subtitle}</span>
-                    </div>
-                    <p className="text-slate-400 text-[11px]">{p.visualBehavior}</p>
-                    <p className="text-slate-500 text-[11px] font-mono">{p.acousticResponse}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeNav === 'memory' && (
-            <div className="flex-1 flex flex-col min-h-0 p-4 space-y-4 text-xs">
-              <div>
-                <h2 className="text-sm font-semibold text-slate-100">
-                  Duální sémantická paměť & Vektorová vnoření
-                </h2>
-                <p className="text-[11px] text-slate-400 mt-0.5">
-                  Indexace konceptů a strukturálních izomorfismů pomocí modelu{' '}
-                  <code className="font-mono text-cyan-400">gemini-embedding-2-preview</code>.
-                </p>
-              </div>
-
-              <form onSubmit={handleSearchMemory} className="flex gap-2">
-                <input
-                  type="text"
-                  value={memorySearchQuery}
-                  onChange={(e) => setMemorySearchQuery(e.target.value)}
-                  placeholder="Vyhledat sémantický koncept nebo izomorfismus..."
-                  className="flex-1 bg-[#07090E] border border-slate-800 rounded px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:border-cyan-500"
-                />
-                <button
-                  type="submit"
-                  className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded flex items-center gap-1.5 whitespace-nowrap"
-                >
-                  <Search className="w-3.5 h-3.5" />
-                  <span>Hledat</span>
-                </button>
-              </form>
-
-              <div className="flex-1 overflow-y-auto space-y-2.5 pr-1">
-                {memories.map((m) => (
-                  <div
-                    key={m.id}
-                    className="p-3 bg-[#07090E] border border-slate-800 rounded space-y-1.5"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-semibold text-slate-100">{m.concept}</span>
-                      {m.similarity !== undefined && (
-                        <span className="font-mono text-[11px] text-emerald-400 shrink-0">
-                          cos(θ) = {m.similarity.toFixed(3)}
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-[11px] font-mono text-cyan-400">{m.domain}</div>
-                    <p className="text-slate-300 leading-relaxed">{m.summary}</p>
-                    {m.isomorphismLink && (
-                      <div className="text-[11px] text-slate-400 font-mono pt-1 border-t border-slate-800/80">
-                        Izomorfismus: {m.isomorphismLink}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              <form
-                onSubmit={handleStoreMemory}
-                className="p-3 bg-[#07090E] border border-slate-800 rounded space-y-2"
-              >
-                <div className="font-semibold text-slate-200">
-                  Archivovat nový koncept do vektorového indexu
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="text"
-                    value={newConceptTitle}
-                    onChange={(e) => setNewConceptTitle(e.target.value)}
-                    placeholder="Název konceptu / teze"
-                    className="bg-[#0B0E17] border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-100"
-                  />
-                  <input
-                    type="text"
-                    value={newConceptDomain}
-                    onChange={(e) => setNewConceptDomain(e.target.value)}
-                    placeholder="Mezioborová doména"
-                    className="bg-[#0B0E17] border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-100"
-                  />
-                </div>
-                <textarea
-                  rows={2}
-                  value={newConceptSummary}
-                  onChange={(e) => setNewConceptSummary(e.target.value)}
-                  placeholder="Formální definice a syntéza strukturálního izomorfismu..."
-                  className="w-full bg-[#0B0E17] border border-slate-800 rounded p-2 text-xs text-slate-100 resize-none"
-                />
-                <button
-                  type="submit"
-                  disabled={isStoringMemory || !newConceptTitle.trim()}
-                  className="w-full py-1.5 bg-cyan-500 hover:bg-cyan-400 disabled:opacity-40 text-slate-950 font-semibold rounded flex items-center justify-center gap-1.5"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>
-                    {isStoringMemory ? 'Generování vektorového vnoření...' : 'Uložit do vektorové paměti'}
-                  </span>
-                </button>
-              </form>
-            </div>
-          )}
-
-          {activeNav === 'methodology' && (
-            <div className="flex-1 overflow-y-auto p-5 space-y-4 text-xs leading-relaxed">
-              <div>
-                <h2 className="text-base font-display font-bold text-slate-100">
-                  Metodika hluboké interdisciplinární disputace
-                </h2>
-                <p className="text-slate-400 mt-1">
-                  Produkční systémová konfigurace vkládaná do rámce{' '}
-                  <code className="font-mono text-cyan-400">BidiGenerateContentSetup</code>.
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                <div className="p-3.5 bg-[#07090E] border border-slate-800 rounded">
-                  <h3 className="font-semibold text-slate-100">01. Sokratovská elenktika</h3>
-                  <p className="text-slate-400 mt-1">
-                    Model neposuzuje pouze povrchovou pravdivost výroku, nýbrž odhaluje skryté
-                    ontologické a normativní předpoklady, na nichž argument spočívá, a formuluje
-                    cílené otázky demonstrující jejich vnitřní kontradikce.
-                  </p>
-                </div>
-
-                <div className="p-3.5 bg-[#07090E] border border-slate-800 rounded">
-                  <h3 className="font-semibold text-slate-100">
-                    02. Mezioborový strukturální izomorfismus
-                  </h3>
-                  <p className="text-slate-400 mt-1">
-                    Cílený přenos formálních konceptů mezi disjunktními doménami — např. aplikace
-                    termodynamiky nerovnovážných systémů a teorie bifurkací na institucionální krize,
-                    nebo konfrontace bioetiky s kvantovou teorií informace.
-                  </p>
-                </div>
-
-                <div className="p-3.5 bg-[#07090E] border border-slate-800 rounded">
-                  <h3 className="font-semibold text-slate-100">
-                    03. Princip nejsilnější interpretace (Steelmanning)
-                  </h3>
-                  <p className="text-slate-400 mt-1">
-                    Před kritikou uživatelovy hypotézy model nejprve tezi přeformuluje v její
-                    nejrobustnější, argumentačně nejsilnější podobě, čímž eliminuje povrchní klamy.
-                  </p>
-                </div>
-
-                <div className="p-3.5 bg-[#07090E] border border-slate-800 rounded">
-                  <h3 className="font-semibold text-slate-100">
-                    04. Proaktivní rozcestník tázání (Triáda)
-                  </h3>
-                  <p className="text-slate-400 mt-1">
-                    Každý obrat je zakončen třemi rigorózními směry: Vertikální prohloubení
-                    (fundamentální mechanismy), Laterální extrapolace (přenos do jiného oboru) a
-                    Oponentská antiteze (nejsilnější protiargument konkurenční školy).
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {(activeNav === 'desktop' || activeNav === 'cloud') && (
-            <div className="flex-1 overflow-y-auto p-5 space-y-5 text-xs leading-relaxed">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="p-1 rounded bg-cyan-500/20 text-cyan-400">
-                    <Cpu className="w-4 h-4" />
-                  </span>
-                  <h2 className="text-base font-display font-bold text-slate-100">
-                    Tauri & Rust Nativní Desktop Architektura (ADR 002 Solo Researcher)
-                  </h2>
-                </div>
-                <p className="text-slate-400">
-                  Aplikace je zacílena na <strong className="text-slate-200">Personal-Use First</strong> model: samostatný prémiový desktopový nástroj s Rust/Tauri nativním hostitelem, lokální inferencí přes llama.cpp, sqlite-vec vektorovou pamětí a studiovým Audio DSP workletem chráněným Vitest testy.
-                </p>
-              </div>
-
-              {/* Status Badge */}
-              <div className="p-3.5 bg-[#07090E] border border-cyan-900/50 rounded space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-slate-200 flex items-center gap-1.5">
-                    <Terminal className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>Nativní Tauri Rust Host & Local Intelligence</span>
-                  </span>
-                  <span className="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-mono text-[11px] font-semibold flex items-center gap-1 border border-cyan-500/30">
-                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                    ADR 002 AKTIVNÍ
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 font-mono text-[11px] text-slate-300 pt-1 border-t border-slate-800">
-                  <div>
-                    <span className="text-slate-500">Host:</span> Tauri v2 / Rust 2021
-                  </div>
-                  <div>
-                    <span className="text-slate-500">Audio DSP:</span> Vitest chráněno
-                  </div>
-                  <div>
-                    <span className="text-slate-500">Paměť:</span> sqlite-vec / Local
-                  </div>
-                  <div>
-                    <span className="text-slate-500">Inference:</span> llama.cpp / Gemini
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Action Button to Open Provider Settings */}
-              <div className="p-4 bg-[#090D16] border border-slate-800 rounded-xl flex items-center justify-between">
-                <div>
-                  <h3 className="font-semibold text-sm text-slate-100">Konzole Providerů & Lokálních Modelů</h3>
-                  <p className="text-slate-400 text-xs mt-0.5">
-                    Přepínejte mezi cloudovým Gemini, lokálním Ollama nebo nativním llama.cpp, zálohujte vektorovou paměť a spravujte API klíče.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setProviderSettingsOpen(true)}
-                  className="px-3.5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs flex items-center gap-2 transition-colors"
-                >
-                  <Sliders className="w-3.5 h-3.5" />
-                  <span>Otevřít konfiguraci</span>
-                </button>
-              </div>
-
-              {/* 1-Click Multi-Platform Installation Hub (CachyOS/Linux, macOS, Windows) */}
-              <InstallHubView lang={lang} />
-
-              {/* Vitest Audio DSP Math Protection Showcase */}
-              <div className="space-y-2.5">
-                <h3 className="font-semibold text-slate-200 flex items-center justify-between">
-                  <span>Ochrana DSP matematiky (Vitest Test Suite)</span>
-                  <span className="text-[11px] text-emerald-400 font-mono">npm test: 8/8 testů prochází</span>
-                </h3>
-
-                <div className="p-3 bg-[#07090E] border border-slate-800 rounded space-y-2 font-mono text-[11px]">
-                  <div className="text-slate-300">
-                    <span className="text-emerald-400">✓</span> AsymmetricEnvelopeFollower (10ms attack / 120ms decay balistika)
-                  </div>
-                  <div className="text-slate-300">
-                    <span className="text-emerald-400">✓</span> Downward Expander (-36.5dB práh pro eliminaci hluku ventilátoru)
-                  </div>
-                  <div className="text-slate-300">
-                    <span className="text-emerald-400">✓</span> Biquad Highpass Filter (85Hz 12dB/oct pro potlačení rázů)
-                  </div>
-                  <div className="text-slate-300">
-                    <span className="text-emerald-400">✓</span> 16-bit PCM packetizace (40ms / 640 vzorků) a Base64 transformace
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeNav === 'docs' && <DocumentationView lang={lang} />}
-
-          {activeNav === 'plans' && (
-            <div className="flex-1 overflow-y-auto p-6">
-              <div className="max-w-4xl mx-auto space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                    <ShieldCheck className="w-5 h-5 text-emerald-400" />
-                    <span>{t.plansTitle}</span>
-                  </h2>
-                  <button
-                    onClick={() => setSubscriptionOpen(true)}
-                    className="px-3.5 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs transition-colors"
-                  >
-                    Open Subscription & Admin Console
-                  </button>
-                </div>
-                <p className="text-xs text-slate-400">{t.plansSubtitle}</p>
-              </div>
-            </div>
-          )}
         </section>
       </div>
+      ) : (
+        <ReferenceAuditHub
+          lang={lang}
+          cases={cases}
+          activeCaseId={activeCaseId}
+          onBackToDashboard={() => setActiveNav('arena')}
+        />
+      )}
 
       {/* Floating Audio Playback Indicator & Killswitch when the sphere is actively vocalizing */}
       {playingMessageId && (
@@ -2949,6 +2534,45 @@ export default function App() {
             setMemories(items.map((i) => ({ ...i, id: i.id })));
           });
         }}
+      />
+
+      {/* 7. Advanced Settings Drawer (Tier 1 Dynamic Visibility) */}
+      <AdvancedSettingsDrawer
+        isOpen={isAdvancedSettingsOpen}
+        onClose={() => setIsAdvancedSettingsOpen(false)}
+        lang={lang}
+        selectedModel={selectedModel}
+        onSelectModel={setSelectedModel}
+        selectedTextModel={selectedTextModel}
+        onSelectTextModel={setSelectedTextModel}
+        liveConnected={liveConnected}
+        selectedVoice={selectedVoice}
+        onSelectVoice={setSelectedVoice}
+        vadThreshold={vadThreshold}
+        onChangeVadThreshold={(val) => {
+          setVadThreshold(val);
+          audioEngineRef.current?.setBargeInThreshold(val);
+        }}
+        isPttMode={isPttMode}
+        onTogglePttMode={handleTogglePttMode}
+        dspEnabled={dspEnabled}
+        onToggleDsp={(enabled) => {
+          setDspEnabled(enabled);
+          audioEngineRef.current?.setDspEnabled(enabled);
+        }}
+        synthesizeTtsOnText={synthesizeTtsOnText}
+        onToggleSynthesizeTts={setSynthesizeTtsOnText}
+        highDemandResilient={highDemandResilient}
+        onToggleHighDemandResilient={setHighDemandResilient}
+        patientMode={patientMode}
+        onTogglePatientMode={setPatientMode}
+        particleCount={particleCount}
+        onChangeParticleCount={setParticleCount}
+        visualState={visualState}
+        onChangeVisualState={setVisualState}
+        systemPromptOverride={contextDirective}
+        onChangeSystemPromptOverride={setContextDirective}
+        onOpenProviderSettings={() => setProviderSettingsOpen(true)}
       />
     </div>
   );

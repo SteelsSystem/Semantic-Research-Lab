@@ -1106,20 +1106,25 @@ export class DuplexAudioEngine {
       const nyquist = this.outputCtx.sampleRate / 2; // 12000 Hz
       const binCount = this.freqData.length;
 
-      for (let i = 0; i < binCount; i++) {
-        const freq = (i / binCount) * nyquist;
-        const val = this.freqData[i] / 255.0;
-        if (freq <= 250) {
-          lowSum += val;
-          lowCount++;
-        } else if (freq <= 2500) {
-          midSum += val;
-          midCount++;
-        } else if (freq <= 8000) {
-          highSum += val;
-          highCount++;
-        }
+      // Precalculated bin cutoff indices (zero per-bin division / branching overhead)
+      const bin250 = Math.min(binCount, Math.floor((250 / nyquist) * binCount));
+      const bin2500 = Math.min(binCount, Math.floor((2500 / nyquist) * binCount));
+      const bin8000 = Math.min(binCount, Math.floor((8000 / nyquist) * binCount));
+
+      for (let i = 0; i < bin250; i++) {
+        lowSum += this.freqData[i];
       }
+      lowCount += bin250;
+
+      for (let i = bin250; i < bin2500; i++) {
+        midSum += this.freqData[i];
+      }
+      midCount += (bin2500 - bin250);
+
+      for (let i = bin2500; i < bin8000; i++) {
+        highSum += this.freqData[i];
+      }
+      highCount += (bin8000 - bin2500);
     }
 
     // Blend isolated microphone input FFT when user speaks so the sphere also responds to user articulation
@@ -1127,25 +1132,30 @@ export class DuplexAudioEngine {
       this.inputAnalyser.getByteFrequencyData(this.inputFreqData as any);
       const nyquist = this.inputCtx.sampleRate / 2; // 8000 Hz
       const binCount = this.inputFreqData.length;
-      for (let i = 0; i < binCount; i++) {
-        const freq = (i / binCount) * nyquist;
-        const val = (this.inputFreqData[i] / 255.0) * 0.85;
-        if (freq <= 250) {
-          lowSum += val;
-          lowCount++;
-        } else if (freq <= 2500) {
-          midSum += val;
-          midCount++;
-        } else if (freq <= 8000) {
-          highSum += val;
-          highCount++;
-        }
+
+      const inBin250 = Math.min(binCount, Math.floor((250 / nyquist) * binCount));
+      const inBin2500 = Math.min(binCount, Math.floor((2500 / nyquist) * binCount));
+      const inBin8000 = Math.min(binCount, Math.floor((8000 / nyquist) * binCount));
+
+      for (let i = 0; i < inBin250; i++) {
+        lowSum += this.inputFreqData[i] * 0.85;
       }
+      lowCount += inBin250;
+
+      for (let i = inBin250; i < inBin2500; i++) {
+        midSum += this.inputFreqData[i] * 0.85;
+      }
+      midCount += (inBin2500 - inBin250);
+
+      for (let i = inBin2500; i < inBin8000; i++) {
+        highSum += this.inputFreqData[i] * 0.85;
+      }
+      highCount += (inBin8000 - inBin2500);
     }
 
-    const rawLow = lowCount > 0 ? Math.min(1.0, lowSum / (lowCount * 0.48)) : 0;
-    const rawMid = midCount > 0 ? Math.min(1.0, midSum / (midCount * 0.38)) : 0;
-    const rawHigh = highCount > 0 ? Math.min(1.0, highSum / (highCount * 0.28)) : 0;
+    const rawLow = lowCount > 0 ? Math.min(1.0, lowSum / (lowCount * 255.0 * 0.48)) : 0;
+    const rawMid = midCount > 0 ? Math.min(1.0, midSum / (midCount * 255.0 * 0.38)) : 0;
+    const rawHigh = highCount > 0 ? Math.min(1.0, highSum / (highCount * 255.0 * 0.28)) : 0;
 
     // Apply Asymmetric Envelope Follower ballistics
     const lowBand = this.envLow.process(rawLow, dt);

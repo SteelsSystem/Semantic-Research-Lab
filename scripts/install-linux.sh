@@ -1,12 +1,28 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # VaporSphere - Linux Installation Script (First-Class CachyOS & Arch Support)
+# Supports: Dynamic GitHub Release asset discovery, AppImage, deb, and local fallback
+# Usage:
+#   curl -fsSL https://raw.githubusercontent.com/<user>/<repo>/main/scripts/install-linux.sh | bash
+# Or:
+#   ./scripts/install-linux.sh [owner/repo]
 # ==============================================================================
 
 set -euo pipefail
 
-REPO_OWNER="vaporsphere"
-REPO_NAME="vaporsphere"
+# 1. Resolve Target Repository Dynamically
+REPO_INPUT="${1:-${VAPORSPHERE_REPO:-${GITHUB_REPOSITORY:-}}}"
+if [[ -z "${REPO_INPUT}" ]] && command -v git &>/dev/null; then
+    GIT_ORIGIN="$(git config --get remote.origin.url 2>/dev/null || true)"
+    if [[ "${GIT_ORIGIN}" =~ github\.com[:/]([^/]+)/([^/.]+)(\.git)? ]]; then
+        REPO_INPUT="${BASH_REMATCH[1]}/${BASH_REMATCH[2]}"
+    fi
+fi
+
+if [[ -z "${REPO_INPUT}" ]]; then
+    REPO_INPUT="vaporsphere/vaporsphere"
+fi
+
 BIN_NAME="vaporsphere"
 INSTALL_DIR="${HOME}/.local/bin"
 DESKTOP_DIR="${HOME}/.local/share/applications"
@@ -16,13 +32,14 @@ BOLD="\033[1m"
 GREEN="\033[32m"
 CYAN="\033[36m"
 YELLOW="\033[33m"
-RED="\033[31m"
 RESET="\033[0m"
 
 echo -e "${CYAN}${BOLD}>>> VaporSphere Linux Installer (CachyOS / Arch / Ubuntu / Fedora)${RESET}"
+echo -e "Target Repository: ${BOLD}${REPO_INPUT}${RESET}"
 
 # Detect distribution
 DISTRO="generic"
+DISTRO_LIKE="generic"
 if [ -f /etc/os-release ]; then
     . /etc/os-release
     DISTRO="${ID:-generic}"
@@ -41,7 +58,7 @@ fi
 
 echo -e "OS: ${BOLD}${DISTRO}${RESET} | Architecture: $(uname -m) | CPU Microarch: ${CYAN}${CPU_LEVEL}${RESET}"
 
-# 1. Package Manager Dependency Resolution
+# 2. Package Manager Dependency Resolution
 if [[ "${DISTRO}" == "cachyos" || "${DISTRO}" == "arch" || "${DISTRO_LIKE}" =~ arch ]]; then
     echo -e "\n${GREEN}[CachyOS / Arch Linux Native Environment Detected]${RESET}"
     echo -e "Checking native dependencies via pacman..."
@@ -58,7 +75,7 @@ elif [[ "${DISTRO}" == "ubuntu" || "${DISTRO}" == "debian" || "${DISTRO_LIKE}" =
     echo -e "\n[Debian / Ubuntu Environment Detected]"
     if command -v sudo &>/dev/null && command -v apt-get &>/dev/null; then
         sudo apt-get update -qq || true
-        sudo apt-get install -y -qq libwebkit2gtk-4.1-0 libayatana-appindicator3-1 libssl3 curl
+        sudo apt-get install -y -qq libwebkit2gtk-4.1-0 libayatana-appindicator3-1 libssl3 curl || true
     fi
 elif [[ "${DISTRO}" == "fedora" ]]; then
     echo -e "\n[Fedora Environment Detected]"
@@ -67,29 +84,36 @@ elif [[ "${DISTRO}" == "fedora" ]]; then
     fi
 fi
 
-# 2. Setup Directories
 mkdir -p "${INSTALL_DIR}" "${DESKTOP_DIR}" "${ICON_DIR}"
-
-# 3. Retrieve Latest Release
-LATEST_TAG=$(curl -s "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' || echo "v0.2.0")
-if [[ -z "${LATEST_TAG}" || "${LATEST_TAG}" == "null" ]]; then
-    LATEST_TAG="v0.2.0"
-fi
-
-APPIMAGE_NAME="VaporSphere_${LATEST_TAG#v}_amd64.AppImage"
-APPIMAGE_URL="https://github.com/${REPO_OWNER}/${REPO_NAME}/releases/download/${LATEST_TAG}/${APPIMAGE_NAME}"
 TARGET_PATH="${INSTALL_DIR}/${BIN_NAME}"
 
-echo -e "Fetching latest release binary (${LATEST_TAG})..."
-if curl -fL --progress-bar "${APPIMAGE_URL}" -o "${TARGET_PATH}"; then
-    chmod +x "${TARGET_PATH}"
-    echo -e "${GREEN}✓ Successfully downloaded VaporSphere AppImage binary.${RESET}"
-else
-    echo -e "${YELLOW}Notice: Release bundle not yet uploaded on GitHub Releases.${RESET}"
-    echo -e "Creating local launcher script for immediate use..."
+# 3. Query GitHub API for Real Assets
+echo -e "\n[*] Querying GitHub Releases for ${BOLD}${REPO_INPUT}${RESET}..."
+RELEASE_JSON="$(curl -s "https://api.github.com/repos/${REPO_INPUT}/releases/latest" 2>/dev/null || true)"
+
+DOWNLOADED=false
+
+if [[ -n "${RELEASE_JSON}" && "${RELEASE_JSON}" != *"Not Found"* ]]; then
+    # Look for AppImage URL in release assets
+    APPIMAGE_URL="$(echo "${RELEASE_JSON}" | grep -o 'https://[^"]*\.AppImage' | head -n 1 || true)"
+    if [[ -n "${APPIMAGE_URL}" ]]; then
+        echo -e "Found release asset: ${CYAN}${APPIMAGE_URL}${RESET}"
+        if curl -fL --progress-bar "${APPIMAGE_URL}" -o "${TARGET_PATH}"; then
+            chmod +x "${TARGET_PATH}"
+            DOWNLOADED=true
+            echo -e "${GREEN}✓ Successfully downloaded VaporSphere AppImage binary.${RESET}"
+        fi
+    fi
+fi
+
+# Fallback: check if local app bundle exists or create local runner
+if [ "$DOWNLOADED" = false ]; then
+    echo -e "${YELLOW}Notice: Release AppImage binary not yet published on GitHub for '${REPO_INPUT}'.${RESET}"
+    echo -e "Configuring local launcher wrapper..."
     cat << 'EOF' > "${TARGET_PATH}"
 #!/usr/bin/env bash
-echo "Starting VaporSphere..."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+echo "Starting VaporSphere Dialectical Lab..."
 if command -v xdg-open &>/dev/null; then
     xdg-open "http://localhost:3000" &
 elif command -v sensible-browser &>/dev/null; then
@@ -116,7 +140,11 @@ EOF
 chmod +x "${DESKTOP_DIR}/vaporsphere.desktop"
 
 # Icon installation
-curl -sL "https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/public/favicon.ico" -o "${ICON_DIR}/vaporsphere.png" 2>/dev/null || true
+if [ -f "$(dirname "$0")/../src-tauri/icons/128x128@2x.png" ]; then
+    cp "$(dirname "$0")/../src-tauri/icons/128x128@2x.png" "${ICON_DIR}/vaporsphere.png" 2>/dev/null || true
+elif [ -f "$(dirname "$0")/../public/favicon.ico" ]; then
+    cp "$(dirname "$0")/../public/favicon.ico" "${ICON_DIR}/vaporsphere.png" 2>/dev/null || true
+fi
 
 if command -v update-desktop-database &>/dev/null; then
     update-desktop-database "${DESKTOP_DIR}" 2>/dev/null || true

@@ -1,0 +1,96 @@
+name: macOS Release (Apple Silicon & Intel Universal DMG)
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release Tag (e.g. v0.2.0)'
+        required: false
+        default: 'v0.2.0'
+
+permissions:
+  contents: write
+
+jobs:
+  release-macos:
+    name: Build & Publish macOS Universal DMG Release
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Set up Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: 'aarch64-apple-darwin,x86_64-apple-darwin'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Generate multi-platform icons
+        run: python3 scripts/generate-icons.py
+
+      - name: Run DSP unit test suite
+        run: npm test
+
+      - name: Build frontend bundle
+        run: npm run build
+
+      - name: Build Tauri macOS Universal DMG
+        run: npx tauri build --target universal-apple-darwin
+        continue-on-error: true
+
+      - name: Package portable macOS bundle
+        run: node scripts/package-portable.js
+
+      - name: Determine release tag
+        id: vars
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          elif [ -n "${{ inputs.release_tag }}" ]; then
+            echo "tag=${{ inputs.release_tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=v0.2.0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Publish macOS Release on GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.vars.outputs.tag }}
+          name: VaporSphere macOS Universal Release (${{ steps.vars.outputs.tag }})
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg
+            src-tauri/target/release/bundle/dmg/*.dmg
+            releases/*macos*.tar.gz
+          body: |
+            ### VaporSphere Dialectical Lab - macOS Universal Release
+            Universal binary for Apple Silicon (M1/M2/M3/M4) and Intel Macs.
+
+            #### 🍎 Quick Installation on macOS
+            **Method A — 1-Line Terminal Command:**
+            ```bash
+            curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/main/scripts/install-macos.sh | bash
+            ```
+
+            **Method B — Download DMG:**
+            1. Download `VaporSphere_*_universal.dmg` from assets below.
+            2. Double-click to open and drag `VaporSphere.app` to `/Applications`.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -5,7 +5,8 @@ pkgver=0.2.0
 pkgrel=1
 pkgdesc="Personal Dialectical Research Lab & OKLab Acoustic Engine (Tauri v2 Desktop Host)"
 arch=('x86_64' 'aarch64')
-url="https://github.com/vaporsphere/vaporsphere"
+_repo="${VAPORSPHERE_REPO:-vaporsphere/vaporsphere}"
+url="https://github.com/${_repo}"
 license=('MIT')
 depends=(
     'webkit2gtk-4.1'
@@ -19,17 +20,21 @@ optdepends=(
 )
 provides=('vaporsphere')
 conflicts=('vaporsphere')
-source_x86_64=("https://github.com/vaporsphere/vaporsphere/releases/download/v${pkgver}/VaporSphere_${pkgver}_amd64.AppImage")
+source_x86_64=("${pkgname}-${pkgver}.AppImage::https://github.com/${_repo}/releases/download/v${pkgver}/VaporSphere_${pkgver}_amd64.AppImage")
 sha256sums_x86_64=('SKIP')
 
 prepare() {
     cd "${srcdir}"
-    chmod +x "VaporSphere_${pkgver}_amd64.AppImage"
-    ./"VaporSphere_${pkgver}_amd64.AppImage" --appimage-extract >/dev/null 2>&1 || true
+    local appimage="${pkgname}-${pkgver}.AppImage"
+    if [ -f "${appimage}" ]; then
+        chmod +x "${appimage}"
+        ./"${appimage}" --appimage-extract >/dev/null 2>&1 || true
+    fi
 }
 
 package() {
     cd "${srcdir}"
+    local appimage="${pkgname}-${pkgver}.AppImage"
 
     install -dm755 "${pkgdir}/usr/bin"
     install -dm755 "${pkgdir}/usr/share/applications"
@@ -37,9 +42,9 @@ package() {
 
     if [ -d "squashfs-root" ]; then
         install -Dm755 "squashfs-root/usr/bin/vaporsphere" "${pkgdir}/usr/bin/vaporsphere" 2>/dev/null || \
-        install -Dm755 "VaporSphere_${pkgver}_amd64.AppImage" "${pkgdir}/usr/bin/vaporsphere"
-    else
-        install -Dm755 "VaporSphere_${pkgver}_amd64.AppImage" "${pkgdir}/usr/bin/vaporsphere"
+        install -Dm755 "${appimage}" "${pkgdir}/usr/bin/vaporsphere"
+    elif [ -f "${appimage}" ]; then
+        install -Dm755 "${appimage}" "${pkgdir}/usr/bin/vaporsphere"
     fi
 
     # Desktop entry
@@ -53,6 +58,7 @@ Terminal=false
 Type=Application
 Categories=Science;AudioVideo;Development;Education;
 StartupWMClass=vaporsphere-desktop
+Keywords=socratic;dialectics;ai;gemini;dsp;oklab;cachyos;
 EOF
 
     # Icon

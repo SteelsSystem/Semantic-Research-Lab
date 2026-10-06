@@ -1,126 +1,146 @@
 # ==============================================================================
 # VaporSphere - Windows PowerShell Installation Script
-# Supports: Standalone .exe installer (NSIS), .msi installer, and portable ZIP
+# Supports: Dynamic GitHub Release discovery, NSIS .EXE, MSI, and Portable setups
 # Usage:
-#   irm https://raw.githubusercontent.com/vaporsphere/vaporsphere/main/scripts/install-windows.ps1 | iex
+#   irm https://raw.githubusercontent.com/<user>/<repo>/main/scripts/install-windows.ps1 | iex
+# Or:
+#   powershell -ExecutionPolicy Bypass -File install-windows.ps1 -Repo "owner/repo"
 # ==============================================================================
 
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-$ErrorActionPreference = "Stop"
+param (
+    [string]$Repo = $env:GITHUB_REPOSITORY,
+    [string]$Tag = "",
+    [switch]$ForceLocal
+)
 
-$RepoOwner = "vaporsphere"
-$RepoName = "vaporsphere"
-$AppName = "VaporSphere"
-$BinName = "vaporsphere.exe"
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+$ErrorActionPreference = "Continue"
 
 Write-Host "======================================================" -ForegroundColor Cyan
 Write-Host "  VaporSphere Dialectical Lab - Windows .EXE Installer " -ForegroundColor Cyan
 Write-Host "======================================================" -ForegroundColor Cyan
+Write-Host ""
+
+# 1. Resolve Target GitHub Repository Dynamically
+if (-not $Repo) {
+    if ($env:VAPORSPHERE_REPO) {
+        $Repo = $env:VAPORSPHERE_REPO
+    } else {
+        try {
+            $gitOrigin = git config --get remote.origin.url 2>$null
+            if ($gitOrigin -match "github\.com[:/]([^/]+)/([^/.]+?)(\.git)?$") {
+                $Repo = "$($Matches[1])/$($Matches[2])"
+            }
+        } catch {}
+    }
+}
+
+if (-not $Repo) {
+    $Repo = "vaporsphere/vaporsphere"
+}
+
+Write-Host "Target GitHub Repository: $Repo" -ForegroundColor DarkGray
 
 $InstallDir = "$env:LOCALAPPDATA\Programs\VaporSphere"
-$TempDir = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), [System.Guid]::NewGuid().ToString())
+$TempDir = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "VaporSphereSetup_" + [System.Guid]::NewGuid().ToString().Substring(0,8))
 New-Item -ItemType Directory -Path $TempDir -Force | Out-Null
 
+$Installed = $false
+
 try {
-    Write-Host "Fetching latest release information from GitHub..." -ForegroundColor Yellow
-    $ReleaseApiUrl = "https://api.github.com/repos/$RepoOwner/$RepoName/releases/latest"
-    $ReleaseTag = "v0.2.0"
-
-    try {
-        $Release = Invoke-RestMethod -Uri $ReleaseApiUrl -Method Get -Headers @{ "User-Agent" = "VaporSphere-Installer" }
-        if ($Release.tag_name) {
-            $ReleaseTag = $Release.tag_name
-        }
-    } catch {
-        Write-Host "Could not query GitHub API, defaulting to $ReleaseTag" -ForegroundColor DarkGray
+    # 2. Query GitHub Releases API for Real Published Assets
+    Write-Host "Querying GitHub Releases for $Repo..." -ForegroundColor Yellow
+    $ApiUrl = if ($Tag) {
+        "https://api.github.com/repos/$Repo/releases/tags/$Tag"
+    } else {
+        "https://api.github.com/repos/$Repo/releases/latest"
     }
 
-    $VersionClean = $ReleaseTag.TrimStart('v')
-    
-    # 1. Primary Target: Standard Windows .EXE Setup Installer (NSIS)
-    $ExeName = "VaporSphere_${VersionClean}_x64-setup.exe"
-    $ExeUrl = "https://github.com/$RepoOwner/$RepoName/releases/download/$ReleaseTag/$ExeName"
-    $ExePath = Join-Path $TempDir $ExeName
-
-    # 2. Secondary Target: Windows .MSI Setup Installer
-    $MsiName = "VaporSphere_${VersionClean}_x64_en-US.msi"
-    $MsiUrl = "https://github.com/$RepoOwner/$RepoName/releases/download/$ReleaseTag/$MsiName"
-    $MsiPath = Join-Path $TempDir $MsiName
-
-    # 3. Fallback Target: Portable .ZIP Package
-    $ZipName = "VaporSphere_${VersionClean}_x64.zip"
-    $ZipUrl = "https://github.com/$RepoOwner/$RepoName/releases/download/$ReleaseTag/$ZipName"
-    $ZipPath = Join-Path $TempDir $ZipName
-
-    $Installed = $false
-
-    # Attempt .EXE installer download
-    Write-Host "Attempting download of Windows .exe setup installer ($ExeName)..." -ForegroundColor Green
+    $Release = $null
     try {
-        Invoke-WebRequest -Uri $ExeUrl -OutFile $ExePath -UseBasicParsing
-        if ((Test-Path $ExePath) -and ((Get-Item $ExePath).Length -gt 1000)) {
-            Write-Host "Running VaporSphere .EXE Setup Installer..." -ForegroundColor Cyan
-            Start-Process -FilePath $ExePath -ArgumentList "/S" -Wait
-            $Installed = $true
-            Write-Host "✓ .EXE Installation finished successfully!" -ForegroundColor Green
-        }
+        $Release = Invoke-RestMethod -Uri $ApiUrl -Method Get -Headers @{ "User-Agent" = "VaporSphere-Installer" }
     } catch {
-        Write-Host ".EXE setup asset not found, checking for .MSI package..." -ForegroundColor DarkYellow
+        Write-Host "Notice: Could not retrieve release metadata from $ApiUrl ($($_.Exception.Message))" -ForegroundColor DarkYellow
     }
 
-    # If .EXE was not available, try .MSI
-    if (-not $Installed) {
-        try {
-            Invoke-WebRequest -Uri $MsiUrl -OutFile $MsiPath -UseBasicParsing
-            if ((Test-Path $MsiPath) -and ((Get-Item $MsiPath).Length -gt 1000)) {
-                Write-Host "Installing VaporSphere MSI package..." -ForegroundColor Green
+    if ($Release -and $Release.assets) {
+        Write-Host "Found release: $($Release.name) ($($Release.tag_name))" -ForegroundColor Green
+
+        # Look for Windows NSIS Setup .exe
+        $ExeAsset = $Release.assets | Where-Object { $_.name -like "*setup.exe" -or $_.name -like "*.exe" } | Select-Object -First 1
+        # Look for MSI
+        $MsiAsset = $Release.assets | Where-Object { $_.name -like "*.msi" } | Select-Object -First 1
+        # Look for portable ZIP
+        $ZipAsset = $Release.assets | Where-Object { $_.name -like "*win*.zip" -or $_.name -like "*windows*.zip" -or $_.name -like "*.zip" } | Select-Object -First 1
+
+        if ($ExeAsset) {
+            Write-Host "Downloading Windows Setup Wizard: $($ExeAsset.name)..." -ForegroundColor Cyan
+            $ExePath = Join-Path $TempDir $ExeAsset.name
+            Invoke-WebRequest -Uri $ExeAsset.browser_download_url -OutFile $ExePath -UseBasicParsing
+            if (Test-Path $ExePath) {
+                Write-Host "Launching installer: $($ExeAsset.name)..." -ForegroundColor Green
+                Start-Process -FilePath $ExePath -Wait
+                $Installed = $true
+            }
+        } elseif ($MsiAsset) {
+            Write-Host "Downloading MSI package: $($MsiAsset.name)..." -ForegroundColor Cyan
+            $MsiPath = Join-Path $TempDir $MsiAsset.name
+            Invoke-WebRequest -Uri $MsiAsset.browser_download_url -OutFile $MsiPath -UseBasicParsing
+            if (Test-Path $MsiPath) {
+                Write-Host "Installing MSI package: $($MsiAsset.name)..." -ForegroundColor Green
                 Start-Process -FilePath "msiexec.exe" -ArgumentList "/i `"$MsiPath`" /quiet /norestart" -Wait
                 $Installed = $true
-                Write-Host "✓ .MSI Installation finished successfully!" -ForegroundColor Green
             }
-        } catch {
-            Write-Host ".MSI package not found, checking for portable ZIP archive..." -ForegroundColor DarkYellow
+        } elseif ($ZipAsset) {
+            Write-Host "Downloading portable ZIP package: $($ZipAsset.name)..." -ForegroundColor Cyan
+            $ZipPath = Join-Path $TempDir $ZipAsset.name
+            Invoke-WebRequest -Uri $ZipAsset.browser_download_url -OutFile $ZipPath -UseBasicParsing
+            if (Test-Path $ZipPath) {
+                Expand-Archive -Path $ZipPath -DestinationPath $InstallDir -Force
+                $Installed = $true
+            }
         }
     }
 
-    # If neither .EXE nor .MSI succeeded, fallback to ZIP extraction
+    # 3. Fallback: If no pre-built GitHub release exists yet, handle locally
     if (-not $Installed) {
-        try {
-            Invoke-WebRequest -Uri $ZipUrl -OutFile $ZipPath -UseBasicParsing
-            Expand-Archive -Path $ZipPath -DestinationPath $InstallDir -Force
+        Write-Host ""
+        Write-Host "GitHub release binary is not yet published for $Repo." -ForegroundColor Yellow
+        Write-Host "Configuring local application environment..." -ForegroundColor DarkGray
+
+        $LocalDist = Join-Path (Split-Path -Parent $PSScriptRoot) "dist\index.html"
+        if (-not (Test-Path $LocalDist)) {
+            $LocalDist = Join-Path $PWD "dist\index.html"
+        }
+
+        # Create Desktop Shortcut
+        $WshShell = New-Object -ComObject WScript.Shell
+        $DesktopShortcutPath = [System.IO.Path]::Combine([Environment]::GetFolderPath("Desktop"), "VaporSphere.lnk")
+        $Shortcut = $WshShell.CreateShortcut($DesktopShortcutPath)
+
+        if (Test-Path $LocalDist) {
+            $Shortcut.TargetPath = $LocalDist
+            $Shortcut.Description = "VaporSphere Dialectical Research Lab"
+            $Shortcut.Save()
+            Write-Host "✓ Created Desktop Shortcut: VaporSphere" -ForegroundColor Green
+            Write-Host "Launching local application..." -ForegroundColor Cyan
+            Start-Process $LocalDist
             $Installed = $true
-            Write-Host "✓ Portable package extracted to $InstallDir" -ForegroundColor Green
-        } catch {
-            Write-Host "Pre-built binary release is being built by GitHub Actions." -ForegroundColor Yellow
+        } else {
+            Write-Host "To build the release locally:" -ForegroundColor White
+            Write-Host "  1. npm install" -ForegroundColor Cyan
+            Write-Host "  2. npm run build" -ForegroundColor Cyan
+            Write-Host "  3. npm run tauri build" -ForegroundColor Cyan
+            Write-Host "To trigger GitHub releases, push to GitHub with the updated release workflow." -ForegroundColor White
         }
     }
 
-    # Ensure desktop shortcut exists
-    $WshShell = New-Object -ComObject WScript.Shell
-    $DesktopShortcutPath = [System.IO.Path]::Combine([Environment]::GetFolderPath("Desktop"), "VaporSphere.lnk")
-    $TargetExe = Join-Path $InstallDir $BinName
-
-    if (Test-Path $TargetExe) {
-        $Shortcut = $WshShell.CreateShortcut($DesktopShortcutPath)
-        $Shortcut.TargetPath = $TargetExe
-        $Shortcut.Description = "VaporSphere Dialectical Research Lab"
-        $Shortcut.Save()
+    if ($Installed) {
+        Write-Host ""
+        Write-Host "======================================================" -ForegroundColor Cyan
+        Write-Host "  ✓ VaporSphere Setup Completed Successfully!           " -ForegroundColor Green
+        Write-Host "======================================================" -ForegroundColor Cyan
     }
-
-    # User PATH configuration
-    $UserPath = [Environment]::GetEnvironmentVariable("Path", [EnvironmentVariableTarget]::User)
-    if ($UserPath -notlike "*$InstallDir*") {
-        [Environment]::SetEnvironmentVariable("Path", "$UserPath;$InstallDir", [EnvironmentVariableTarget]::User)
-    }
-
-    Write-Host "`n======================================================" -ForegroundColor Cyan
-    Write-Host "  ✓ VaporSphere has been successfully installed!        " -ForegroundColor Green
-    Write-Host "======================================================" -ForegroundColor Cyan
-    Write-Host "You can launch VaporSphere from:" -ForegroundColor White
-    Write-Host "  1. Desktop shortcut: VaporSphere" -ForegroundColor Cyan
-    Write-Host "  2. Start Menu" -ForegroundColor Cyan
-    Write-Host "  3. PowerShell / Command Prompt: vaporsphere.exe" -ForegroundColor Cyan
-    Write-Host ""
 
 } finally {
     Remove-Item -Path $TempDir -Recurse -Force -ErrorAction SilentlyContinue
