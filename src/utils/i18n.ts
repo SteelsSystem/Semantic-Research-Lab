@@ -38,6 +38,7 @@ export interface TranslationDictionary {
   navMethodology: string;
   navCloud: string;
   navPlans: string;
+  navDesktop: string;
   navDocs: string;
   
   // Quick Actions & Live
@@ -194,6 +195,7 @@ export interface TranslationDictionary {
 }
 
 const baseExtraEn = {
+  navDesktop: 'Desktop Host (Tauri)',
   workspaceDeconstruct: 'Deconstruction',
   workspaceBalanced: 'Balanced',
   workspaceSphere: 'Sphere',
@@ -248,6 +250,7 @@ const baseExtraEn = {
 };
 
 const baseExtraCs = {
+  navDesktop: 'Desktop Host (Tauri)',
   workspaceDeconstruct: 'Dekonstrukce',
   workspaceBalanced: 'Vyvážený',
   workspaceSphere: 'Sféra',
@@ -328,6 +331,7 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     navMethodology: 'Socratic Protocol',
     navCloud: 'Google Cloud Mesh',
     navPlans: 'Subscriptions & Tiers',
+    navDesktop: 'Desktop Host (Tauri)',
     navDocs: 'Guide & PDF Docs',
 
     startLive: 'Start Gemini Live API',
@@ -448,6 +452,7 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     navMethodology: 'Sokratovský protokol',
     navCloud: 'Google Cloud Mesh',
     navPlans: 'Předplatné & Tarify',
+    navDesktop: 'Desktop Host (Tauri)',
     navDocs: 'Příručka & PDF Dokumentace',
 
     startLive: 'Spustit Gemini Live API',

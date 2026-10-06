@@ -1,7 +1,26 @@
 import { ResearchCase, TranscriptEntry, VisualState } from '../types/cognitive';
+import { IndexedDbStorage } from './indexedDbStorage';
 
 const STORAGE_KEY = 'cognitive_research_cases_v2';
 const ACTIVE_CASE_KEY = 'cognitive_active_case_id_v2';
+
+// In-memory fallback in case localStorage is disabled or completely full
+let memoryCasesCache: ResearchCase[] | null = null;
+
+/**
+ * Strips heavy payloads (such as 24kHz WAV base64 audio and excessive telemetry)
+ * before persisting to localStorage to strictly prevent QuotaExceededError.
+ */
+function sanitizeCasesForLocalStorage(cases: ResearchCase[], maxTranscriptsPerCase = 25): ResearchCase[] {
+  return cases.map((c) => ({
+    ...c,
+    transcripts: (c.transcripts || []).slice(-maxTranscriptsPerCase).map((t) => {
+      // Omit wavBase64 from localStorage - audio is safely cached in IndexedDb or memory
+      const { wavBase64, ...lightTranscript } = t;
+      return lightTranscript;
+    }),
+  }));
+}
 
 export const INITIAL_PRESET_CASES: ResearchCase[] = [
   {
@@ -190,27 +209,59 @@ export const INITIAL_PRESET_CASES: ResearchCase[] = [
 
 export class CaseManager {
   static loadCases(): ResearchCase[] {
+    if (memoryCasesCache && memoryCasesCache.length > 0) {
+      return memoryCasesCache;
+    }
+
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed) && parsed.length > 0) {
+          memoryCasesCache = parsed;
           return parsed;
         }
       }
     } catch (e) {
       console.warn('Failed to parse saved cases from localStorage:', e);
     }
+
     // Initialize with presets
+    memoryCasesCache = INITIAL_PRESET_CASES;
     this.saveCases(INITIAL_PRESET_CASES);
     return INITIAL_PRESET_CASES;
   }
 
   static saveCases(cases: ResearchCase[]): void {
+    memoryCasesCache = cases;
+
+    // Asynchronously save full fidelity data into IndexedDB (no 5MB quota constraints)
+    IndexedDbStorage.saveAllCases(cases).catch(() => {});
+
+    // Primary attempt: Save sanitized cases (stripped of heavy wavBase64, max 25 transcripts)
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(cases));
-    } catch (e) {
-      console.error('Failed to save cases to localStorage:', e);
+      const sanitized = sanitizeCasesForLocalStorage(cases, 25);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
+      return;
+    } catch (e1) {
+      // Quota exceeded recovery Level 1: Reduce transcripts to 10 per case
+      try {
+        const compact = sanitizeCasesForLocalStorage(cases, 10);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(compact));
+        return;
+      } catch (e2) {
+        // Quota exceeded recovery Level 2: Keep only pinned cases + active case
+        try {
+          const activeId = this.getActiveCaseId();
+          const essentialCases = cases.filter((c) => c.isPinned || c.id === activeId || c.id === cases[0]?.id);
+          const minimal = sanitizeCasesForLocalStorage(essentialCases.length > 0 ? essentialCases : cases.slice(0, 2), 5);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(minimal));
+          return;
+        } catch (e3) {
+          // Level 3: Graceful fallback to memory and IndexedDB - do not throw error
+          console.warn('LocalStorage quota filled. Seamlessly running with in-memory + IndexedDB persistence.');
+        }
+      }
     }
   }
 

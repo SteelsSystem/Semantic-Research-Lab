@@ -110,8 +110,8 @@ const semanticMemoryStore: StoredMemory[] = [
   }
 ];
 
-function getAIClient() {
-  const apiKey = process.env.GEMINI_API_KEY;
+function getAIClient(customKey?: string) {
+  const apiKey = customKey?.trim() || process.env.GEMINI_API_KEY;
   if (!apiKey) {
     throw new Error('GEMINI_API_KEY is not configured in environment.');
   }
@@ -435,7 +435,8 @@ async function startServer() {
         return res.status(400).json({ error: 'Žádný artikulovatelný text po vyčištění.' });
       }
 
-      const ai = getAIClient();
+      const apiKeyToUse = (typeof req.body.userApiKey === 'string' && req.body.userApiKey.trim()) ? req.body.userApiKey.trim() : (req.headers['x-gemini-api-key'] as string);
+      const ai = getAIClient(apiKeyToUse);
       const ttsModels = ['gemini-3.8-flash-lite-tts', 'gemini-3.8-flash-tts'];
       let wavBase64: string | null = null;
       let lastTtsErr: any = null;
@@ -497,8 +498,10 @@ async function startServer() {
         synthesizeAudio = true,
         modelName = 'gemini-3.8-flash',
         patientMode = true,
+        userApiKey,
       } = req.body;
-      const ai = getAIClient();
+      const apiKeyToUse = (typeof userApiKey === 'string' && userApiKey.trim()) ? userApiKey.trim() : (req.headers['x-gemini-api-key'] as string);
+      const ai = getAIClient(apiKeyToUse);
 
       const relevantMemories = semanticMemoryStore
         .slice(0, 3)
@@ -604,33 +607,33 @@ async function startServer() {
       let wavBase64: string | null = null;
       let ttsError: string | null = null;
       if (synthesizeAudio && cleanSpeechText.length > 0) {
-        try {
-          const ttsText = cleanSpeechText.slice(0, 1000);
-          const ttsResponse = await ai.models.generateContent({
-            model: 'gemini-3.8-flash-lite-tts',
-            contents: [
-              {
-                role: 'user',
-                parts: [
-                  {
-                    text: ttsText,
+        const ttsModels = ['gemini-3.8-flash-lite-tts', 'gemini-3.8-flash-tts'];
+        const ttsText = cleanSpeechText.slice(0, 1200);
+        for (const ttsModel of ttsModels) {
+          try {
+            const ttsResponse = await ai.models.generateContent({
+              model: ttsModel,
+              contents: [
+                {
+                  role: 'user',
+                  parts: [{ text: ttsText }]
+                }
+              ],
+              config: {
+                responseModalities: ['AUDIO'],
+                speechConfig: {
+                  voiceConfig: {
+                    prebuiltVoiceConfig: { voiceName: voiceName || 'Zephyr' }
                   }
-                ]
-              }
-            ],
-            config: {
-              responseModalities: ['AUDIO'],
-              speechConfig: {
-                voiceConfig: {
-                  prebuiltVoiceConfig: { voiceName: voiceName || 'Zephyr' }
                 }
               }
-            }
-          });
-          wavBase64 = ttsResponse.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || null;
-        } catch (ttsErr: any) {
-          console.warn('TTS synthesis warning:', ttsErr?.message || ttsErr);
-          ttsError = ttsErr?.message || 'Hlasová syntéza TTS nebyla dostupná pro tuto repliku.';
+            });
+            wavBase64 = ttsResponse.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || null;
+            if (wavBase64) break;
+          } catch (ttsErr: any) {
+            console.warn(`TTS synthesis attempt with ${ttsModel} warning:`, ttsErr?.message || ttsErr);
+            ttsError = ttsErr?.message || 'Hlasová syntéza TTS nebyla dostupná pro tuto repliku.';
+          }
         }
       }
 

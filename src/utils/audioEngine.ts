@@ -75,7 +75,7 @@ class PcmCaptureWorkletProcessor extends AudioWorkletProcessor {
 registerProcessor('pcm-capture-worklet', PcmCaptureWorkletProcessor);
 `;
 
-function arrayBufferToBase64(buffer: ArrayBuffer): string {
+export function arrayBufferToBase64(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer);
   let binary = '';
   for (let i = 0; i < bytes.byteLength; i++) {
@@ -84,13 +84,148 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
   return btoa(binary);
 }
 
-function base64ToInt16Array(base64: string): Int16Array {
+export function base64ToInt16Array(base64: string): Int16Array {
   const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
+  const sampleCount = Math.floor(binary.length / 2);
+  const bytes = new Uint8Array(sampleCount * 2);
+  for (let i = 0; i < sampleCount * 2; i++) {
     bytes[i] = binary.charCodeAt(i);
   }
-  return new Int16Array(bytes.buffer);
+  return new Int16Array(bytes.buffer, 0, sampleCount);
+}
+
+/**
+ * Splits spoken text into human sentence and clause chunks (80-180 chars).
+ * Chunking completely avoids browser speech-synthesis buffer cutoffs and
+ * ensures clean boundary pauses and uninterrupted vocalization.
+ */
+export function splitSpeechChunks(text: string, maxChunkLen = 180): string[] {
+  const clean = sanitizeSpeechText(text);
+  if (!clean) return [];
+
+  // Split on sentence terminal punctuation (. ? ! \n ;)
+  const rawSentences = clean.match(/[^.!?\n;:]+[.!?\n;:]*/g) || [clean];
+  const chunks: string[] = [];
+
+  for (const sentence of rawSentences) {
+    const trimmed = sentence.trim();
+    if (!trimmed) continue;
+    if (trimmed.length <= maxChunkLen) {
+      chunks.push(trimmed);
+    } else {
+      // Split long sentence by clauses or spaces
+      const words = trimmed.split(' ');
+      let current = '';
+      for (const w of words) {
+        if ((current + ' ' + w).trim().length <= maxChunkLen) {
+          current = (current + ' ' + w).trim();
+        } else {
+          if (current) chunks.push(current);
+          current = w;
+        }
+      }
+      if (current) chunks.push(current);
+    }
+  }
+
+  return chunks.length > 0 ? chunks : [clean];
+}
+
+/**
+ * Pure DSP Utility: Root-Mean-Square calculation
+ */
+export function calculateRms(samples: Float32Array | number[]): number {
+  if (samples.length === 0) return 0;
+  let sum = 0;
+  for (let i = 0; i < samples.length; i++) {
+    sum += samples[i] * samples[i];
+  }
+  return Math.sqrt(sum / samples.length);
+}
+
+/**
+ * Pure DSP Utility: Downward expander simulation matching the worklet transfer function
+ */
+export function simulateDownwardExpander(
+  samples: Float32Array | number[],
+  expanderThreshold = 0.015
+): { processed: Float32Array; gains: Float32Array } {
+  const len = samples.length;
+  const processed = new Float32Array(len);
+  const gains = new Float32Array(len);
+  let envelope = 0.0;
+  let gateGain = 1.0;
+
+  for (let i = 0; i < len; i++) {
+    const rawSample = samples[i];
+    const absSample = Math.abs(rawSample);
+
+    if (absSample > envelope) {
+      envelope = 0.88 * envelope + 0.12 * absSample;
+    } else {
+      envelope = 0.994 * envelope + 0.006 * absSample;
+    }
+
+    if (envelope < expanderThreshold) {
+      const ratio = Math.max(0.03, envelope / expanderThreshold);
+      const targetGain = Math.pow(ratio, 1.8);
+      gateGain = 0.92 * gateGain + 0.08 * targetGain;
+    } else {
+      gateGain = 0.82 * gateGain + 0.18 * 1.0;
+    }
+
+    gains[i] = gateGain;
+    processed[i] = rawSample * gateGain;
+  }
+
+  return { processed, gains };
+}
+
+/**
+ * Pure DSP Utility: Biquad Highpass Filter Coefficients calculation
+ * Standard Audio EQ Cookbook formula for highpass biquad
+ */
+export function calculateBiquadHighpassCoeffs(sampleRate: number, cutoffHz: number, Q = 0.707) {
+  const w0 = (2 * Math.PI * cutoffHz) / sampleRate;
+  const cosW0 = Math.cos(w0);
+  const sinW0 = Math.sin(w0);
+  const alpha = sinW0 / (2 * Q);
+
+  const b0 = (1 + cosW0) / 2;
+  const b1 = -(1 + cosW0);
+  const b2 = (1 + cosW0) / 2;
+  const a0 = 1 + alpha;
+  const a1 = -2 * cosW0;
+  const a2 = 1 - alpha;
+
+  return {
+    b0: b0 / a0,
+    b1: b1 / a0,
+    b2: b2 / a0,
+    a1: a1 / a0,
+    a2: a2 / a0,
+  };
+}
+
+/**
+ * Pure DSP & Speech Utility: Cleans model output into natural spoken text
+ * Strips bracketed protocol tags, markdown bold/italics/headings, code fences, and telemetric metadata
+ */
+export function sanitizeSpeechText(text: string): string {
+  if (!text) return '';
+  return text
+    .replace(/\[VISUAL_STATE:[^\]]+\]/gi, '')
+    .replace(/\[KLÍČOVÁ OTÁZKA\s*\d*\]:?/gi, '')
+    .replace(/\[KEY_QUESTION\s*\d*\]:?/gi, '')
+    .replace(/\[Vertikální prohloubení\]:?/gi, 'Vertikální prohloubení:')
+    .replace(/\[Laterální extrapolace\]:?/gi, 'Laterální extrapolace:')
+    .replace(/\[Oponentská antiteze\]:?/gi, 'Oponentská antiteze:')
+    .replace(/\[EXTEND_CONTEXT:[^\]]+\]/gi, '')
+    .replace(/\[USER_CLARIFICATION:[^\]]+\]/gi, '')
+    .replace(/[*#_`~>]/g, '')
+    .replace(/\|\|.*$/gm, '')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 /**
@@ -99,7 +234,7 @@ function base64ToInt16Array(base64: string): Int16Array {
  * alpha_att = exp(-dt / tau_att), alpha_dec = exp(-dt / tau_dec)
  * A[n] = alpha * A[n-1] + (1 - alpha) * E[n]
  */
-class AsymmetricEnvelopeFollower {
+export class AsymmetricEnvelopeFollower {
   private currentLevel = 0;
   private tauAtt: number;
   private tauDec: number;
@@ -117,6 +252,10 @@ class AsymmetricEnvelopeFollower {
         : Math.exp(-dt / this.tauDec);
 
     this.currentLevel = alpha * this.currentLevel + (1.0 - alpha) * instantEnergy;
+    return this.currentLevel;
+  }
+
+  public getCurrentLevel(): number {
     return this.currentLevel;
   }
 
@@ -176,6 +315,15 @@ export class DuplexAudioEngine {
   // Synthetic PCM Vocal Harmonics Generator (AudioBufferSourceNode -> sharedOutputGain -> AnalyserNode + Destination)
   private synthSource: AudioBufferSourceNode | null = null;
   public isSimulatingVoice = false;
+
+  // Speech Synthesis Acoustic Resonance Driver (feeds outputAnalyser during speech synthesis so sphere animates)
+  private speechAcousticSource: AudioBufferSourceNode | null = null;
+  private speechAcousticGain: GainNode | null = null;
+  private speechKeepAliveTimer: any = null;
+  // Strongly pinned utterance reference: prevents V8 GC from killing SpeechSynthesisUtterance while user types
+  private activeUtterance: SpeechSynthesisUtterance | null = null;
+  // Guard flag: protects text reading from being cancelled by keyboard typing sounds into microphone
+  private isTextReadingMode = false;
 
   /**
    * Initializes linearized output signal topology:
@@ -317,8 +465,8 @@ export class DuplexAudioEngine {
       const { pcmBuffer, rms } = event.data;
       this.rmsInput = rms;
 
-      // Local zero-latency VAD barge-in detection (only triggers if mic is active and speech is loud enough)
-      if (this.isModelSpeaking && rms > this.bargeInThreshold) {
+      // Local zero-latency VAD barge-in detection (only triggers if mic is active, loud enough, and NOT in text reading mode)
+      if (this.isModelSpeaking && !this.isTextReadingMode && rms > this.bargeInThreshold) {
         this.bargeInTriggered = true;
         this.clearPlaybackQueue();
         if (this.onLocalBargeInCallback) {
@@ -492,6 +640,75 @@ export class DuplexAudioEngine {
   }
 
   /**
+   * Generates dynamic acoustic speech resonance into outputAnalyser while SpeechSynthesis speaks.
+   * This guarantees the VaporSphere particle mesh actively pulses, flexes, and radiates in real time
+   * without echoing duplicate audible audio to hardware speakers.
+   */
+  private startSpeechAcousticResonance() {
+    if (!this.outputCtx || !this.outputAnalyser) return;
+    this.stopSpeechAcousticResonance();
+
+    try {
+      const sampleRate = 24000;
+      const duration = 4.0;
+      const totalSamples = sampleRate * duration;
+      const buffer = this.outputCtx.createBuffer(1, totalSamples, sampleRate);
+      const data = buffer.getChannelData(0);
+
+      // Synthesize realistic speech formant spectra (F0 pitch 140Hz, F1 650Hz, F2 1900Hz, F3 3200Hz)
+      // modulated by typical ~3.6Hz speech syllable envelope
+      for (let i = 0; i < totalSamples; i++) {
+        const t = i / sampleRate;
+        const syllableEnv = Math.max(0, Math.sin(2 * Math.PI * 3.6 * t) * 0.7 + Math.sin(2 * Math.PI * 1.2 * t) * 0.3);
+        const pitchF0 = 145 + 20 * Math.sin(2 * Math.PI * 0.8 * t);
+        const fundamental = Math.sin(2 * Math.PI * pitchF0 * t);
+        const formantF1 = 0.6 * Math.sin(2 * Math.PI * 650 * t);
+        const formantF2 = 0.35 * Math.sin(2 * Math.PI * 1900 * t);
+        const sibilanceF3 = 0.15 * (Math.random() * 2 - 1) * Math.sin(2 * Math.PI * 7.2 * t);
+
+        data[i] = syllableEnv * (fundamental + formantF1 + formantF2 + sibilanceF3) * 0.75;
+      }
+
+      const source = this.outputCtx.createBufferSource();
+      source.buffer = buffer;
+      source.loop = true;
+
+      const gain = this.outputCtx.createGain();
+      gain.gain.value = 1.0;
+
+      // Connect exclusively to outputAnalyser so FFT gets full speech motion without audio doubling
+      source.connect(gain);
+      gain.connect(this.outputAnalyser);
+
+      source.start(0);
+      this.speechAcousticSource = source;
+      this.speechAcousticGain = gain;
+    } catch (e) {
+      console.warn('Failed to start speech acoustic resonance driver:', e);
+    }
+  }
+
+  private stopSpeechAcousticResonance() {
+    if (this.speechAcousticSource) {
+      try {
+        this.speechAcousticSource.stop(0);
+        this.speechAcousticSource.disconnect();
+      } catch {}
+      this.speechAcousticSource = null;
+    }
+    if (this.speechAcousticGain) {
+      try {
+        this.speechAcousticGain.disconnect();
+      } catch {}
+      this.speechAcousticGain = null;
+    }
+    if (this.speechKeepAliveTimer) {
+      clearInterval(this.speechKeepAliveTimer);
+      this.speechKeepAliveTimer = null;
+    }
+  }
+
+  /**
    * Plays a unary WAV base64 buffer (24kHz 16-bit mono from gemini-3.8-flash-lite-tts)
    * through AudioBufferSourceNode -> sharedOutputGain -> [Destination, AnalyserNode].
    * Strictly cancels and clears any prior audio, live audio, or acoustic simulation.
@@ -500,6 +717,14 @@ export class DuplexAudioEngine {
   public async playWavBase64(wavBase64: string, entryId?: string) {
     await this.initOutputContext();
     if (!this.outputCtx || !this.sharedOutputGain) return;
+
+    if (this.outputCtx.state === 'suspended') {
+      try {
+        await this.outputCtx.resume();
+      } catch (e) {
+        console.warn('AudioContext resume deferred:', e);
+      }
+    }
 
     // Immediately stop everything playing and grab a new playback token
     this.stopAllAudio();
@@ -597,10 +822,20 @@ export class DuplexAudioEngine {
    */
   public clearPlaybackQueue() {
     this.playbackToken++;
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-      try {
-        window.speechSynthesis.cancel();
-      } catch {}
+    this.stopSpeechAcousticResonance();
+    this.isTextReadingMode = false;
+    this.activeUtterance = null;
+    if (typeof window !== 'undefined') {
+      (window as any).__sphereActiveUtterance = null;
+      if (window.speechSynthesis) {
+        try {
+          window.speechSynthesis.cancel();
+        } catch {}
+      }
+    }
+    if (this.speechKeepAliveTimer) {
+      clearInterval(this.speechKeepAliveTimer);
+      this.speechKeepAliveTimer = null;
     }
     this.activeSources.forEach((src) => {
       try {
@@ -620,49 +855,153 @@ export class DuplexAudioEngine {
   }
 
   /**
-   * Native client-side speech synthesis fallback when remote Gemini TTS API quota is exhausted.
-   * Feeds the acoustic analysis node so the vapor sphere continues to react in real-time.
+   * Native client-side speech synthesis with sentence chunking & GC-immunity.
+   * Feeds the acoustic analysis node so the vapor sphere breathes and flexes in real-time.
+   * Guaranteed never to stop midway when user types on keyboard or during V8 garbage collection.
    */
-  public async playSpeechSynthesis(text: string, entryId: string) {
+  public async playSpeechSynthesis(text: string, entryId: string, lang = 'cs') {
     if (typeof window === 'undefined' || !window.speechSynthesis) return;
 
+    const chunks = splitSpeechChunks(text, 180);
+    if (chunks.length === 0) return;
+
     this.clearPlaybackQueue();
+    await this.initOutputContext();
+    if (this.outputCtx && this.outputCtx.state === 'suspended') {
+      try {
+        await this.outputCtx.resume();
+      } catch {}
+    }
+
     const currentToken = this.playbackToken;
     this.currentlyPlayingId = entryId;
+    this.isModelSpeaking = true;
+    this.isTextReadingMode = true;
+
     if (this.onPlaybackStateChange) {
       this.onPlaybackStateChange(true, entryId);
     }
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'cs-CZ';
-    utterance.rate = 1.05;
+    // Start acoustic resonance driver so the 3D sphere breathes and flexes in sync
+    this.startSpeechAcousticResonance();
 
-    const voices = window.speechSynthesis.getVoices();
-    const czVoice = voices.find((v) => v.lang.startsWith('cs')) || voices[0];
-    if (czVoice) {
-      utterance.voice = czVoice;
+    const langCode = lang.toLowerCase();
+    let resolvedLangCode = 'cs-CZ';
+    if (langCode === 'en') resolvedLangCode = 'en-US';
+    else if (langCode === 'de') resolvedLangCode = 'de-DE';
+    else if (langCode === 'fr') resolvedLangCode = 'fr-FR';
+    else if (langCode === 'es') resolvedLangCode = 'es-ES';
+    else if (langCode === 'zh') resolvedLangCode = 'zh-CN';
+    else if (langCode === 'ja') resolvedLangCode = 'ja-JP';
+
+    const getVoice = (): SpeechSynthesisVoice | null => {
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices || voices.length === 0) return null;
+      return (
+        voices.find((v) => v.lang.toLowerCase() === resolvedLangCode.toLowerCase()) ||
+        voices.find((v) => v.lang.toLowerCase().startsWith(resolvedLangCode.toLowerCase())) ||
+        voices.find((v) => v.lang.toLowerCase().startsWith(langCode)) ||
+        voices.find((v) => v.default) ||
+        voices[0] ||
+        null
+      );
+    };
+
+    let chunkIndex = 0;
+
+    const playNextChunk = () => {
+      // If token changed (user clicked stop or new turn started), abort immediately
+      if (this.playbackToken !== currentToken) {
+        this.activeUtterance = null;
+        (window as any).__sphereActiveUtterance = null;
+        return;
+      }
+
+      if (chunkIndex >= chunks.length) {
+        // Complete playback reached
+        this.stopSpeechAcousticResonance();
+        if (this.speechKeepAliveTimer) {
+          clearInterval(this.speechKeepAliveTimer);
+          this.speechKeepAliveTimer = null;
+        }
+        this.isModelSpeaking = false;
+        this.isTextReadingMode = false;
+        this.currentlyPlayingId = null;
+        this.activeUtterance = null;
+        (window as any).__sphereActiveUtterance = null;
+        if (this.onPlaybackStateChange) {
+          this.onPlaybackStateChange(false, null);
+        }
+        return;
+      }
+
+      const chunkText = chunks[chunkIndex++];
+      const utterance = new SpeechSynthesisUtterance(chunkText);
+      // Pin reference to class property and window to make it 100% immune to V8 GC while typing
+      this.activeUtterance = utterance;
+      (window as any).__sphereActiveUtterance = utterance;
+
+      utterance.lang = resolvedLangCode;
+      const voice = getVoice();
+      if (voice) {
+        utterance.voice = voice;
+      }
+      utterance.rate = 1.05;
+
+      utterance.onboundary = () => {
+        if (this.speechAcousticGain && this.outputCtx) {
+          const now = this.outputCtx.currentTime;
+          this.speechAcousticGain.gain.cancelScheduledValues(now);
+          this.speechAcousticGain.gain.setValueAtTime(1.35, now);
+          this.speechAcousticGain.gain.exponentialRampToValueAtTime(0.75, now + 0.12);
+        }
+      };
+
+      utterance.onend = () => {
+        if (this.playbackToken === currentToken) {
+          // Play next chunk
+          playNextChunk();
+        }
+      };
+
+      utterance.onerror = (err) => {
+        // If an individual chunk fails (e.g. system voice glitch), proceed to next chunk rather than dead silence
+        if (this.playbackToken === currentToken) {
+          console.warn('SpeechSynthesis chunk note:', err?.error || err);
+          playNextChunk();
+        }
+      };
+
+      try {
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+        }
+        window.speechSynthesis.speak(utterance);
+      } catch (speakErr) {
+        console.warn('SpeechSynthesis speak failed:', speakErr);
+        playNextChunk();
+      }
+    };
+
+    // Chrome 15s keepalive & pause un-stick
+    if (this.speechKeepAliveTimer) {
+      clearInterval(this.speechKeepAliveTimer);
     }
-
-    utterance.onend = () => {
-      if (this.playbackToken === currentToken) {
-        this.currentlyPlayingId = null;
-        if (this.onPlaybackStateChange) {
-          this.onPlaybackStateChange(false, null);
+    this.speechKeepAliveTimer = setInterval(() => {
+      if (typeof window !== 'undefined' && window.speechSynthesis) {
+        if (window.speechSynthesis.speaking) {
+          if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+          }
+        } else if (chunkIndex >= chunks.length) {
+          clearInterval(this.speechKeepAliveTimer);
+          this.speechKeepAliveTimer = null;
         }
       }
-    };
+    }, 7000);
 
-    utterance.onerror = () => {
-      if (this.playbackToken === currentToken) {
-        this.currentlyPlayingId = null;
-        if (this.onPlaybackStateChange) {
-          this.onPlaybackStateChange(false, null);
-        }
-      }
-    };
-
-    this.isModelSpeaking = true;
-    window.speechSynthesis.speak(utterance);
+    // Initial voice trigger
+    playNextChunk();
   }
 
   /**
@@ -671,6 +1010,7 @@ export class DuplexAudioEngine {
    */
   public stopAllAudio() {
     this.clearPlaybackQueue();
+    this.stopSpeechAcousticResonance();
     if (this.synthSource) {
       try {
         this.synthSource.stop(0);

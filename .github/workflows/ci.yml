@@ -1,0 +1,33 @@
+name: CI & Audio DSP Verification
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run TypeScript typecheck / lint
+      run: npm run lint
+
+    - name: Run Vitest DSP math unit test suite
+      run: npm test
+
+    - name: Verify Vite production build
+      run: npm run build
