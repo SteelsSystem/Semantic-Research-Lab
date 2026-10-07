@@ -1,5 +1,5 @@
 %PDF-1.3
-%ºß¬à
+%ï¿½ß¬ï¿½
 3 0 obj
 <</Type /Page
 /Parent 1 0 R
@@ -26,7 +26,7 @@ BT
 20.6999999999999993 TL
 0.973 0.98 0.988 rg
 68.031496062992133 785.1970866141732586 Td
-(Semantic Research Lab — Operational User Guide) Tj
+(Semantic Research Lab ï¿½ Operational User Guide) Tj
 ET
 BT
 /F1 9 Tf
@@ -47,14 +47,14 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 717.1655905511811397 Td
-(• Think of this application as a high-level scientific debate partner and thinking lab.) Tj
+(ï¿½ Think of this application as a high-level scientific debate partner and thinking lab.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 698.7403937007873083 Td
-(• Unlike simple chatbots that give shallow conversational summaries, this interface is built on Socratic Elenctics: it looks for hidden) Tj
+(ï¿½ Unlike simple chatbots that give shallow conversational summaries, this interface is built on Socratic Elenctics: it looks for hidden) Tj
 T* (assumptions in what you say, stress-tests your hypotheses, and connects ideas across theoretical physics, biology, and philosophy.) Tj
 ET
 BT
@@ -62,7 +62,7 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 667.559291338582625 Td
-(• Everything you discuss is physically mirrored in real-time by a glowing 3D particle sphere \(the OKLab VaporSphere\) that changes) Tj
+(ï¿½ Everything you discuss is physically mirrored in real-time by a glowing 3D particle sphere \(the OKLab VaporSphere\) that changes) Tj
 T* (color, turbulence, and density on your GPU depending on the intellectual tension and emotional tone of the inquiry.) Tj
 ET
 BT
@@ -77,7 +77,7 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 608.0317322834645211 Td
-(• Top Cases / Topics Bar: Located at the very top of your screen. Every distinct line of inquiry is treated as a dedicated "Case" \(like an) Tj
+(ï¿½ Top Cases / Topics Bar: Located at the very top of your screen. Every distinct line of inquiry is treated as a dedicated "Case" \(like an) Tj
 T* (investigation file in a scientific lab\).) Tj
 ET
 BT
@@ -85,14 +85,14 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 576.8506299212597241 Td
-(• The badge shows the total number of topics/cases you have processed \(e.g., [ 4 Cases Processed ]\).) Tj
+(ï¿½ The badge shows the total number of topics/cases you have processed \(e.g., [ 4 Cases Processed ]\).) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 558.42543307086612 Td
-(• You can switch between previous cases with zero data loss—your full conversation history, key clarifying questions, and 3D visual) Tj
+(ï¿½ You can switch between previous cases with zero data lossï¿½your full conversation history, key clarifying questions, and 3D visual) Tj
 T* (particle states are preserved in your local browser.) Tj
 ET
 BT
@@ -100,7 +100,7 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 527.2443307086614368 Td
-(• Click "New Case \(+\)" to open a fresh slate, or click "Entry Hub" to choose pre-configured philosophical paradoxes.) Tj
+(ï¿½ Click "New Case \(+\)" to open a fresh slate, or click "Entry Hub" to choose pre-configured philosophical paradoxes.) Tj
 ET
 BT
 /F2 11 Tf
@@ -114,14 +114,14 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 480.4726771653542983 Td
-(• Real-Time Duplex Voice: Click the cyan "Start Gemini Live API" button in the top right to start a live audio stream.) Tj
+(ï¿½ Real-Time Duplex Voice: Click the cyan "Start Gemini Live API" button in the top right to start a live audio stream.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 462.0474803149605805 Td
-(• Instant Interruption \(Barge-In\): You do not need to wait for the model to finish speaking. If you speak into your microphone, the local) Tj
+(ï¿½ Instant Interruption \(Barge-In\): You do not need to wait for the model to finish speaking. If you speak into your microphone, the local) Tj
 T* (voice activity detector \(VAD\) immediately cuts the model speech and lets you take the floor.) Tj
 ET
 BT
@@ -129,14 +129,14 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 430.8663779527558404 Td
-(• Voice Personas: Choose between Zephyr \(Analytical\), Fenrir \(Deep Baritone\), Kore \(Precise\), Charon \(Grave\), or Puck \(Dynamic\).) Tj
+(ï¿½ Voice Personas: Choose between Zephyr \(Analytical\), Fenrir \(Deep Baritone\), Kore \(Precise\), Charon \(Grave\), or Puck \(Dynamic\).) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 412.4411811023621226 Td
-(• Spectral Telemetry: Notice how your voice frequencies directly perturb the 3D vapor sphere in real time.) Tj
+(ï¿½ Spectral Telemetry: Notice how your voice frequencies directly perturb the 3D vapor sphere in real time.) Tj
 ET
 BT
 /F2 11 Tf
@@ -150,7 +150,7 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 365.6695275590550409 Td
-(• Perceptual Color Space \(OKLab\): Colors are calculated using true human vision LMS cone responses. This prevents ugly muddy) Tj
+(ï¿½ Perceptual Color Space \(OKLab\): Colors are calculated using true human vision LMS cone responses. This prevents ugly muddy) Tj
 T* (transitions and creates radiant, luminous glows.) Tj
 ET
 BT
@@ -158,49 +158,49 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 334.4884251968503008 Td
-(• Color Meanings:) Tj
+(ï¿½ Color Meanings:) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 316.0632283464566399 Td
-(•   - Deep Indigo \(285 deg\): Metaphysics & Ontology of Consciousness.) Tj
+(ï¿½   - Deep Indigo \(285 deg\): Metaphysics & Ontology of Consciousness.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 297.6380314960629221 Td
-(•   - Crystalline Azure \(190 deg\): Exact Sciences & Theoretical Physics.) Tj
+(ï¿½   - Crystalline Azure \(190 deg\): Exact Sciences & Theoretical Physics.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 279.2128346456692043 Td
-(•   - Emerald / Warm Amber \(145 to 35 deg\): Medicine & Bioethical Dilemmas.) Tj
+(ï¿½   - Emerald / Warm Amber \(145 to 35 deg\): Medicine & Bioethical Dilemmas.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 260.7876377952754865 Td
-(•   - Terracotta / Cobalt \(15 to 240 deg\): Socioeconomic Bifurcation & Friction.) Tj
+(ï¿½   - Terracotta / Cobalt \(15 to 240 deg\): Socioeconomic Bifurcation & Friction.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 242.3624409448817687 Td
-(•   - Pale Platinum \(85 deg\): Critical Epistemology & Deconstruction.) Tj
+(ï¿½   - Pale Platinum \(85 deg\): Critical Epistemology & Deconstruction.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 223.9372440944881646 Td
-(• Turbulence: Low turbulence = calm, orderly logic. High turbulence = fierce controversy or structural paradox.) Tj
+(ï¿½ Turbulence: Low turbulence = calm, orderly logic. High turbulence = fierce controversy or structural paradox.) Tj
 ET
 BT
 /F2 11 Tf
@@ -214,14 +214,14 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 177.1655905511810261 Td
-(• Submitting a Premise: In the Dialectical Arena, write your hypothesis or research question.) Tj
+(ï¿½ Submitting a Premise: In the Dialectical Arena, write your hypothesis or research question.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 158.7403937007873083 Td
-(• Elenctic Deconstruction: The model immediately identifies: 1\) Hidden Axioms, 2\) Structural Isomorphisms, and 3\) Dialectical) Tj
+(ï¿½ Elenctic Deconstruction: The model immediately identifies: 1\) Hidden Axioms, 2\) Structural Isomorphisms, and 3\) Dialectical) Tj
 T* (Counter-Theses.) Tj
 ET
 BT
@@ -229,7 +229,7 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 127.559291338582625 Td
-(• Key Clarification Questions: The model will pose 2-3 specific questions asking you to clarify missing boundaries. You can click) Tj
+(ï¿½ Key Clarification Questions: The model will pose 2-3 specific questions asking you to clarify missing boundaries. You can click) Tj
 T* ("Address Question" to instantly inject your answer into the debate.) Tj
 ET
 BT
@@ -237,7 +237,7 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 96.3781889763778281 Td
-(• Branching Inquiries: Three quick-launch buttons allow you to dive deeper vertically, extrapolate laterally, or adopt the opponent) Tj
+(ï¿½ Branching Inquiries: Three quick-launch buttons allow you to dive deeper vertically, extrapolate laterally, or adopt the opponent) Tj
 T* (antithesis.) Tj
 ET
 endstream
@@ -272,28 +272,28 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 768.1892125984252289 Td
-(• Free Explorer: 20 turns/day, uses Gemini 3.1 Flash-Lite, standard 100k GPU particles, browser voice synthesis.) Tj
+(ï¿½ Free Explorer: 20 turns/day, uses Gemini 3.1 Flash-Lite, standard 100k GPU particles, browser voice synthesis.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 749.7640157480315111 Td
-(• Pro Researcher: 250 turns/day, Gemini 3.8 Flash, Pro reasoning, full 24kHz Live audio streaming, unlimited research cases.) Tj
+(ï¿½ Pro Researcher: 250 turns/day, Gemini 3.8 Flash, Pro reasoning, full 24kHz Live audio streaming, unlimited research cases.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 731.3388188976377933 Td
-(• Unlimited Scholar: Unlimited inquiries, 250k particle simulation, extended thinking mode, automated PDF report generation.) Tj
+(ï¿½ Unlimited Scholar: Unlimited inquiries, 250k particle simulation, extended thinking mode, automated PDF report generation.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 712.9136220472440755 Td
-(• ADMIN & Root Mesh: Complete administrative bypass, live WebSocket latency inspectors, raw prompt debugger, vector store) Tj
+(ï¿½ ADMIN & Root Mesh: Complete administrative bypass, live WebSocket latency inspectors, raw prompt debugger, vector store) Tj
 T* (management, and direct integration hooks with Google Cloud Run, Cloud SQL, Firebase, and Google Workspace.) Tj
 ET
 BT
@@ -308,7 +308,7 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 653.3860629921259715 Td
-(• Language Selection: Toggle between English \(default\), Czech, Spanish, German, French, Japanese, Chinese, Arabic, and) Tj
+(ï¿½ Language Selection: Toggle between English \(default\), Czech, Spanish, German, French, Japanese, Chinese, Arabic, and) Tj
 T* (Portuguese with 1 click.) Tj
 ET
 BT
@@ -316,7 +316,7 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 622.2049606299212883 Td
-(• Personalisation: Customize your UI accent glow \(Cyan, Emerald, Amber, Violet, Rose\) and dialectical tone \(Post-graduate, Socratic) Tj
+(ï¿½ Personalisation: Customize your UI accent glow \(Cyan, Emerald, Amber, Violet, Rose\) and dialectical tone \(Post-graduate, Socratic) Tj
 T* (Challenger, Peer Reviewer\).) Tj
 ET
 BT
@@ -324,7 +324,7 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 591.0238582677164914 Td
-(• Ambient Focus Hum: Activate a 432Hz binaural background frequency to enhance mental immersion during research.) Tj
+(ï¿½ Ambient Focus Hum: Activate a 432Hz binaural background frequency to enhance mental immersion during research.) Tj
 ET
 BT
 /F2 11 Tf
@@ -338,7 +338,7 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 544.2522047244094665 Td
-(• Hard Default Push-to-Talk: To protect dialogue sanctity and eliminate accidental background interruptions, the microphone is muted) Tj
+(ï¿½ Hard Default Push-to-Talk: To protect dialogue sanctity and eliminate accidental background interruptions, the microphone is muted) Tj
 T* (by default until you hold the Spacebar or the central Microphone button.) Tj
 ET
 BT
@@ -346,7 +346,7 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 513.0711023622046696 Td
-(• Universal Microphone Button: Features a universal mic icon that changes dynamically from cool standby slate into glowing emerald) Tj
+(ï¿½ Universal Microphone Button: Features a universal mic icon that changes dynamically from cool standby slate into glowing emerald) Tj
 T* (while transmitting.) Tj
 ET
 BT
@@ -354,14 +354,14 @@ BT
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 481.8899999999999295 Td
-(• Ability to Disable PTT: If you prefer continuous hands-free dialogue, toggle the switch from "PTT" to "Open Mic" at any time.) Tj
+(ï¿½ Ability to Disable PTT: If you prefer continuous hands-free dialogue, toggle the switch from "PTT" to "Open Mic" at any time.) Tj
 ET
 BT
 /F1 8.5 Tf
 9.7749999999999986 TL
 0.886 0.91 0.941 rg
 45.354330708661422 463.4648031496062686 Td
-(• Studio DSP Noise Reduction Strip: The audio chain processes your input before sending to Gemini: 1\) 85Hz High-Pass Filter cuts) Tj
+(ï¿½ Studio DSP Noise Reduction Strip: The audio chain processes your input before sending to Gemini: 1\) 85Hz High-Pass Filter cuts) Tj
 T* (desk bumps and HVAC rumble; 2\) 2.8kHz Clarity Peaking EQ lifts consonant intelligibility; 3\) Downward Expander silences background) Tj
 T* (room tone; 4\) 3.5:1 Vocal Compressor levels quiet vs loud words; 5\) -1.5dB Brickwall Peak Limiter eliminates digital distortion; 6\) 12ms) Tj
 T* (Anti-Click soft ramp eliminates mechanical mouse switch clicks.) Tj
@@ -371,7 +371,7 @@ BT
 8.625 TL
 0.392 0.455 0.545 rg
 45.354330708661422 22.6771653543306684 Td
-(Generated by Semantic Research Lab Engine · Gemini Live API & OKLab VaporSphere · 10/4/2026) Tj
+(Generated by Semantic Research Lab Engine ï¿½ Gemini Live API & OKLab VaporSphere ï¿½ 10/4/2026) Tj
 ET
 endstream
 endobj

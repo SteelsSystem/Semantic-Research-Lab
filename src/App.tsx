@@ -71,6 +71,8 @@ import { VoicePttController } from './components/VoicePttController';
 import { InstallHubView } from './components/InstallHubView';
 import { ReferenceAuditHub } from './components/ReferenceAuditHub';
 import { AdvancedSettingsDrawer } from './components/AdvancedSettingsDrawer';
+import { GeminiChatbotView } from './components/GeminiChatbotView';
+import { ConceptualImageStudio } from './components/ConceptualImageStudio';
 
 const INITIAL_TRANSCRIPTS: TranscriptEntry[] = [
   {
@@ -130,7 +132,7 @@ const INITIAL_TRANSCRIPTS: TranscriptEntry[] = [
 export default function App() {
   // Active Top Navigation Tab (Two-Tier Model: Action Dashboard 'arena' vs Reference Hub 'reference')
   const [activeNav, setActiveNav] = useState<
-    'arena' | 'reference' | 'physics' | 'colorimetry' | 'memory' | 'methodology' | 'cloud' | 'desktop' | 'plans' | 'docs'
+    'arena' | 'chat' | 'images' | 'reference' | 'physics' | 'colorimetry' | 'memory' | 'methodology' | 'cloud' | 'desktop' | 'plans' | 'docs'
   >('arena');
   const [isAdvancedSettingsOpen, setIsAdvancedSettingsOpen] = useState(false);
 
@@ -1155,7 +1157,7 @@ export default function App() {
         </a>
 
         {/* Zone 2: Two-Tier Consolidated Navigation */}
-        <nav className="hidden lg:flex items-center gap-4 text-xs font-medium text-slate-400">
+        <nav className="hidden lg:flex items-center gap-3 text-xs font-medium text-slate-400">
           <button
             onClick={() => setActiveNav('arena')}
             className={`py-1 transition-colors whitespace-nowrap flex items-center gap-1.5 ${
@@ -1169,9 +1171,33 @@ export default function App() {
           </button>
 
           <button
+            onClick={() => setActiveNav('chat')}
+            className={`py-1 transition-colors whitespace-nowrap flex items-center gap-1.5 ${
+              activeNav === 'chat'
+                ? 'text-cyan-400 underline underline-offset-4 font-semibold'
+                : 'hover:text-slate-100'
+            }`}
+          >
+            <Terminal className="w-3.5 h-3.5 text-cyan-400" />
+            <span>{lang === 'cs' ? 'Gemini Chatbot' : 'Gemini Chatbot'}</span>
+          </button>
+
+          <button
+            onClick={() => setActiveNav('images')}
+            className={`py-1 transition-colors whitespace-nowrap flex items-center gap-1.5 ${
+              activeNav === 'images'
+                ? 'text-cyan-400 underline underline-offset-4 font-semibold'
+                : 'hover:text-slate-100'
+            }`}
+          >
+            <Palette className="w-3.5 h-3.5 text-cyan-400" />
+            <span>{lang === 'cs' ? 'Obrazy & Studio' : 'Image Studio'}</span>
+          </button>
+
+          <button
             onClick={() => setActiveNav('reference')}
             className={`py-1 transition-colors whitespace-nowrap flex items-center gap-1.5 ${
-              activeNav !== 'arena'
+              activeNav === 'reference'
                 ? 'text-cyan-400 underline underline-offset-4 font-semibold'
                 : 'hover:text-slate-100'
             }`}
@@ -2447,6 +2473,17 @@ export default function App() {
             </div>
         </section>
       </div>
+      ) : activeNav === 'chat' ? (
+        <GeminiChatbotView
+          lang={lang}
+          audioEngine={audioEngineRef.current}
+          onBackToDashboard={() => setActiveNav('arena')}
+        />
+      ) : activeNav === 'images' ? (
+        <ConceptualImageStudio
+          lang={lang}
+          onBackToDashboard={() => setActiveNav('arena')}
+        />
       ) : (
         <ReferenceAuditHub
           lang={lang}
