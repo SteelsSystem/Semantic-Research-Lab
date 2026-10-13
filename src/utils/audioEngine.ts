@@ -95,11 +95,10 @@ export function base64ToInt16Array(base64: string): Int16Array {
 }
 
 /**
- * Splits spoken text into human sentence and clause chunks (80-180 chars).
- * Chunking completely avoids browser speech-synthesis buffer cutoffs and
- * ensures clean boundary pauses and uninterrupted vocalization.
+ * Splits spoken text into human sentence and clause chunks naturally without artificial clipping.
+ * Preserves complete sentences and punctuation so speech synthesis never cuts off mid-sentence.
  */
-export function splitSpeechChunks(text: string, maxChunkLen = 180): string[] {
+export function splitSpeechChunks(text: string, maxChunkLen = 600): string[] {
   const clean = sanitizeSpeechText(text);
   if (!clean) return [];
 
@@ -113,7 +112,7 @@ export function splitSpeechChunks(text: string, maxChunkLen = 180): string[] {
     if (trimmed.length <= maxChunkLen) {
       chunks.push(trimmed);
     } else {
-      // Split long sentence by clauses or spaces
+      // Split long sentence by clauses or spaces without cutting words
       const words = trimmed.split(' ');
       let current = '';
       for (const w of words) {
@@ -731,6 +730,7 @@ export class DuplexAudioEngine {
     const currentToken = ++this.playbackToken;
 
     this.currentlyPlayingId = entryId || null;
+    this.isTextReadingMode = true; // Protects playback from false microphone barge-in triggers
     if (this.onPlaybackStateChange) {
       this.onPlaybackStateChange(true, this.currentlyPlayingId);
     }
@@ -779,11 +779,13 @@ export class DuplexAudioEngine {
 
       // ANTI-CHAOS CHECK: If user stopped or clicked something else while decoding, drop this buffer!
       if (this.playbackToken !== currentToken) {
+        this.isTextReadingMode = false;
         return;
       }
 
       if (!audioBuffer) {
         this.currentlyPlayingId = null;
+        this.isTextReadingMode = false;
         if (this.onPlaybackStateChange) this.onPlaybackStateChange(false, null);
         return;
       }
@@ -799,6 +801,7 @@ export class DuplexAudioEngine {
         this.activeSources.delete(source);
         if (this.playbackToken === currentToken && this.activeSources.size === 0) {
           this.isModelSpeaking = false;
+          this.isTextReadingMode = false;
           this.currentlyPlayingId = null;
           if (this.onPlaybackStateChange) {
             this.onPlaybackStateChange(false, null);
@@ -807,6 +810,7 @@ export class DuplexAudioEngine {
       };
     } catch (err) {
       console.warn('Playback of synthesized voice audio failed gracefully:', err);
+      this.isTextReadingMode = false;
       if (this.playbackToken === currentToken) {
         this.currentlyPlayingId = null;
         if (this.onPlaybackStateChange) {
@@ -862,7 +866,7 @@ export class DuplexAudioEngine {
   public async playSpeechSynthesis(text: string, entryId: string, lang = 'cs') {
     if (typeof window === 'undefined' || !window.speechSynthesis) return;
 
-    const chunks = splitSpeechChunks(text, 180);
+    const chunks = splitSpeechChunks(text, 600);
     if (chunks.length === 0) return;
 
     this.clearPlaybackQueue();
@@ -957,15 +961,38 @@ export class DuplexAudioEngine {
         }
       };
 
+      let chunkWatchdogTimer: any = null;
+      const clearWatchdog = () => {
+        if (chunkWatchdogTimer) {
+          clearTimeout(chunkWatchdogTimer);
+          chunkWatchdogTimer = null;
+        }
+      };
+
+      // Watchdog timeout to prevent speech from getting prematurely cancelled while speaking naturally
+      const maxExpectedMs = Math.max(16000, chunkText.length * 150 + 8000);
+      chunkWatchdogTimer = setTimeout(() => {
+        if (this.playbackToken === currentToken && this.activeUtterance === utterance) {
+          console.warn('[audioEngine] Speech synthesis chunk watchdog triggered, advancing smoothly:', chunkText.slice(0, 30));
+          try {
+            if (window.speechSynthesis) {
+              window.speechSynthesis.pause();
+              window.speechSynthesis.resume();
+            }
+          } catch {}
+          playNextChunk();
+        }
+      }, maxExpectedMs);
+
       utterance.onend = () => {
+        clearWatchdog();
         if (this.playbackToken === currentToken) {
-          // Play next chunk
           playNextChunk();
         }
       };
 
       utterance.onerror = (err) => {
-        // If an individual chunk fails (e.g. system voice glitch), proceed to next chunk rather than dead silence
+        clearWatchdog();
         if (this.playbackToken === currentToken) {
           console.warn('SpeechSynthesis chunk note:', err?.error || err);
           playNextChunk();
@@ -978,6 +1005,7 @@ export class DuplexAudioEngine {
         }
         window.speechSynthesis.speak(utterance);
       } catch (speakErr) {
+        clearWatchdog();
         console.warn('SpeechSynthesis speak failed:', speakErr);
         playNextChunk();
       }
@@ -992,13 +1020,17 @@ export class DuplexAudioEngine {
         if (window.speechSynthesis.speaking) {
           if (window.speechSynthesis.paused) {
             window.speechSynthesis.resume();
+          } else {
+            // Keep Chrome speech synthesis engine alive through brief pause/resume cycle
+            window.speechSynthesis.pause();
+            window.speechSynthesis.resume();
           }
         } else if (chunkIndex >= chunks.length) {
           clearInterval(this.speechKeepAliveTimer);
           this.speechKeepAliveTimer = null;
         }
       }
-    }, 7000);
+    }, 4500);
 
     // Initial voice trigger
     playNextChunk();

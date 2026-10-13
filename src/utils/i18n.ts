@@ -474,8 +474,8 @@ export const TRANSLATIONS: Record<LanguageCode, TranslationDictionary> = {
     textModel: 'Model textové disputace',
     highDemandFailover: 'Ochrana proti přetížení (High Demand Failover)',
     highDemandFailoverDesc: 'Při chybách 429/503 automaticky přepíná na záložní modely s exponenciálním odkladem.',
-    patientMode: 'Trpělivý režim (Vyšší limit na uvažování)',
-    patientModeDesc: 'Povoluje delší časový limit a více pokusů pro komplexní uvažování bez přerušení.',
+    patientMode: 'Hluboké uvažování (Propojené myšlení)',
+    patientModeDesc: 'Povoluje hluboké uvažování a plný 180s časový limit pro komplexní dialektickou syntézu.',
     secDomains: '03. Tematické a afektivní domény (OKLab)',
 
     disputationHeading: 'Sokratovská disputace & Axiomatika',

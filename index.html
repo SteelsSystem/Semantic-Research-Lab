@@ -12,6 +12,48 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700&display=swap" rel="stylesheet">
+    <script>
+      // Gracefully ignore ResizeObserver loop notifications & WebSocket / HMR disconnects
+      window.onerror = function(message, source, lineno, colno, error) {
+        var msg = (message || '') + ' ' + (error && error.message ? error.message : '');
+        if (
+          msg.indexOf('ResizeObserver') !== -1 ||
+          msg.indexOf('undelivered notifications') !== -1 ||
+          msg.indexOf('WebSocket') !== -1
+        ) {
+          return true; // suppresses the error from browser reporting
+        }
+      };
+      window.addEventListener('unhandledrejection', function(event) {
+        var msg = (event && event.reason && (event.reason.message || event.reason.toString())) || '';
+        var stack = (event && event.reason && event.reason.stack) || '';
+        if (
+          msg.indexOf('ResizeObserver') !== -1 ||
+          msg.indexOf('undelivered notifications') !== -1 ||
+          msg.indexOf('WebSocket') !== -1 ||
+          msg.indexOf('createWebSocketModuleRunnerTransport') !== -1 ||
+          stack.indexOf('createWebSocketModuleRunnerTransport') !== -1 ||
+          stack.indexOf('@vite/client') !== -1
+        ) {
+          event.preventDefault();
+        }
+      });
+      window.addEventListener('error', function(event) {
+        var msg = (event && (event.message || (event.error && event.error.message))) || '';
+        if (
+          msg.indexOf('ResizeObserver') !== -1 ||
+          msg.indexOf('undelivered notifications') !== -1 ||
+          msg.indexOf('WebSocket') !== -1 ||
+          msg.indexOf('createWebSocketModuleRunnerTransport') !== -1
+        ) {
+          event.preventDefault();
+          if (event.stopImmediatePropagation) {
+            event.stopImmediatePropagation();
+          }
+          return true;
+        }
+      }, true);
+    </script>
   </head>
   <body class="bg-[#07090E] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200 overflow-hidden">
     <div id="root"></div>

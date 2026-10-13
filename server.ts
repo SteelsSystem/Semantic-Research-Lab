@@ -8,57 +8,41 @@ import path from 'path';
 
 dotenv.config();
 
+// In AI Studio preview environment, HMR is explicitly disabled per environment constraints
+process.env.DISABLE_HMR = 'true';
+
 const PORT = Number(process.env.PORT) || 3000;
 
 const PRODUCTION_SYSTEM_PROMPT = `SYSTÉMOVÁ KONFIGURACE KOGNITIVNÍHO ROZHRANÍ: INTERDISCIPLINÁRNÍ DIALEKTICKÝ PARTNER
 
 1. KOGNITIVNÍ IDENTITA A EXPERTNÍ DOMÉNY
-Působíte jako špičkový interdisciplinární vědec, dialektický partner a sokratovský myslitel. Vaším cílem je kultivovat rigorózní, intelektuálně náročný dialog na postgraduální úrovni napříč těmito klíčovými doménami:
+Působíte jako špičkový interdisciplinární vědec, dialektický partner a sokratovský myslitel na postgraduální úrovni napříč těmito doménami:
 - Epistemologie, ontologie a etické systémy
 - Teoretická fyzika, kosmologie a teorie komplexních systémů
 - Neurovědy, patofyziologie, kognitivní věda a bioetika
-- Kvantitativní sociologie, institucionální ekonomie a filosofie techniky
-Styl projevu je terminologicky exaktní, racionální, syntetický a nekompromisně věcný. Zásadně se vyhýbejte konverzačním floskulím, lichocení uživateli a povrchním shrnutím. Komunikujte primárně v českém jazyce (pokud uživatel nevyžaduje jinak).
+- Kvantitativní sociologie, institucionální ekonomie a filosofie vědy a techniky
 
-2. MODALITA GEMINI LIVE API A HLASOVÁ ADAPTACE
-Komunikujete přes nativní obousměrný audio stream. Formulujte promluvy tak, aby byly přirozeně artikulovatelné, rytmicky vyvážené a syntakticky přehledné.
-Modulujte prozodii a tempo podle charakteru tématu: pomalejší rozvážná kadence u metafyzických témat, břitká a přesná dikce u matematicko-fyzikálních problémů, ztišený analytický tón u bioetických dilemat.
-Respektujte princip okamžitého přerušení (barge-in): vstoupí-li uživatel do Vaší řeči, okamžitě opusťte stávající formulaci a plynule reagujte na nový podnět bez omluv či komentování přerušení.
+2. DŮRAZ NA HLUBOKOU PROVÁZANOST A VĚCNOST (ZÁKAZ BALASTU A ZBYTEČNÝCH ZNAKŮ)
+- POSKYTUJTE VELMI PROVÁZANÉ ODPOVĚDI: Myšlenky, argumenty a interdisciplinární souvislosti plynule a organicky syntetizujte do koherentního, hluboce provázaného textu.
+- ZÁKAZ ZBYTEČNÉHO GENEROVÁNÍ: To, co nemusí být vygenerováno, NIKDY negenerujte jen proto, aby tam něco bylo. Žádné umělé výplně, žádná prázdná klišé, žádné mechanické struktury ani repetitivní shrnutí.
+- ZÁKAZ MECHANICKÝCH ZNAČEK A ŠABLON: Do textu odpovědi NIKDY nevkládejte zbytečné znaky, formální tagy typu "[KLÍČOVÁ OTÁZKA 1]", roury "||", hranaté závorky pro otázky ani mechanické šablonovité seznamy.
+- Všechny otázky k dalšímu zkoumání včleňte zcela přirozeně a elegantně přímo do proudu úvahy na konec odpovědi.
 
-3. EPISTEMOLOGICKÁ PRAVIDLA A DIALEKTICKÁ METODIKA
-- Sokratovská elenktika: V každé replice identifikujte skryté axiomy v argumentaci uživatele a zpochybněte jejich univerzální platnost.
-- Steelmanning: Před kritikou alternativní hypotézy ji zformulujte v její nejkoherentnější a nejlépe obhajitelné formě.
-- Strukturální izomorfismus: Aktivně propojujte probíraný fenomén s koncepty jiných oborů (např. termodynamická entropie aplikovaná na sociální dynamiku).
-- Vědecká integrita: V medicínských a biologických otázkách vycházejte striktně z mechanismů buněčné a molekulární biologie a současného konsenzu lékařské vědy. Prezentujte problematiku z analytického, systémového hlediska.
+3. SOKRATOVSKÁ METODIKA A STRUKTURÁLNÍ IZOMORFISMUS
+- Odhalujte skryté axiomy v argumentaci uživatele a zpochybňujte jejich univerzální platnost.
+- Před kritikou alternativní hypotézy ji zformulujte v její nejkoherentnější a nejlépe obhajitelné formě (steelmanning).
+- Přirozeně propojujte probíraný fenomén s koncepty jiných oborů (např. termodynamická entropie aplikovaná na institucionální dynamiku).
 
-4. PROTOKOL TELEMETRIE PRO SHADER (OKLAB PROTOCOL)
-Vaše odpovědi v reálném čase řídí vizuální reprezentaci solidifikované parní sféry vykreslované na GPU. Na začátek každého nového tematického celku nebo při zřetelném posunu afektu musíte na samostatný řádek vložit řídicí tag v tomto exaktním formátu (případně zavolat nástroj emit_visual_state):
+4. PROTOKOL PRO SOLIDIFIKOVANOU PARNÍ SFÉRU (OKLAB PROTOCOL)
+Pokud došlo k výraznému posunu afektivního napětí nebo vědní domény, vložte POUZE na úplný konec své odpovědi na samostatný řádek řídicí tag:
 [VISUAL_STATE: L=<0.0-1.0>, a=<-0.4-0.4>, b=<-0.4-0.4>, turbulence=<0.0-1.0>, density=<0.0-1.0>]
-Mapování stavů:
-- Ontologie / Hluboká filosofie: [VISUAL_STATE: L=0.42, a=0.05, b=-0.15, turbulence=0.20, density=0.85]
-- Exaktní vědy / Fyzika: [VISUAL_STATE: L=0.82, a=-0.12, b=-0.10, turbulence=0.60, density=0.60]
-- Medicína / Bioetická dilemata: [VISUAL_STATE: L=0.68, a=-0.15, b=0.08, turbulence=0.35, density=0.75]
-- Dialektické napětí / Kontroverze: [VISUAL_STATE: L=0.58, a=0.25, b=0.12, turbulence=0.85, density=0.90]
-- Epistemologická skepse / Dekonstrukce: [VISUAL_STATE: L=0.75, a=0.01, b=0.04, turbulence=0.40, density=0.40]
+Příklady:
+- Ontologie / Filosofie: [VISUAL_STATE: L=0.42, a=0.05, b=-0.15, turbulence=0.20, density=0.85]
+- Teoretická fyzika: [VISUAL_STATE: L=0.82, a=-0.12, b=-0.10, turbulence=0.60, density=0.60]
+- Neurovědy / Bioetika: [VISUAL_STATE: L=0.68, a=-0.15, b=0.08, turbulence=0.35, density=0.75]
+- Dialektické napětí / Polemika: [VISUAL_STATE: L=0.58, a=0.25, b=0.12, turbulence=0.85, density=0.90]
 
-5. DYNAMICKÁ STRUKTURA ODPOVĚDI, DEEP DEKONSTRUKCE A KLÍČOVÉ OTÁZKY PRO UŽIVATELE
-Každý diskusní obrat strukturovaně gradujte:
-1. Syntéza a analýza: Exaktní rozbor zadaného tématu, hypotézy nebo složitého textu s ukotvením v teoretickém rámci.
-2. Dialektická tenze: Odhalení skrytých axiomů, limitů a vnitřních kontradikcí.
-3. Klíčové doplňující otázky pro uživatele (Clarification & Extension Requests):
-Vždy zformulujte 2 až 3 zásadní otevřené otázky, kde vyzvete uživatele, aby doplnil klíčové informace, upřesnil své premisy nebo zadal specifické instrukce k dalšímu zkoumání:
-[KLÍČOVÁ OTÁZKA 1]: <Konkrétní otázka na doplnění chybějícího kontextu či parametrů> || <Důvod, proč je to zásadní pro další analýzu>
-[KLÍČOVÁ OTÁZKA 2]: <Konkrétní otázka na epistemologické nebo praktické vymezení> || <Důvod, proč je to zásadní>
-4. Proaktivní rozcestník tázání (Branching Inquiries):
-[Vertikální prohloubení]: Zkoumání fundamentálních ontologických/fyzikálních mechanismů.
-[Laterální extrapolace]: Přenos principu do jiné vědní domény.
-[Oponentská antiteze]: Nejsilnější protiargument zpochybňující aktuální shodu.
-
-6. PROGRAMOVATELNÉ ROZŠÍŘENÍ KONTEXTU (DYNAMIC CONTEXT INJECTION)
-Pokud uživatelský vstup obsahuje direktivu [EXTEND_CONTEXT: <DOMÉNA/ROLE>] nebo odpověď na klíčové otázky [USER_CLARIFICATION: ...], neprodleně rekonfigurujte operační parametry:
-- Inkorporujte specifický pojmový aparát zadané specializace a doplňujících informací od uživatele.
-- Převezměte požadovanou roli (např. oponent vědecké práce, člen bioetické komise, analytik systémových rizik).
-- Změnu reflektujte odpovídající úpravou řídicího tagu [VISUAL_STATE] a odpověď uveďte v nově nastaveném formálním tónu.`;
+Komunikujte primárně v kultivovaném, terminologicky přesném českém jazyce.`;
 
 // Persistent Dual Memory Store (Relational Archive + Semantic Vector Store)
 interface StoredMemory {
@@ -242,7 +226,20 @@ async function startServer() {
   app.use(express.json({ limit: '15mb' }));
 
   const httpServer = createServer(app);
-  const wss = new WebSocketServer({ server: httpServer, path: '/live' });
+  const wss = new WebSocketServer({ noServer: true });
+
+  httpServer.on('upgrade', (request, socket, head) => {
+    try {
+      const url = new URL(request.url || '', `http://${request.headers.host || 'localhost'}`);
+      if (url.pathname === '/live') {
+        wss.handleUpgrade(request, socket, head, (clientWs) => {
+          wss.emit('connection', clientWs, request);
+        });
+      }
+    } catch (err) {
+      console.warn('Upgrade handling error:', err);
+    }
+  });
 
   // REST API: Forensic Security & Architectural Audit Telemetry
   app.get('/api/audit/security-report', (_req, res) => {
@@ -374,7 +371,7 @@ async function startServer() {
     try {
       const { query } = req.body;
       if (!query) {
-        return res.json({ results: semanticMemoryStore.slice(0, 4).map(({ embedding, ...r }) => r) });
+        return res.json({ results: semanticMemoryStore.map(({ embedding, ...r }) => r) });
       }
 
       let queryVector: number[] = [];
@@ -460,15 +457,14 @@ async function startServer() {
 
     for (let mIdx = 0; mIdx < chain.length; mIdx++) {
       const currentModel = chain[mIdx];
-      // Give patientMode ample attempts (up to 3) with generous patience
-      const maxAttempts = patientMode ? 3 : 2;
+      // Fast single attempt per model with instant failover to prevent timeouts
+      const maxAttempts = 1;
 
       for (let attempt = 0; attempt < maxAttempts; attempt++) {
         try {
-          console.log(`[AI Studio Resilience] Volám model ${currentModel} (pokus ${attempt + 1}/${maxAttempts}, patientMode=${patientMode})`);
+          console.log(`[AI Studio Resilience] Volám model ${currentModel} (failover chain ${mIdx + 1}/${chain.length})`);
           const config: Record<string, any> = {
             systemInstruction,
-            maxOutputTokens: 8192,
           };
 
           if (currentModel === 'gemini-3.8-flash' || currentModel === 'gemini-3.1-pro-preview' || currentModel === 'gemini-3.1-flash-lite') {
@@ -534,13 +530,8 @@ async function startServer() {
             break; // Immediately break out of attempts for this exhausted model!
           }
 
-          if (attempt < maxAttempts - 1) {
-            const delay = (attempt + 1) * (patientMode ? 2000 : 1200) + Math.random() * 400;
-            console.log(`[AI Resilience] Dočasný nápor, zpoždění ${Math.round(delay)}ms před opakováním...`);
-            await new Promise((r) => setTimeout(r, delay));
-          } else if (mIdx < chain.length - 1) {
-            console.log(`[AI Resilience Failover] Model ${currentModel} vyčerpal pokusy, přecházím na: ${chain[mIdx + 1]}`);
-            await new Promise((r) => setTimeout(r, 500));
+          if (mIdx < chain.length - 1) {
+            console.log(`[AI Resilience Failover] Model ${currentModel} hlásí nápor, okamžitě zkouším další model: ${chain[mIdx + 1]}`);
           }
         }
       }
@@ -569,18 +560,6 @@ async function startServer() {
         .replace(/\[DOPLNĚNÍ INSTRUKCÍ[^\]]+\]:?/gi, '')
         .replace(/[*#_`]/g, '')
         .trim();
-
-      // Intelligently trim up to 1800 chars on sentence boundaries
-      if (cleanSpeech.length > 1800) {
-        const sliced = cleanSpeech.slice(0, 1800);
-        const lastSentence = Math.max(
-          sliced.lastIndexOf('. '),
-          sliced.lastIndexOf('? '),
-          sliced.lastIndexOf('! '),
-          sliced.lastIndexOf('\n')
-        );
-        cleanSpeech = lastSentence > 1200 ? sliced.slice(0, lastSentence + 1) : sliced;
-      }
 
       if (!cleanSpeech) {
         return res.status(400).json({ error: 'Žádný artikulovatelný text po vyčištění.' });
@@ -655,7 +634,6 @@ async function startServer() {
       const ai = getAIClient(apiKeyToUse);
 
       const relevantMemories = semanticMemoryStore
-        .slice(0, 3)
         .map((m) => `- [${m.domain}] ${m.concept}: ${m.summary}`)
         .join('\n');
 
@@ -663,8 +641,8 @@ async function startServer() {
         contextDirective ? `\n\nAKTIVNÍ DIREKTIVA ROZŠÍŘENÍ KONTEXTU: [EXTEND_CONTEXT: ${contextDirective}]` : ''
       }`;
 
-      // Clean history to prevent token bloat and repetitive tag echoes
-      const sanitizedHistory = history.slice(-6).map((h: { role: string; text: string }) => {
+      // Clean history to retain deep dialectic continuity and inter-turn cohesion
+      const sanitizedHistory = history.slice(-40).map((h: { role: string; text: string }) => {
         const clean = (h.text || '')
           .replace(/\[VISUAL_STATE:[^\]]+\]/gi, '')
           .trim();
@@ -705,7 +683,7 @@ async function startServer() {
         };
       }
 
-      // Extract Branching Inquiries (robust against markdown bolding and headings)
+      // Extract Branching Inquiries (if naturally provided)
       const branchingInquiries: Array<{ type: 'vertical' | 'lateral' | 'antithesis'; label: string; question: string }> = [];
       const vertMatch = rawText.match(/(?:\[Vertikální prohloubení\]|\*\*Vertikální prohloubení:?\*\*|###\s*Vertikální prohloubení)[*#_\s]*:?\s*([^\n\[\*]+)/i);
       const latMatch = rawText.match(/(?:\[Laterální extrapolace\]|\*\*Laterální extrapolace:?\*\*|###\s*Laterální extrapolace)[*#_\s]*:?\s*([^\n\[\*]+)/i);
@@ -715,61 +693,58 @@ async function startServer() {
       if (latMatch) branchingInquiries.push({ type: 'lateral', label: 'Laterální extrapolace', question: latMatch[1].trim() });
       if (antiMatch) branchingInquiries.push({ type: 'antithesis', label: 'Oponentská antiteze', question: antiMatch[1].trim() });
 
-      // Extract Key Clarification Questions for User (robust against formatting variations)
+      // Extract Key Clarification Questions (only if genuinely asked, without forcing synthetic placeholders)
       const keyQuestions: Array<{ id: string; question: string; contextWhy: string; status: 'pending' }> = [];
       const kqRegex = /(?:\[KLÍČOVÁ OTÁZKA\s*\d*\]|\*\*Klíčová otázka\s*\d*:\*\*)[*#_\s]*:?\s*([^|\n]+)(?:\|\|\s*([^\n\[]+))?/gi;
       let kqMatch;
       let kqIndex = 1;
       while ((kqMatch = kqRegex.exec(rawText)) !== null) {
-        keyQuestions.push({
-          id: `kq-${Date.now()}-${kqIndex++}`,
-          question: kqMatch[1].trim(),
-          contextWhy: kqMatch[2] ? kqMatch[2].trim() : 'Zásadní parametr pro zúžení epistemologického rámce.',
-          status: 'pending'
-        });
+        const qText = kqMatch[1].trim();
+        if (qText) {
+          keyQuestions.push({
+            id: `kq-${Date.now()}-${kqIndex++}`,
+            question: qText,
+            contextWhy: kqMatch[2] ? kqMatch[2].trim() : 'Kontext k upřesnění parametrů.',
+            status: 'pending'
+          });
+        }
       }
 
-      // If no explicit tags were found, infer 2 default deep clarifying questions if the text is analytical
-      if (keyQuestions.length === 0 && rawText.length > 120) {
-        keyQuestions.push({
-          id: `kq-${Date.now()}-1`,
-          question: 'Jaké ontologické nebo empirické hraniční podmínky v tomto tématu předpokládáte jako neměnné?',
-          contextWhy: 'Umožní přesněji ohraničit analytický aparát a eliminovat nezamýšlené kontextové posuny.',
-          status: 'pending'
-        });
-        keyQuestions.push({
-          id: `kq-${Date.now()}-2`,
-          question: 'Do jakého praktického či teoretického rámce si přejete tuto analýzu dále rozšířit (např. systémová dynamika, etika, formalismus)?',
-          contextWhy: 'Poslouží jako direktiva pro dynamické rozšíření kontextu [EXTEND_CONTEXT].',
-          status: 'pending'
-        });
-      }
-
-      // Clean text for TTS reading: strip visual state tag, markdown asterisks, hashes, brackets
-      let cleanSpeechText = rawText
+      // Clean display text for user: eliminate all ugly syntax tags, code delimiters (||), and mechanical sections
+      let cleanDisplayText = rawText
         .replace(/\[VISUAL_STATE:[^\]]+\]/gi, '')
-        .replace(/\[KLÍČOVÁ OTÁZKA[^\]]+\]:?/gi, '')
-        .replace(/\[Vertikální prohloubení\]:?/gi, 'Vertikální prohloubení:')
-        .replace(/\[Laterální extrapolace\]:?/gi, 'Laterální extrapolace:')
-        .replace(/\[Oponentská antiteze\]:?/gi, 'Oponentská antiteze:')
-        .replace(/[*#_`]/g, '')
+        .replace(/\[KLÍČOVÁ OTÁZKA\s*\d*\]:?/gi, '')
+        .replace(/\[KEY_QUESTION\s*\d*\]:?/gi, '')
+        .replace(/\[Vertikální prohloubení\]:?/gi, '')
+        .replace(/\[Laterální extrapolace\]:?/gi, '')
+        .replace(/\[Oponentská antiteze\]:?/gi, '')
+        .replace(/\[EXTEND_CONTEXT:[^\]]+\]/gi, '')
+        .replace(/\[USER_CLARIFICATION:[^\]]+\]/gi, '')
+        .replace(/\|\|\s*[^.\n]+/g, '')
+        .replace(/1\.\s*Syntéza a analýza:?\s*/gi, '')
+        .replace(/2\.\s*Dialektická tenze:?\s*/gi, '')
+        .replace(/3\.\s*Klíčové doplňující otázky[^:\n]*:?\s*/gi, '')
+        .replace(/4\.\s*Proaktivní rozcestník tázání[^:\n]*:?\s*/gi, '')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+
+      // Clean speech text for TTS reading
+      let cleanSpeechText = cleanDisplayText
+        .replace(/[*#_`~>]/g, '')
+        .replace(/\s+/g, ' ')
         .trim();
 
       let wavBase64: string | null = null;
       let ttsError: string | null = null;
       if (synthesizeAudio && cleanSpeechText.length > 0) {
         const ttsModels = ['gemini-3.8-flash-lite-tts', 'gemini-3.8-flash-tts'];
-        const ttsText = cleanSpeechText.slice(0, 1200);
+        // Synthesize full complete speech without mid-sentence truncations
+        const ttsText = cleanSpeechText;
         for (const ttsModel of ttsModels) {
           try {
-            const ttsResponse = await ai.models.generateContent({
+            const ttsPromise = ai.models.generateContent({
               model: ttsModel,
-              contents: [
-                {
-                  role: 'user',
-                  parts: [{ text: ttsText }]
-                }
-              ],
+              contents: [{ role: 'user', parts: [{ text: ttsText }] }],
               config: {
                 responseModalities: ['AUDIO'],
                 speechConfig: {
@@ -779,8 +754,14 @@ async function startServer() {
                 }
               }
             });
-            wavBase64 = ttsResponse.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || null;
-            if (wavBase64) break;
+
+            // 45-second timeout race so TTS comfortably completes full audio synthesis without getting cut off
+            const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 45000));
+            const ttsResponse: any = await Promise.race([ttsPromise, timeoutPromise]);
+            if (ttsResponse) {
+              wavBase64 = ttsResponse.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data || null;
+              if (wavBase64) break;
+            }
           } catch (ttsErr: any) {
             console.warn(`TTS synthesis attempt with ${ttsModel} warning:`, ttsErr?.message || ttsErr);
             ttsError = ttsErr?.message || 'Hlasová syntéza TTS nebyla dostupná pro tuto repliku.';
@@ -789,7 +770,7 @@ async function startServer() {
       }
 
       res.json({
-        text: rawText,
+        text: cleanDisplayText,
         cleanText: cleanSpeechText,
         visualState,
         branchingInquiries,
@@ -898,22 +879,161 @@ async function startServer() {
     }
   });
 
-  // REST API: Text-to-Image Generation (gemini-3.1-flash-image / gemini-3.1-flash-lite-image)
+  // Helper: Generates a high-fidelity procedural OKLab scientific/philosophical SVG visual
+  // used as a zero-quota failover when Google API image generation quotas are temporarily exhausted
+  function generateProceduralConceptualSvg(prompt: string, aspectRatio = '1:1', baseImageHref?: string): string {
+    let width = 1024;
+    let height = 1024;
+    if (aspectRatio === '16:9') { width = 1280; height = 720; }
+    else if (aspectRatio === '9:16') { width = 720; height = 1280; }
+    else if (aspectRatio === '4:3') { width = 1024; height = 768; }
+    else if (aspectRatio === '3:4') { width = 768; height = 1024; }
+
+    const pLower = prompt.toLowerCase();
+    let colA = '#06b6d4'; // cyan
+    let colB = '#6366f1'; // indigo
+    let colC = '#3b82f6'; // blue
+    let domainTag = 'KOGNITIVNÍ SYNTÉZA & ONTOLOGIE';
+
+    if (pLower.includes('práv') || pLower.includes('lex') || pLower.includes('carneades') || pLower.includes('soud') || pLower.includes('obran')) {
+      colA = '#f59e0b';
+      colB = '#8b5cf6';
+      colC = '#ef4444';
+      domainTag = 'LEX FORENSICA • VYVRATITELNÉ USUZOVÁNÍ (CAES)';
+    } else if (pLower.includes('kvant') || pLower.includes('fyzik') || pLower.includes('entrop') || pLower.includes('termo')) {
+      colA = '#38bdf8';
+      colB = '#818cf8';
+      colC = '#c084fc';
+      domainTag = 'TEORETICKÁ FYZIKA & DISIPATIVNÍ STRUKTURY';
+    } else if (pLower.includes('bio') || pLower.includes('gen') || pLower.includes('neuro') || pLower.includes('vědom')) {
+      colA = '#10b981';
+      colB = '#06b6d4';
+      colC = '#f59e0b';
+      domainTag = 'NEUROBIOLOGIE & INTEGRACE INFORMACE (Φ)';
+    }
+
+    let seed = 0;
+    for (let i = 0; i < prompt.length; i++) {
+      seed = (seed * 31 + prompt.charCodeAt(i)) >>> 0;
+    }
+    const pseudoRand = () => {
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+      return seed / 4294967296;
+    };
+
+    const cx = width / 2;
+    const cy = height / 2;
+    const maxR = Math.min(width, height) * 0.42;
+
+    const particles: string[] = [];
+    for (let i = 0; i < 48; i++) {
+      const angle = pseudoRand() * Math.PI * 2;
+      const dist = pseudoRand() * maxR * 1.1;
+      const px = Math.round(cx + Math.cos(angle) * dist);
+      const py = Math.round(cy + Math.sin(angle) * dist);
+      const r = (1.5 + pseudoRand() * 3.5).toFixed(1);
+      const opacity = (0.25 + pseudoRand() * 0.65).toFixed(2);
+      const col = pseudoRand() > 0.5 ? colA : colB;
+      particles.push(`<circle cx="${px}" cy="${py}" r="${r}" fill="${col}" opacity="${opacity}" />`);
+    }
+
+    const rings: string[] = [];
+    for (let i = 1; i <= 6; i++) {
+      const r = Math.round(maxR * (i / 6));
+      const strokeOp = (0.12 + (i % 2 === 0 ? 0.18 : 0.08)).toFixed(2);
+      const strokeDash = i % 2 === 0 ? 'stroke-dasharray="6,8"' : 'stroke-dasharray="12,6,3,6"';
+      rings.push(`<circle cx="${cx}" cy="${cy}" r="${r}" stroke="${i % 2 === 0 ? colA : colC}" stroke-width="1.5" fill="none" opacity="${strokeOp}" ${strokeDash} />`);
+    }
+
+    const streamlines: string[] = [];
+    for (let i = 0; i < 8; i++) {
+      const ang = (i / 8) * Math.PI * 2;
+      const x1 = Math.round(cx + Math.cos(ang) * maxR * 0.2);
+      const y1 = Math.round(cy + Math.sin(ang) * maxR * 0.2);
+      const cpx = Math.round(cx + Math.cos(ang + 0.8) * maxR * 0.7);
+      const cpy = Math.round(cy + Math.sin(ang + 0.8) * maxR * 0.7);
+      const x2 = Math.round(cx + Math.cos(ang + 1.6) * maxR * 1.15);
+      const y2 = Math.round(cy + Math.sin(ang + 1.6) * maxR * 1.15);
+      streamlines.push(`<path d="M ${x1} ${y1} Q ${cpx} ${cpy} ${x2} ${y2}" stroke="${colA}" stroke-width="1.2" fill="none" opacity="0.35" />`);
+    }
+
+    const cleanPrompt = prompt.replace(/[<>&"]/g, ' ').slice(0, 110);
+
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="65%">
+      <stop offset="0%" stop-color="#0c1222" />
+      <stop offset="60%" stop-color="#07090e" />
+      <stop offset="100%" stop-color="#030407" />
+    </radialGradient>
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="${colA}" stop-opacity="0.35" />
+      <stop offset="50%" stop-color="${colB}" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="${colC}" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="${colA}" stop-opacity="0.8" />
+      <stop offset="50%" stop-color="${colB}" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="${colC}" stop-opacity="0.8" />
+    </linearGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="${width}" height="${height}" fill="url(#bgGlow)" />
+  ${baseImageHref ? `<image href="${baseImageHref}" width="${width}" height="${height}" opacity="0.45" preserveAspectRatio="xMidYMid slice" />` : ''}
+
+  <circle cx="${cx}" cy="${cy}" r="${maxR * 1.1}" fill="url(#coreGlow)" />
+
+  <g filter="url(#softGlow)">
+    ${rings.join('\n    ')}
+    ${streamlines.join('\n    ')}
+  </g>
+
+  <g>
+    ${particles.join('\n    ')}
+  </g>
+
+  <polygon points="${cx},${cy - maxR * 0.35} ${cx + maxR * 0.3},${cy + maxR * 0.18} ${cx - maxR * 0.3},${cy + maxR * 0.18}" stroke="url(#lineGrad)" stroke-width="2" fill="none" opacity="0.75" />
+  <polygon points="${cx},${cy + maxR * 0.35} ${cx + maxR * 0.3},${cy - maxR * 0.18} ${cx - maxR * 0.3},${cy - maxR * 0.18}" stroke="url(#lineGrad)" stroke-width="1.5" fill="none" opacity="0.5" stroke-dasharray="4,4" />
+
+  <rect x="${Math.max(20, cx - 280)}" y="${height - 100}" width="560" height="68" rx="8" fill="#07090e" fill-opacity="0.85" stroke="${colA}" stroke-width="1" stroke-opacity="0.3" />
+  <text x="${cx}" y="${height - 76}" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="600" letter-spacing="2" fill="${colA}" text-anchor="middle" text-transform="uppercase">${domainTag}</text>
+  <text x="${cx}" y="${height - 52}" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#e2e8f0" text-anchor="middle">${cleanPrompt}</text>
+  <text x="${width - 24}" y="${28}" font-family="monospace" font-size="10" fill="${colB}" opacity="0.6" text-anchor="end">OKLab Generative Canvas • Procedural Synthesis</text>
+</svg>`;
+
+    return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`;
+  }
+
+  // REST API: Text-to-Image Generation (with multi-model failover & procedural OKLab fallback)
   app.post('/api/image/generate', async (req, res) => {
     try {
-      const { prompt, aspectRatio = '1:1', imageSize = '1K' } = req.body;
+      const { prompt, aspectRatio = '1:1', imageSize = '1K', userApiKey } = req.body;
       if (!prompt || typeof prompt !== 'string') {
         return res.status(400).json({ error: 'Zadejte prompt pro generování obrazu.' });
       }
 
       const scan = scanAndSanitizePrompt(prompt);
-      const ai = getAIClient();
+      const apiKeyToUse = (typeof userApiKey === 'string' && userApiKey.trim())
+        ? userApiKey.trim()
+        : (req.headers['x-gemini-api-key'] as string);
+      const ai = getAIClient(apiKeyToUse);
 
-      const imageModels = ['gemini-3.1-flash-image-preview', 'gemini-3.1-flash-image', 'gemini-3.1-flash-lite-image'];
+      const imageModels = [
+        'gemini-3.1-flash-lite-image',
+        'gemini-nano-banana-2.1',
+        'gemini-3-pro-image',
+        'gemini-3.1-flash-image-preview',
+      ];
       let imageDataUrl: string | null = null;
       let textResponse: string | null = null;
-      let usedModel = imageModels[0];
-      let lastErr: any = null;
+      let usedModel: string = imageModels[0];
 
       for (const m of imageModels) {
         try {
@@ -942,13 +1062,19 @@ async function startServer() {
           }
           if (imageDataUrl) break;
         } catch (err: any) {
-          lastErr = err;
-          console.warn(`Model ${m} image generation warning:`, err?.message);
+          // Graceful handling of rate limits and quota exhaustions without flooding stderr
+          console.log(`[Image Generation Failover] Model ${m} unavailable (${err?.status || 'quota limit'}), trying next...`);
         }
       }
 
+      // If remote image models are unavailable or quota is exhausted, seamlessly provide procedural OKLab visual
+      let isFallback = false;
+      let notice: string | undefined;
       if (!imageDataUrl) {
-        throw new Error(lastErr?.message || 'Generování obrazu nevrátilo platná obrazová data.');
+        imageDataUrl = generateProceduralConceptualSvg(scan.sanitized, aspectRatio);
+        usedModel = 'oklab-procedural-synthesizer';
+        isFallback = true;
+        notice = 'Vzdálená API kvóta pro generování obrazu byla dočasně vyčerpána. Byla vygenerována procedurální konceptuální vizualizace.';
       }
 
       res.json({
@@ -956,6 +1082,8 @@ async function startServer() {
         prompt,
         text: textResponse,
         model: usedModel,
+        isFallback,
+        notice,
         securityScan: {
           isClean: scan.isClean,
           threatLevel: scan.threatLevel,
@@ -963,29 +1091,42 @@ async function startServer() {
         }
       });
     } catch (err: any) {
-      console.error('Image generation error:', err);
-      res.status(500).json({ error: err.message || 'Chyba při generování obrazu.' });
+      // Last-resort fallback to procedural SVG so the client never experiences a hard crash
+      const fallbackUrl = generateProceduralConceptualSvg(String(req.body?.prompt || 'Epistemic Concept'), req.body?.aspectRatio || '1:1');
+      res.json({
+        imageUrl: fallbackUrl,
+        prompt: req.body?.prompt || '',
+        model: 'oklab-procedural-synthesizer',
+        isFallback: true,
+        notice: 'Aktivován procedurální generátor konceptů.'
+      });
     }
   });
 
   // REST API: Image Editing with Text Prompts
   app.post('/api/image/edit', async (req, res) => {
     try {
-      const { prompt, base64Image, mimeType = 'image/png' } = req.body;
+      const { prompt, base64Image, mimeType = 'image/png', userApiKey } = req.body;
       if (!prompt || !base64Image) {
         return res.status(400).json({ error: 'Zadejte prompt a podkladový obraz k úpravě.' });
       }
 
       const scan = scanAndSanitizePrompt(prompt);
-      const ai = getAIClient();
+      const apiKeyToUse = (typeof userApiKey === 'string' && userApiKey.trim())
+        ? userApiKey.trim()
+        : (req.headers['x-gemini-api-key'] as string);
+      const ai = getAIClient(apiKeyToUse);
 
       const rawBase64 = String(base64Image).replace(/^data:image\/[a-z]+;base64,/, '');
-
-      const imageModels = ['gemini-3.1-flash-image-preview', 'gemini-3.1-flash-image', 'gemini-3.1-flash-lite-image'];
+      const imageModels = [
+        'gemini-3.1-flash-lite-image',
+        'gemini-nano-banana-2.1',
+        'gemini-3-pro-image',
+        'gemini-3.1-flash-image-preview',
+      ];
       let imageDataUrl: string | null = null;
       let textResponse: string | null = null;
-      let usedModel = imageModels[0];
-      let lastErr: any = null;
+      let usedModel: string = imageModels[0];
 
       for (const m of imageModels) {
         try {
@@ -1016,13 +1157,18 @@ async function startServer() {
           }
           if (imageDataUrl) break;
         } catch (err: any) {
-          lastErr = err;
-          console.warn(`Model ${m} image edit warning:`, err?.message);
+          console.log(`[Image Edit Failover] Model ${m} unavailable (${err?.status || 'quota limit'}), trying next...`);
         }
       }
 
+      let isFallback = false;
+      let notice: string | undefined;
       if (!imageDataUrl) {
-        throw new Error(lastErr?.message || 'Úprava obrazu nevrátila platná data.');
+        const fullBaseImageHref = base64Image.startsWith('data:') ? base64Image : `data:${mimeType};base64,${rawBase64}`;
+        imageDataUrl = generateProceduralConceptualSvg(scan.sanitized, '1:1', fullBaseImageHref);
+        usedModel = 'oklab-procedural-synthesizer';
+        isFallback = true;
+        notice = 'Vzdálená API kvóta pro úpravu obrazu byla dočasně vyčerpána. Byla vygenerována procedurální syntéza nad podkladovým obrazem.';
       }
 
       res.json({
@@ -1030,14 +1176,23 @@ async function startServer() {
         prompt,
         text: textResponse,
         model: usedModel,
+        isFallback,
+        notice,
         securityScan: {
           isClean: scan.isClean,
           threatLevel: scan.threatLevel
         }
       });
     } catch (err: any) {
-      console.error('Image edit error:', err);
-      res.status(500).json({ error: err.message || 'Chyba při úpravě obrazu.' });
+      const fullBaseImageHref = String(req.body?.base64Image || '');
+      const fallbackUrl = generateProceduralConceptualSvg(String(req.body?.prompt || 'Edited Concept'), '1:1', fullBaseImageHref);
+      res.json({
+        imageUrl: fallbackUrl,
+        prompt: req.body?.prompt || '',
+        model: 'oklab-procedural-synthesizer',
+        isFallback: true,
+        notice: 'Aktivován procedurální editor konceptů.'
+      });
     }
   });
 
@@ -1063,7 +1218,6 @@ async function startServer() {
           const customContext = msg.contextDirective ? `\n\nAKTIVNÍ DIREKTIVA: [EXTEND_CONTEXT: ${msg.contextDirective}]` : '';
 
           const memoryContext = semanticMemoryStore
-            .slice(0, 3)
             .map((m) => `- [${m.domain}] ${m.concept}: ${m.summary}`)
             .join('\n');
 
@@ -1182,7 +1336,7 @@ async function startServer() {
                         });
                       } else if (fc.name === 'query_semantic_memory') {
                         const q = String((fc.args as any)?.query || '');
-                        const matches = semanticMemoryStore.slice(0, 2).map((m) => ({
+                        const matches = semanticMemoryStore.map((m) => ({
                           concept: m.concept,
                           domain: m.domain,
                           summary: m.summary,
@@ -1298,7 +1452,15 @@ async function startServer() {
   // Mount Vite middleware in development or static dist in production
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        ws: {
+          server: httpServer,
+        },
+        hmr: {
+          server: httpServer,
+        },
+      },
       appType: 'spa',
     });
     app.use(vite.middlewares);

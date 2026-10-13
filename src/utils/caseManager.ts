@@ -11,7 +11,7 @@ let memoryCasesCache: ResearchCase[] | null = null;
  * Strips heavy payloads (such as 24kHz WAV base64 audio and excessive telemetry)
  * before persisting to localStorage to strictly prevent QuotaExceededError.
  */
-function sanitizeCasesForLocalStorage(cases: ResearchCase[], maxTranscriptsPerCase = 25): ResearchCase[] {
+function sanitizeCasesForLocalStorage(cases: ResearchCase[], maxTranscriptsPerCase = 100): ResearchCase[] {
   return cases.map((c) => ({
     ...c,
     transcripts: (c.transcripts || []).slice(-maxTranscriptsPerCase).map((t) => {
@@ -218,8 +218,22 @@ export class CaseManager {
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          memoryCasesCache = parsed;
-          return parsed;
+          // Explicitly purge removed forensic case files as requested
+          const filtered = parsed.filter(
+            (c) => c.id !== 'case-05-lex-forensica' && c.id !== 'case-06-steel-auras'
+          );
+          let updated = filtered.length !== parsed.length;
+          for (const preset of INITIAL_PRESET_CASES) {
+            if (!filtered.some((c) => c.id === preset.id)) {
+              filtered.push(preset);
+              updated = true;
+            }
+          }
+          if (updated) {
+            this.saveCases(filtered);
+          }
+          memoryCasesCache = filtered;
+          return filtered;
         }
       }
     } catch (e) {
@@ -267,7 +281,9 @@ export class CaseManager {
 
   static getActiveCaseId(): string {
     const stored = localStorage.getItem(ACTIVE_CASE_KEY);
-    if (stored) return stored;
+    if (stored && stored !== 'case-05-lex-forensica' && stored !== 'case-06-steel-auras') {
+      return stored;
+    }
     return INITIAL_PRESET_CASES[0].id;
   }
 

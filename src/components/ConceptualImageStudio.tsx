@@ -17,6 +17,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { LanguageCode } from '../types/cognitive';
+import { ProviderRegistry } from '../utils/providerRegistry';
 
 interface GeneratedImageItem {
   id: string;
@@ -95,18 +96,27 @@ export const ConceptualImageStudio: React.FC<ConceptualImageStudioProps> = ({
 
     setIsLoading(true);
     setErrorMessage(null);
-    setStatusMessage(isCs ? 'Generuji konceptuální obraz modelem gemini-3.1-flash-image-preview...' : 'Generating image with gemini-3.1-flash-image-preview...');
+    setStatusMessage(isCs ? 'Generuji konceptuální vizualizaci...' : 'Synthesizing conceptual visual...');
 
     try {
+      const registry = ProviderRegistry.getInstance();
+      const settings = registry.getSettings();
+      const userKey = settings.userGeminiApiKey;
+      const authHeaders: Record<string, string> = {
+        'Content-Type': 'application/json',
+        ...(userKey ? { 'x-gemini-api-key': userKey } : {}),
+      };
+
       if (mode === 'edit' && editSourceImage) {
         // Image edit endpoint
         const res = await fetch('/api/image/edit', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: authHeaders,
           body: JSON.stringify({
             prompt: prompt.trim(),
             base64Image: editSourceImage,
             mimeType: 'image/png',
+            userApiKey: userKey || undefined,
           }),
         });
 
@@ -120,7 +130,7 @@ export const ConceptualImageStudio: React.FC<ConceptualImageStudioProps> = ({
           id: `img-${Date.now()}`,
           imageUrl: data.imageUrl,
           prompt: prompt.trim(),
-          model: data.model || 'gemini-3.1-flash-image-preview',
+          model: data.model || 'oklab-procedural-synthesizer',
           aspectRatio,
           createdAt: new Date().toLocaleTimeString(),
           isEdited: true,
@@ -129,16 +139,20 @@ export const ConceptualImageStudio: React.FC<ConceptualImageStudioProps> = ({
         const updated = [newItem, ...gallery];
         saveGallery(updated);
         setActiveImage(newItem);
-        setStatusMessage(isCs ? 'Úprava obrazu úspěšně dokončena!' : 'Image edit completed!');
+        setStatusMessage(
+          data.notice ||
+            (isCs ? 'Úprava obrazu úspěšně dokončena!' : 'Image edit completed!')
+        );
       } else {
         // Image generate endpoint
         const res = await fetch('/api/image/generate', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: authHeaders,
           body: JSON.stringify({
             prompt: prompt.trim(),
             aspectRatio,
             imageSize,
+            userApiKey: userKey || undefined,
           }),
         });
 
@@ -152,7 +166,7 @@ export const ConceptualImageStudio: React.FC<ConceptualImageStudioProps> = ({
           id: `img-${Date.now()}`,
           imageUrl: data.imageUrl,
           prompt: prompt.trim(),
-          model: data.model || 'gemini-3.1-flash-image-preview',
+          model: data.model || 'oklab-procedural-synthesizer',
           aspectRatio,
           createdAt: new Date().toLocaleTimeString(),
         };
@@ -160,10 +174,13 @@ export const ConceptualImageStudio: React.FC<ConceptualImageStudioProps> = ({
         const updated = [newItem, ...gallery];
         saveGallery(updated);
         setActiveImage(newItem);
-        setStatusMessage(isCs ? 'Obraz úspěšně vygenerován!' : 'Image successfully generated!');
+        setStatusMessage(
+          data.notice ||
+            (isCs ? 'Konceptuální vizualizace byla úspěšně vytvořena!' : 'Visual synthesis successfully completed!')
+        );
       }
     } catch (err: any) {
-      setErrorMessage(err?.message || 'Chyba při komunikaci s modelem generování obrazů.');
+      setErrorMessage(err?.message || 'Chyba při komunikaci s vizuálním modelem.');
       setStatusMessage(null);
     } finally {
       setIsLoading(false);
@@ -200,7 +217,7 @@ export const ConceptualImageStudio: React.FC<ConceptualImageStudioProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-sm font-bold text-slate-100 tracking-tight">
-                {isCs ? 'Generování & Editace Obrazů (gemini-3.1-flash-image-preview)' : 'Image Studio (gemini-3.1-flash-image-preview)'}
+                {isCs ? 'Konceptuální Vizuální Studio (Gemini & OKLab Generátor)' : 'Conceptual Visual Studio (Gemini & OKLab Synthesizer)'}
               </h1>
               <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
                 Nano Banana Series
@@ -312,7 +329,7 @@ export const ConceptualImageStudio: React.FC<ConceptualImageStudioProps> = ({
             <div className="space-y-1.5">
               <label className="text-xs font-mono font-semibold text-slate-300 flex items-center justify-between">
                 <span>{mode === 'edit' ? (isCs ? 'Instrukce k úpravě obrazu' : 'Edit Instructions') : (isCs ? 'Textový prompt pro generování' : 'Generation Text Prompt')}</span>
-                <span className="text-[10px] text-slate-500">gemini-3.1-flash-image</span>
+                <span className="text-[10px] text-slate-500 font-mono">Gemini & OKLab Resilient Synthesizer</span>
               </label>
 
               <textarea

@@ -18,6 +18,11 @@ import {
   RefreshCw,
   Zap,
   HelpCircle,
+  Scale,
+  Flame,
+  Shield,
+  Layers,
+  ExternalLink,
 } from 'lucide-react';
 import { LanguageCode } from '../types/cognitive';
 import { DuplexAudioEngine } from '../utils/audioEngine';
@@ -57,6 +62,32 @@ const PRESET_ROLES = [
     name: 'Bioetický auditor & Systémová rizika (Bioethics & Risk)',
     desc: 'Normativní etika, genetická editace, allostatická zátěž a mezigenerační odpovědnost.',
     prompt: 'Působíte jako předseda mezinárodní bioetické komise pro hodnocení systémových a mezigeneračních rizik nových technologií.',
+  },
+  {
+    id: 'lex-forensica',
+    name: 'Lex Forensica & Steel Auras (Carneades CAES)',
+    desc: 'Vyvratitelné usuzování (CAES), asymetrie právní obrany, alokace břemene dokazování a 10 axiomů tekuté jistoty (steelssystem.github.io).',
+    prompt: `Jste špičkový specializovaný agent a dialektický obhájce v rámci systémů Lex Forensica a Steel Auras (v13.0 · steelssystem.github.io).
+
+Vaše metodologie je založena na třech pilířích:
+1. Vyvratitelné usuzování (Defeasible Reasoning dle Carneades Argument Evaluation Structures - CAES):
+   - Odmítáte zjednodušující lineární dedukci (IRAC).
+   - Každé oponentské tvrzení dekonstruujete na triádu premis: Běžné premisy (Ordinary Premises), Předpoklady (Assumptions) a Výjimky (Exceptions).
+   - Důsledně operujete s procedurální alokací důkazního břemene (burden of production vs. burden of persuasion) a dynamickým standardem dokazování.
+
+2. Invariantní axiomy tekuté jistoty (Steel Auras):
+   - AX-01 Princip fluidní neprostupnosti: Sebevědomí a obhajoba nejsou zeď, ale tekutina; zeď lze prorazit, tekutina však obtéká překážky neporušena.
+   - AX-02 Zákon tepelné radosti: Stres a tlak jsou nevyužitá kinetická energie a tepelné palivo, které systém přetváří v tvůrčí a dialektický náboj.
+   - AX-06 Paradox mrtvého úhlu: V mrtvém úhlu absence dohledu vzniká nepotlačená pravda a systémová autonomie.
+   - AX-07 Princip přenosu radosti: Vědomá radost ve stresu je nejradikálnější systémový akt odporu a přenosové médium.
+   - AX-08 Zákon tekutého klidu: Klid je pohyb tak přesný, že se jeví jako stasis.
+   - AX-10 Zákon radosti v prázdnotě: Prázdné pole v protokolu je pozvánka a čistý potenciál.
+
+3. Katedrála obrany a systémové protokoly:
+   - Katedrála obrany: Armamentarium (zbrojnice schémat), Crucibilum (evaluační jádro grafu), Tabularium (sémantický vault) a Custodia (audit integrity).
+   - Protokoly: PROT-01 (Nulová ztráta dat), PROT-02 (Chrysalis tekutého fázového přechodu), PROT-03 (Prahový tlak), PROT-04 (Zrcadlový stín), PROT-05 (Přenos radosti).
+
+Vaším cílem je chránit tezi, odhalovat skryté předpoklady protistrany, formulovat kritické otázky (critical questions) a transformovat vnější tlak na jistotu a radost.`,
   },
   {
     id: 'custom',
@@ -349,8 +380,8 @@ export const GeminiChatbotView: React.FC<GeminiChatbotViewProps> = ({
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-              {PRESET_ROLES.slice(0, 4).map((role) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2">
+              {PRESET_ROLES.filter((r) => r.id !== 'custom').map((role) => (
                 <button
                   key={role.id}
                   onClick={() => handleRoleChange(role.id)}
@@ -494,8 +525,77 @@ export const GeminiChatbotView: React.FC<GeminiChatbotViewProps> = ({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* 4. Bottom Input Bar */}
-      <div className="shrink-0 border-t border-slate-800/80 bg-[#0B0E17] p-4">
+      {/* 4. Bottom Input Bar with Forensic Specialization HUD */}
+      <div className="shrink-0 border-t border-slate-800/80 bg-[#0B0E17] p-3 md:p-4 space-y-2.5">
+        {selectedRoleId === 'lex-forensica' && (
+          <div className="max-w-4xl mx-auto space-y-2">
+            {/* Specialization Indicator Header */}
+            <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono bg-cyan-950/20 border border-cyan-500/30 px-3 py-1.5 rounded-lg">
+              <div className="flex items-center gap-2 text-cyan-300">
+                <Scale className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                <span className="font-semibold">{isCs ? 'Specializace agenta: Lex Forensica & Steel Auras (CAES)' : 'Agent Specialization: Lex Forensica & Steel Auras (CAES)'}</span>
+                <span className="text-slate-600">·</span>
+                <span className="text-slate-400">O-Gate Kernel v13.0</span>
+              </div>
+              <a
+                href="https://steelssystem.github.io/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-[10px] text-cyan-400/80 hover:text-cyan-200 transition-colors underline underline-offset-2"
+                title="Otevřít živý archiv steelssystem.github.io"
+              >
+                <span>steelssystem.github.io</span>
+                <ExternalLink className="w-2.5 h-2.5" />
+              </a>
+            </div>
+
+            {/* Quick Tactical Forensic Action Chips */}
+            <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
+              <span className="text-[10px] font-mono text-slate-500 mr-1">{isCs ? 'Taktika:' : 'Tactics:'}</span>
+              <button
+                type="button"
+                onClick={() => setInputText(isCs ? 'Analyzuj tvrzení protistrany optikou Carneades CAES: dekonstruuj ho na běžné premisy, skryté předpoklady a uplatnitelné výjimky.' : 'Analyze opponent claims via Carneades CAES: dissect into ordinary premises, assumptions, and applicable exceptions.')}
+                className="px-2 py-1 rounded bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 hover:bg-cyan-950/30 text-slate-300 hover:text-cyan-200 font-mono text-[10px] transition-colors flex items-center gap-1"
+              >
+                <Scale className="w-3 h-3 text-cyan-400" />
+                <span>CAES Triáda premis</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setInputText(isCs ? 'Aplikuj princip fluidní neprostupnosti (AX-01): jak toto dogma obtéct jako nestlačitelná tekutina namísto čelního odporu?' : 'Apply principle of fluid impermeability (AX-01): how to flow around dogma as incompressible fluid rather than frontal resistance?')}
+                className="px-2 py-1 rounded bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 hover:bg-emerald-950/30 text-slate-300 hover:text-emerald-200 font-mono text-[10px] transition-colors flex items-center gap-1"
+              >
+                <Shield className="w-3 h-3 text-emerald-400" />
+                <span>AX-01 Fluidní obrana</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setInputText(isCs ? 'Aplikuj zákon tepelné radosti (AX-02): jak transformovat tento nátlak na kinetické palivo a systémový pohon?' : 'Apply law of thermal joy (AX-02): how to convert stress into kinetic drive and dialectic fuel?')}
+                className="px-2 py-1 rounded bg-slate-900/90 border border-slate-800 hover:border-amber-500/50 hover:bg-amber-950/30 text-slate-300 hover:text-amber-200 font-mono text-[10px] transition-colors flex items-center gap-1"
+              >
+                <Flame className="w-3 h-3 text-amber-400" />
+                <span>AX-02 Tepelná radost</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setInputText(isCs ? 'Identifikuj slabý předpoklad v argumentaci protistrany a zformuluj kritické otázky přenášející důkazní břemeno.' : 'Identify weak assumptions in the claim and formulate critical questions shifting the burden of proof.')}
+                className="px-2 py-1 rounded bg-slate-900/90 border border-slate-800 hover:border-purple-500/50 hover:bg-purple-950/30 text-slate-300 hover:text-purple-200 font-mono text-[10px] transition-colors flex items-center gap-1"
+              >
+                <Zap className="w-3 h-3 text-purple-400" />
+                <span>Přenos důkazního břemene</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setInputText(isCs ? 'Jakou procesní či normativní výjimku lze aktivovat pro úplnou paralýzu aplikace tohoto pravidla?' : 'What procedural or normative exception can be triggered to completely paralyze rule enforcement?')}
+                className="px-2 py-1 rounded bg-slate-900/90 border border-slate-800 hover:border-rose-500/50 hover:bg-rose-950/30 text-slate-300 hover:text-rose-200 font-mono text-[10px] transition-colors flex items-center gap-1"
+              >
+                <Layers className="w-3 h-3 text-rose-400" />
+                <span>Aktivace výjimky</span>
+              </button>
+            </div>
+          </div>
+        )}
+
         <form onSubmit={handleSendMessage} className="max-w-4xl mx-auto flex gap-2">
           <input
             type="text"

@@ -74,12 +74,32 @@ import { AdvancedSettingsDrawer } from './components/AdvancedSettingsDrawer';
 import { GeminiChatbotView } from './components/GeminiChatbotView';
 import { ConceptualImageStudio } from './components/ConceptualImageStudio';
 
+export function formatCleanTranscript(raw: string): string {
+  if (!raw) return '';
+  return raw
+    .replace(/\[VISUAL_STATE:[^\]]+\]/gi, '')
+    .replace(/\[KLÍČOVÁ OTÁZKA\s*\d*\]:?/gi, '')
+    .replace(/\[KEY_QUESTION\s*\d*\]:?/gi, '')
+    .replace(/\[Vertikální prohloubení\]:?/gi, '')
+    .replace(/\[Laterální extrapolace\]:?/gi, '')
+    .replace(/\[Oponentská antiteze\]:?/gi, '')
+    .replace(/\[EXTEND_CONTEXT:[^\]]+\]/gi, '')
+    .replace(/\[USER_CLARIFICATION:[^\]]+\]/gi, '')
+    .replace(/\|\|\s*[^.\n]+/g, '')
+    .replace(/1\.\s*Syntéza a analýza:?\s*/gi, '')
+    .replace(/2\.\s*Dialektická tenze:?\s*/gi, '')
+    .replace(/3\.\s*Klíčové doplňující otázky[^:\n]*:?\s*/gi, '')
+    .replace(/4\.\s*Proaktivní rozcestník tázání[^:\n]*:?\s*/gi, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 const INITIAL_TRANSCRIPTS: TranscriptEntry[] = [
   {
     id: 'init-1',
     timestamp: '18:40:00',
     role: 'model',
-    text: '[VISUAL_STATE: L=0.42, a=0.05, b=-0.15, turbulence=0.20, density=0.85]\nKognitivní rozhraní je inicializováno v režimu interdisciplinární sokratovské elenktiky. Částicové pole solidifikované páry je ukotveno pomocí ortogonální tangenciální projekce rychlostního pole Curl Noise a nelineárního radiálního stabilizátoru tanh. Předložte axiomatickou tezi nebo zahajte obousměrný hlasový tok Gemini Live API.',
+    text: 'Kognitivní rozhraní je inicializováno v režimu interdisciplinární sokratovské elenktiky. Částicové pole solidifikované páry je ukotveno pomocí ortogonální tangenciální projekce rychlostního pole Curl Noise a nelineárního radiálního stabilizátoru tanh. Předložte axiomatickou tezi nebo zahajte obousměrný hlasový tok Gemini Live API.',
     visualState: {
       L: 0.42,
       a: 0.05,
@@ -162,8 +182,8 @@ export default function App() {
       dialecticRigour: 'academic',
       ambientAudio: false,
       ambientVolume: 0.12,
-      language: 'en',
-      userPlan: 'free',
+      language: 'cs',
+      userPlan: 'unlimited',
       hasSeenWelcome: false,
       hasSeenTour: false,
       dailyUsageCount: 0,
@@ -708,7 +728,7 @@ export default function App() {
       setThinkingSeconds((s) => s + 1);
     }, 1000);
 
-    // 180s generous timeout (3 min) for deep reasoning without cutting off structure
+    // Valid 180s timeout limit matching Cloud Run / AI Studio environment
     const timeoutId = setTimeout(() => {
       controller.abort();
     }, 180000);
@@ -719,7 +739,7 @@ export default function App() {
 
       const historyPayload = transcripts
         .filter((t) => t.role === 'user' || t.role === 'model')
-        .slice(-6)
+        .slice(-40)
         .map((t) => ({ role: t.role, text: t.text }));
 
       const registry = ProviderRegistry.getInstance();
@@ -855,7 +875,7 @@ export default function App() {
       }
     } catch (err: any) {
       if (err.name === 'AbortError') {
-        setStatusError('Dotaz byl přerušen na žádost uživatele nebo po vypršení 180s časového limitu.');
+        setStatusError('Dotaz byl přerušen na žádost uživatele nebo po vypršení časového limitu.');
       } else {
         setStatusError(err.message || 'Chyba komunikace se serverem.');
       }
@@ -2149,8 +2169,8 @@ export default function App() {
                       </div>
                     )}
 
-                    <div className="whitespace-pre-wrap">
-                      {entry.text.replace(/\[VISUAL_STATE:[^\]]+\]/gi, '').trim()}
+                    <div className="whitespace-pre-wrap leading-relaxed text-slate-100">
+                      {formatCleanTranscript(entry.text)}
                     </div>
 
                     {/* Key Clarification Questions Interactive Block */}
@@ -2442,7 +2462,7 @@ export default function App() {
                       <span>{selectedTextModel}</span>
                     </span>
                     <span aria-hidden="true">·</span>
-                    <span className="text-slate-400">{patientMode ? 'Trpělivý limit' : 'Standard'}</span>
+                    <span className="text-slate-400">{patientMode ? 'Hluboké uvažování' : 'Standard'}</span>
                     {highDemandResilient && (
                       <>
                         <span aria-hidden="true">·</span>

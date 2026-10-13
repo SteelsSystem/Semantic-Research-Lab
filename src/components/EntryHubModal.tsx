@@ -200,8 +200,8 @@ export function EntryHubModal({
                 <p className="text-xs text-slate-400 mt-1 leading-relaxed">{t.entryActionResumeDesc}</p>
               </div>
 
-              <div className="mt-3 space-y-1.5 max-h-28 overflow-y-auto pr-1">
-                {cases.slice(0, 3).map((c) => (
+              <div className="mt-3 space-y-1.5 max-h-36 overflow-y-auto pr-1">
+                {cases.map((c) => (
                   <button
                     key={c.id}
                     onClick={() => {

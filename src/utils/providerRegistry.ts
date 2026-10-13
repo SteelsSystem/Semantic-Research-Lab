@@ -154,36 +154,13 @@ export function parseTurnContent(rawText: string, defaultDomain = 'Epistemologie
     visualState,
     analysis: {
       topicTitle: defaultDomain,
-      corePremises: corePremises.slice(0, 4),
-      hiddenAxioms: hiddenAxioms.slice(0, 4),
-      structuralIsomorphisms: structuralIsomorphisms.slice(0, 4),
-      counterTheses: counterTheses.slice(0, 4),
-      keyQuestions: keyQuestions.length > 0 ? keyQuestions.slice(0, 3) : [
-        {
-          id: `kq-default-1`,
-          question: 'Jaké empirické či formální kritérium považujete za rozhodující pro falzifikaci této hypotézy?',
-          contextWhy: 'Nezbytné pro rozlišení vědeckého tvrzení od metafyzického axiomu.',
-          status: 'pending',
-        }
-      ],
+      corePremises,
+      hiddenAxioms,
+      structuralIsomorphisms,
+      counterTheses,
+      keyQuestions,
     },
-    branching: branching.length > 0 ? branching.slice(0, 3) : [
-      {
-        type: 'vertical',
-        label: 'Vertikální prohloubení',
-        question: 'Jaké subatomární či mikroskopické mechanismy tuto vlastnost determinují?',
-      },
-      {
-        type: 'lateral',
-        label: 'Laterální extrapolace',
-        question: 'Lze tento princip přenést do teorie komplexních sociálních sítí?',
-      },
-      {
-        type: 'antithesis',
-        label: 'Oponentská antiteze',
-        question: 'Co když je celý koncept pouze artefaktem použitého matematického aparátu?',
-      }
-    ],
+    branching,
   };
 }
 

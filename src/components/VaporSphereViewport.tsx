@@ -391,8 +391,14 @@ export const VaporSphereViewport: React.FC<VaporSphereViewportProps> = ({
      * d_h = R_max / ((1 - p) * sin(theta_h / 2))
      * d = max(d_v, d_h)
      */
+    let prevRenderW = 0;
+    let prevRenderH = 0;
     const updateContainerSize = (w: number, h: number) => {
       if (w <= 0 || h <= 0) return;
+      if (Math.abs(w - prevRenderW) < 1 && Math.abs(h - prevRenderH) < 1) return;
+      prevRenderW = w;
+      prevRenderH = h;
+
       renderer.setSize(w, h, false);
 
       const alpha = w / h;
@@ -422,11 +428,21 @@ export const VaporSphereViewport: React.FC<VaporSphereViewportProps> = ({
       });
     };
 
+    let resizeRafId: number | null = null;
     const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect;
-        updateContainerSize(width, height);
+      if (!entries || entries.length === 0) return;
+      const entry = entries[0];
+      const { width, height } = entry.contentRect;
+      if (Math.abs(width - prevRenderW) < 1 && Math.abs(height - prevRenderH) < 1) {
+        return;
       }
+      if (resizeRafId !== null) {
+        cancelAnimationFrame(resizeRafId);
+      }
+      resizeRafId = requestAnimationFrame(() => {
+        resizeRafId = null;
+        updateContainerSize(width, height);
+      });
     });
     resizeObserver.observe(container);
     updateContainerSize(container.clientWidth, container.clientHeight);
@@ -506,6 +522,9 @@ export const VaporSphereViewport: React.FC<VaporSphereViewportProps> = ({
 
     return () => {
       cancelAnimationFrame(animFrameId);
+      if (resizeRafId !== null) {
+        cancelAnimationFrame(resizeRafId);
+      }
       resizeObserver.disconnect();
       canvas.removeEventListener('pointerdown', onPointerDown);
       window.removeEventListener('pointermove', onPointerMove);
